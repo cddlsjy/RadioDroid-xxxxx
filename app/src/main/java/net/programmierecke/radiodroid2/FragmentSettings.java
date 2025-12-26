@@ -1,7 +1,10 @@
 package net.programmierecke.radiodroid2;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -13,8 +16,10 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,9 +56,11 @@ import net.programmierecke.radiodroid2.proxy.ProxySettingsDialog;
 import net.programmierecke.radiodroid2.database.RadioStationRepository;
 import net.programmierecke.radiodroid2.service.DatabaseUpdateManager;
 import net.programmierecke.radiodroid2.service.DatabaseUpdateWorker;
+import net.programmierecke.radiodroid2.service.PlayerServiceUtil;
 import net.programmierecke.radiodroid2.ui.DatabaseUpdateProgressDialog;
 
 import static net.programmierecke.radiodroid2.ActivityMain.FRAGMENT_FROM_BACKSTACK;
+import static net.programmierecke.radiodroid2.service.PlayerService.PLAYER_SERVICE_TIMER_FINISHED;
 
 import android.os.PowerManager;
 
@@ -61,6 +68,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
     
     private DatabaseUpdateProgressDialog updateDialog;
     private ActivityResultLauncher<String> filePickerLauncher;
+    private BroadcastReceiver timerFinishedReceiver;
 
     public static FragmentSettings openNewSettingsSubFragment(ActivityMain activity, String key) {
         FragmentSettings f = new FragmentSettings();
@@ -385,6 +393,27 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                     return false;
                 }
             });
+        } else if (s.equals("pref_category_alarm")) {
+            // 初始化睡眠定时器摘要文本
+            Preference alarmTimeoutPref = findPreference("alarm_timeout");
+            if (alarmTimeoutPref != null) {
+                long currenTimerSeconds = PlayerServiceUtil.getTimerSeconds();
+                if (currenTimerSeconds > 0) {
+                    int minutes = (int) (currenTimerSeconds < 60 ? 1 : currenTimerSeconds / 60);
+                    alarmTimeoutPref.setSummary(getString(R.string.settings_alarm_sleep_timer_desc).replace("%1$s", String.valueOf(minutes)));
+                } else {
+                    alarmTimeoutPref.setSummary(getString(R.string.settings_alarm_sleep_timer_desc_not_set));
+                }
+            }
+            
+            findPreference("alarm_timeout").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    // 使用与工具栏睡眠定时器相同的对话框
+                    showSleepTimerDialog();
+                    return true;
+                }
+            });
         } else if (s.equals("pref_category_other")) {
             findPreference("show_statistics").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -664,6 +693,22 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
         Log.d("FragmentSettings", "onResume called");
         
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+
+        // 注册定时器完成广播接收器
+        timerFinishedReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (PLAYER_SERVICE_TIMER_FINISHED.equals(intent.getAction())) {
+                    // 更新睡眠定时器摘要文本
+                    Preference alarmTimeoutPref = findPreference("alarm_timeout");
+                    if (alarmTimeoutPref != null) {
+                        alarmTimeoutPref.setSummary(getString(R.string.settings_alarm_sleep_timer_desc_not_set));
+                    }
+                }
+            }
+        };
+        IntentFilter filter = new IntentFilter(PLAYER_SERVICE_TIMER_FINISHED);
+        requireContext().registerReceiver(timerFinishedReceiver, filter);
 
         refreshToolbar();
 
@@ -1058,5 +1103,86 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                 });
             }
         }).start();
+    }
+    
+    private void showSleepTimerDialog() {
+        final androidx.appcompat.app.AlertDialog.Builder seekDialog = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+        View seekView = View.inflate(requireContext(), R.layout.layout_timer_chooser, null);
+
+        seekDialog.setTitle(R.string.sleep_timer_title);
+        seekDialog.setView(seekView);
+
+        final TextView seekTextView = (TextView) seekView.findViewById(R.id.timerTextView);
+        final SeekBar seekBar = (SeekBar) seekView.findViewById(R.id.timerSeekBar);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                seekTextView.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        SharedPreferences sharedPref = android.preference.PreferenceManager.getDefaultSharedPreferences(requireContext());
+        long currenTimerSeconds = PlayerServiceUtil.getTimerSeconds();
+        long currentTimer;
+        if (currenTimerSeconds <= 0) {
+            currentTimer = sharedPref.getInt("sleep_timer_default_minutes", 10);
+        } else if (currenTimerSeconds < 60) {
+            currentTimer = 1;
+        } else {
+            currentTimer = currenTimerSeconds / 60;
+        }
+        seekBar.setProgress((int) currentTimer);
+        
+        // 根据当前定时器状态更新摘要文本
+        Preference alarmTimeoutPref = findPreference("alarm_timeout");
+        if (alarmTimeoutPref != null) {
+            if (currenTimerSeconds > 0) {
+                int minutes = (int) (currenTimerSeconds < 60 ? 1 : currenTimerSeconds / 60);
+                alarmTimeoutPref.setSummary(getString(R.string.settings_alarm_sleep_timer_desc).replace("%1$s", String.valueOf(minutes)));
+            } else {
+                alarmTimeoutPref.setSummary(getString(R.string.settings_alarm_sleep_timer_desc_not_set));
+            }
+        }
+        
+        seekDialog.setPositiveButton(R.string.sleep_timer_apply, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                PlayerServiceUtil.clearTimer();
+                PlayerServiceUtil.addTimer(seekBar.getProgress() * 60);
+                sharedPref.edit().putInt("sleep_timer_default_minutes", seekBar.getProgress()).apply();
+                
+                // 更新摘要文本
+                Preference alarmTimeoutPref = findPreference("alarm_timeout");
+                if (alarmTimeoutPref != null) {
+                    alarmTimeoutPref.setSummary(getString(R.string.settings_alarm_sleep_timer_desc).replace("%1$s", String.valueOf(seekBar.getProgress())));
+                }
+            }
+        });
+
+        seekDialog.setNegativeButton(R.string.sleep_timer_clear, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                PlayerServiceUtil.clearTimer();
+                
+                // 重置摘要文本
+                Preference alarmTimeoutPref = findPreference("alarm_timeout");
+                if (alarmTimeoutPref != null) {
+                    alarmTimeoutPref.setSummary(getString(R.string.settings_alarm_sleep_timer_desc_not_set));
+                }
+            }
+        });
+
+        seekDialog.create();
+        seekDialog.show();
     }
 }

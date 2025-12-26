@@ -85,6 +85,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
     public static final String PLAYER_SERVICE_NO_NOTIFICATION_EXTRA = "no_notification";
 
     public static final String PLAYER_SERVICE_TIMER_UPDATE = "net.programmierecke.radiodroid2.timerupdate";
+    public static final String PLAYER_SERVICE_TIMER_FINISHED = "net.programmierecke.radiodroid2.timerfinished";
     public static final String PLAYER_SERVICE_META_UPDATE = "net.programmierecke.radiodroid2.metaupdate";
 
     public static final String PLAYER_SERVICE_STATE_CHANGE = "net.programmierecke.radiodroid2.statechange";
@@ -431,6 +432,9 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
             public void onFinish() {
                 stop();
                 timer = null;
+                
+                // 发送定时器完成广播
+                sendBroadCast(PLAYER_SERVICE_TIMER_FINISHED);
             }
         }.start();
     }

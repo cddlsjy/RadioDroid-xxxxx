@@ -150,6 +150,7 @@
     <string name="settings_alarm_audio_player">音频播放器</string>
     <string name="settings_alarm_sleep_timer">睡眠定时器</string>
     <string name="settings_alarm_sleep_timer_desc">在 %1$s 分钟后停止播放</string>
+    <string name="settings_alarm_sleep_timer_desc_not_set">点击设置睡眠定时器</string>
     <string name="settings_play">播放器</string>
     <string name="settings_auto_play_on_startup">自动播放</string>
     <string name="settings_auto_play_on_startup_on">启动时播放上一个电台</string>

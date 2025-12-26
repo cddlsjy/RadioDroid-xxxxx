@@ -217,11 +217,8 @@
             android:key="shareapp_package"
             android:title="@string/settings_alarm_audio_player" />
 
-        <ListPreference
-            android:defaultValue="10"
+        <Preference
             android:dependency="alarm_external"
-            android:entries="@array/timeout_minutes"
-            android:entryValues="@array/timeout_minutes_values"
             android:key="alarm_timeout"
             android:summary="@string/settings_alarm_sleep_timer_desc"
             search:summary=""
