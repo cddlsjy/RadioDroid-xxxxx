@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.text.TextUtils;
@@ -76,7 +77,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 
 
@@ -465,6 +469,30 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
                 }
                 return;
             }
+            case 1003: { // SaveFavourites permission
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    SaveFavourites();
+                }
+                return;
+            }
+            case 1004: { // SaveFavouritesSimple permission
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    SaveFavouritesSimple();
+                }
+                return;
+            }
+            case 1005: { // LoadFavourites permission
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    LoadFavourites();
+                }
+                return;
+            }
+            case 1006: { // LoadFavouritesSimple permission
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    LoadFavouritesSimple();
+                }
+                return;
+            }
         }
     }
     
@@ -724,45 +752,129 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
         if (requestCode == ACTION_SAVE_FILE && resultCode == RESULT_OK) {
             Uri uri = null;
             if (resultData != null) {
-                uri = resultData.getData();
-                Log.d(TAG, "Choosen save path: " + uri);
+                final Uri finalUri = resultData.getData();
+                Log.d(TAG, "Choosen save path: " + finalUri);
                 
-                // 获取文件路径和文件名
-                String path = getPathFromUri(uri);
-                String fileName = getFileNameFromUri(uri);
-                
-                RadioDroidApp radioDroidApp = (RadioDroidApp) getApplication();
-                FavouriteManager favouriteManager = radioDroidApp.getFavouriteManager();
-                HistoryManager historyManager = radioDroidApp.getHistoryManager();
-                
-                try {
-                    if (selectedMenuItem == R.id.nav_item_starred) {
-                        // 使用SaveM3U方法，这样会使用默认文件名
-                        favouriteManager.SaveM3U(path, fileName);
-                    } else if (selectedMenuItem == R.id.nav_item_history) {
-                        // 使用SaveM3U方法，这样会使用默认文件名
-                        historyManager.SaveM3U(path, fileName);
+                // 立即返回应用，在后台执行导出操作
+                new AsyncTask<Void, Void, Boolean>() {
+                    private Exception exception;
+                    private String fileName;
+                    
+                    @Override
+                    protected Boolean doInBackground(Void... params) {
+                        try {
+                            // 在后台线程中获取文件名
+                            fileName = getFileNameFromUri(finalUri);
+                            
+                            OutputStream outputStream = getContentResolver().openOutputStream(finalUri);
+                            if (outputStream != null) {
+                                RadioDroidApp radioDroidApp = (RadioDroidApp) getApplication();
+                                FavouriteManager favouriteManager = radioDroidApp.getFavouriteManager();
+                                HistoryManager historyManager = radioDroidApp.getHistoryManager();
+                                
+                                boolean success;
+                                if (selectedMenuItem == R.id.nav_item_starred) {
+                                    // 直接写入到输出流
+                                    success = favouriteManager.SaveM3UToStream(outputStream);
+                                } else if (selectedMenuItem == R.id.nav_item_history) {
+                                    // 直接写入到输出流
+                                    success = historyManager.SaveM3UToStream(outputStream);
+                                } else {
+                                    success = false;
+                                }
+                                
+                                outputStream.close();
+                                return success;
+                            }
+                        } catch (Exception e) {
+                            exception = e;
+                            Log.e(TAG, "Unable to write to file " + e);
+                        }
+                        return false;
                     }
-                } catch (Exception e) {
-                    Log.e(TAG, "Unable to write to file " + e);
-                }
+
+                    @Override
+                    protected void onPostExecute(Boolean result) {
+                        if (exception != null) {
+                            Toast.makeText(ActivityMain.this, "保存文件失败: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                        } else if (result.booleanValue()) {
+                            Toast.makeText(ActivityMain.this, getResources().getString(R.string.notify_save_playlist_ok, "文件", fileName), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(ActivityMain.this, getResources().getString(R.string.notify_save_playlist_nok, "文件", fileName), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }.execute();
             }
         }
         if (requestCode == ACTION_LOAD_FILE && resultCode == RESULT_OK) {
             Uri uri = null;
             if (resultData != null) {
-                uri = resultData.getData();
-                Log.d(TAG, "Choosen load path: " + uri);
-                RadioDroidApp radioDroidApp = (RadioDroidApp) getApplication();
-                FavouriteManager favouriteManager = radioDroidApp.getFavouriteManager();
-                try{
-                    InputStream is = getContentResolver().openInputStream(uri);
-                    InputStreamReader reader = new InputStreamReader(is);
-                    favouriteManager.LoadM3USimple(reader);
-                }
-                catch (Exception e){
-                    Log.e(TAG, "Unable to load to file " + e);
-                }
+                final Uri finalUri = resultData.getData();
+                Log.d(TAG, "Choosen load path: " + finalUri);
+                
+                // 立即返回应用，在后台执行导入操作
+                new AsyncTask<Void, Void, Void>() {
+                    private String fileName;
+                    private Exception exception;
+                    private int importedCount = 0;
+                    private List<DataRadioStation> importedStations;
+                    
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        try {
+                            // 在后台线程中获取文件名
+                            fileName = getFileNameFromUri(finalUri);
+                            if (fileName == null || fileName.isEmpty()) {
+                                fileName = "playlist.m3u";
+                            }
+                            
+                            // 检查文件是否为M3U格式
+                            if (!fileName.toLowerCase().endsWith(".m3u")) {
+                                exception = new Exception("请选择M3U格式的播放列表文件");
+                                return null;
+                            }
+                            
+                            RadioDroidApp radioDroidApp = (RadioDroidApp) getApplication();
+                            FavouriteManager favouriteManager = radioDroidApp.getFavouriteManager();
+                            
+                            InputStream is = getContentResolver().openInputStream(finalUri);
+                            InputStreamReader reader = new InputStreamReader(is);
+                            
+                            // 直接调用LoadM3UReader获取结果
+                            importedStations = favouriteManager.LoadM3UReader(reader);
+                            if (importedStations != null) {
+                                importedCount = importedStations.size();
+                                // 不在这里调用addMultiple，只保存数据
+                            } else {
+                                exception = new Exception("导入失败：无法解析文件");
+                            }
+                            
+                            reader.close();
+                            is.close();
+                        } catch (Exception e) {
+                            exception = e;
+                            Log.e(TAG, "Unable to load file " + e);
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        if (exception != null) {
+                            if (exception.getMessage() != null && exception.getMessage().contains("M3U")) {
+                                Toast.makeText(ActivityMain.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ActivityMain.this, "导入失败: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (importedStations != null) {
+                            // 在主线程中添加电台到收藏列表
+                            RadioDroidApp radioDroidApp = (RadioDroidApp) getApplication();
+                            FavouriteManager favouriteManager = radioDroidApp.getFavouriteManager();
+                            favouriteManager.addMultiple(importedStations);
+                            Toast.makeText(ActivityMain.this, "已从" + fileName + "导入" + importedCount + "个电台", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }.execute();
             }
         }
     }
@@ -790,33 +902,88 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
     }
 
     void SaveFavourites() {
-        SaveFileDialog dialog = new SaveFileDialog();
-        dialog.setStyle(DialogFragment.STYLE_NO_TITLE, Utils.getThemeResId(this));
-        Bundle args = new Bundle();
-        args.putString(FileDialog.EXTENSION, ".m3u"); // file extension is optional
-        dialog.setArguments(args);
-        dialog.show(getSupportFragmentManager(), SaveFileDialog.class.getName());
-    }
-
-    void SaveFavouritesSimple() {
+        // 检查是否有外部存储权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) 
+                != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 
+                    1003);
+                return;
+            }
+        }
+        
+        // 创建导出文件名：导出时间和电台数量
+        FavouriteManager favouriteManager = new FavouriteManager(this);
+        int favouriteCount = favouriteManager.getList().size();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+        String timestamp = sdf.format(new Date());
+        String defaultFileName = "RadioDroid_Favorites_" + timestamp + "_" + favouriteCount + "stations.m3u";
+        
+        // 使用系统文件选择器
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("audio/x-mpegurl");
-        // 不设置默认文件名，让StationSaveManager使用数据库更新时间作为默认文件名
-        // intent.putExtra(Intent.EXTRA_TITLE, "playlist.m3u");
+        intent.putExtra(Intent.EXTRA_TITLE, defaultFileName);
+        startActivityForResult(intent, ACTION_SAVE_FILE);
+    }
+
+    void SaveFavouritesSimple() {
+        // 检查是否有外部存储权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) 
+                != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 
+                    1004);
+                return;
+            }
+        }
+        
+        // 创建导出文件名：导出时间和电台数量
+        FavouriteManager favouriteManager = new FavouriteManager(this);
+        int favouriteCount = favouriteManager.getList().size();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+        String timestamp = sdf.format(new Date());
+        String defaultFileName = "RadioDroid_Favorites_" + timestamp + "_" + favouriteCount + "stations.m3u";
+        
+        // 使用系统文件选择器
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("audio/x-mpegurl");
+        intent.putExtra(Intent.EXTRA_TITLE, defaultFileName);
         startActivityForResult(intent, ACTION_SAVE_FILE);
     }
 
     void LoadFavourites() {
-        OpenFileDialog dialogOpen = new OpenFileDialog();
-        dialogOpen.setStyle(DialogFragment.STYLE_NO_TITLE, Utils.getThemeResId(this));
-        Bundle argsOpen = new Bundle();
-        argsOpen.putString(FileDialog.EXTENSION, ".m3u"); // file extension is optional
-        dialogOpen.setArguments(argsOpen);
-        dialogOpen.show(getSupportFragmentManager(), OpenFileDialog.class.getName());
+        // 检查是否有外部存储权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) 
+                != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 
+                    1005);
+                return;
+            }
+        }
+        
+        // 使用系统文件选择器
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("audio/x-mpegurl");
+        intent.putExtra(Intent.EXTRA_TITLE, "playlist.m3u");
+        startActivityForResult(intent, ACTION_LOAD_FILE);
     }
 
     void LoadFavouritesSimple() {
+        // 检查是否有外部存储权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) 
+                != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 
+                    1006);
+                return;
+            }
+        }
+        
+        // 使用系统文件选择器
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("audio/x-mpegurl");

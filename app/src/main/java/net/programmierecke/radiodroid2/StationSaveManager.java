@@ -26,6 +26,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
@@ -483,7 +485,11 @@ public class StationSaveManager extends Observable {
     }
 
     public void LoadM3USimple(final Reader reader) {
-        Toast toast = Toast.makeText(context, context.getResources().getString(R.string.notify_load_playlist_now, "", ""), Toast.LENGTH_LONG);
+        LoadM3USimpleWithFileName(reader, "", "");
+    }
+    
+    public void LoadM3USimpleWithFileName(final Reader reader, final String filePath, final String fileName) {
+        Toast toast = Toast.makeText(context, context.getResources().getString(R.string.notify_load_playlist_now, filePath, fileName), Toast.LENGTH_LONG);
         toast.show();
 
         new AsyncTask<Void, Void, List<DataRadioStation>>() {
@@ -497,11 +503,11 @@ public class StationSaveManager extends Observable {
                 if (result != null) {
                     Log.i("LOAD", "Loaded " + result.size() + "stations");
                     addMultiple(result);
-                    Toast toast = Toast.makeText(context, context.getResources().getString(R.string.notify_load_playlist_ok, result.size(), "", ""), Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(context, context.getResources().getString(R.string.notify_load_playlist_ok, result.size(), filePath, fileName), Toast.LENGTH_LONG);
                     toast.show();
                 } else {
                     Log.e("LOAD", "Load failed");
-                    Toast toast = Toast.makeText(context, context.getResources().getString(R.string.notify_load_playlist_nok, "", ""), Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(context, context.getResources().getString(R.string.notify_load_playlist_nok, filePath, fileName), Toast.LENGTH_LONG);
                     toast.show();
                 }
 
@@ -556,6 +562,17 @@ public class StationSaveManager extends Observable {
         }
     }
 
+    public boolean SaveM3UToStream(OutputStream outputStream) {
+        try {
+            OutputStreamWriter osw = new OutputStreamWriter(outputStream, "UTF-8");
+            BufferedWriter bw = new BufferedWriter(osw);
+            return SaveM3UWriter(bw);
+        } catch (Exception e) {
+            Log.e("Exception", "Stream write failed: " + e.toString());
+            return false;
+        }
+    }
+
     List<DataRadioStation> LoadM3UInternal(String filePath, String fileName) {
         try {
             File f = new File(filePath, fileName);
@@ -567,14 +584,13 @@ public class StationSaveManager extends Observable {
         }
     }
 
-    List<DataRadioStation> LoadM3UReader(Reader reader) {
+    protected List<DataRadioStation> LoadM3UReader(Reader reader) {
         try {
             String line;
 
             final RadioDroidApp radioDroidApp = (RadioDroidApp) context.getApplicationContext();
             final OkHttpClient httpClient = radioDroidApp.getHttpClient();
             ArrayList<String> listUuids = new ArrayList<String>();
-            ArraySet<DataRadioStation> loadedItems = null;
 
             BufferedReader br = new BufferedReader(reader);
             while ((line = br.readLine()) != null) {
@@ -582,11 +598,7 @@ public class StationSaveManager extends Observable {
                 if (line.startsWith(M3U_PREFIX)) {
                     try {
                         String uuid = line.substring(M3U_PREFIX.length()).trim();
-                        DataRadioStation station = Utils.getStationByUuid(httpClient, context, uuid);
-                        if (station != null) {
-                            station.queue = this;
-                            loadedItems.add(station);
-                        }
+                        listUuids.add(uuid);
                     } catch (Exception e) {
                         Log.e("LOAD", e.toString());
                     }

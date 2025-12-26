@@ -11,7 +11,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import net.programmierecke.radiodroid2.station.DataRadioStation;
 
+import java.io.Reader;
 import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.Math.min;
 
@@ -45,6 +47,14 @@ public class FavouriteManager extends StationSaveManager {
             super.restore(station, pos);
         }
     }
+    
+    public void LoadM3USimpleWithFileName(final Reader reader, final String fileName) {
+        LoadM3USimpleWithFileName(reader, "", fileName);
+    }
+    
+    public List<DataRadioStation> LoadM3UReader(final Reader reader) {
+        return super.LoadM3UReader(reader);
+    }
 
     @Override
     void Load() {
@@ -52,41 +62,22 @@ public class FavouriteManager extends StationSaveManager {
         updateShortcuts();
     }
 
-    @Override
-    void Save() {
-        super.Save();
-        updateShortcuts();
-    }
-
+    @TargetApi(Build.VERSION_CODES.N_MR1)
     public void updateShortcuts() {
-        if (Build.VERSION.SDK_INT >= 25 && !BuildConfig.IS_TESTING.get()) {
-            int number = min(listStations.size(), ActivityMain.MAX_DYNAMIC_LAUNCHER_SHORTCUTS);
-            SetDynamicAppLauncherShortcuts setDynamicAppLauncherShortcuts = new SetDynamicAppLauncherShortcuts(number);
-            for (int i = 0; i < number; i++) {
-                listStations.get(i).prepareShortcut(context, setDynamicAppLauncherShortcuts);
-            }
-        }
-    }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            ShortcutManager shortcutManager = (ShortcutManager) context.getSystemService(Context.SHORTCUT_SERVICE);
 
-    @TargetApi(25)
-    class SetDynamicAppLauncherShortcuts implements DataRadioStation.ShortcutReadyListener {
-        ArrayList<ShortcutInfo> shortcuts;
-        int expectedNumber;
+            if (shortcutManager != null) {
+                List<ShortcutInfo> shortcuts = new ArrayList<>();
 
-        SetDynamicAppLauncherShortcuts(int expectedNumber) {
-            this.expectedNumber = expectedNumber;
-            shortcuts = new ArrayList<ShortcutInfo>(expectedNumber);
-        }
+                int shortcutCount = min(4, getList().size());
+                for (int i = 0; i < shortcutCount; i++) {
+                    DataRadioStation station = getList().get(i);
+                    shortcuts.add(Utils.createShortcutForStation(context, station, i));
+                }
 
-        @Override
-        public void onShortcutReadyListener(ShortcutInfo shortcut) {
-            shortcuts.add(shortcut);
-            if (shortcuts.size() >= expectedNumber) {
-                ShortcutManager shortcutManager = context.getApplicationContext().getSystemService(ShortcutManager.class);
-                shortcutManager.removeAllDynamicShortcuts();
                 shortcutManager.setDynamicShortcuts(shortcuts);
             }
         }
     }
 }
-

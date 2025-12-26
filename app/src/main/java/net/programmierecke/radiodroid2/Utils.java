@@ -4,10 +4,16 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.ShortcutInfo;
+import android.graphics.drawable.Icon;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -30,11 +36,14 @@ import com.mikepenz.iconics.IconicsColor;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.IconicsSize;
 import com.mikepenz.iconics.typeface.IIcon;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import net.programmierecke.radiodroid2.players.PlayStationTask;
 import net.programmierecke.radiodroid2.players.selector.PlayerSelectorDialog;
 import net.programmierecke.radiodroid2.players.selector.PlayerType;
 import net.programmierecke.radiodroid2.service.ConnectivityChecker;
+import net.programmierecke.radiodroid2.service.MediaSessionCallback;
 import net.programmierecke.radiodroid2.service.PlayerServiceUtil;
 import net.programmierecke.radiodroid2.station.DataRadioStation;
 
@@ -645,5 +654,37 @@ public class Utils {
         }
 
         return client;
+    }
+
+    /**
+     * 创建电台快捷方式
+     * @param context 上下文
+     * @param station 电台对象
+     * @param id 快捷方式ID
+     * @return ShortcutInfo对象
+     */
+    public static ShortcutInfo createShortcutForStation(Context context, DataRadioStation station, int id) {
+        if (Build.VERSION.SDK_INT >= 25) {
+            // 使用默认图标创建快捷方式
+            Intent playByUUIDintent = new Intent(MediaSessionCallback.ACTION_PLAY_STATION_BY_UUID, null, context, ActivityMain.class)
+                    .putExtra(MediaSessionCallback.EXTRA_STATION_UUID, station.StationUuid);
+            
+            ShortcutInfo.Builder builder = new ShortcutInfo.Builder(context.getApplicationContext(), 
+                    context.getPackageName() + "/" + station.StationUuid + "/" + id)
+                    .setShortLabel(station.Name)
+                    .setIntent(playByUUIDintent);
+            
+            // 如果有图标，使用图标
+            if (station.hasIcon()) {
+                // 这里简化处理，使用默认图标
+                // 在实际应用中，可以使用异步加载图标
+                builder.setIcon(Icon.createWithResource(context, R.drawable.ic_launcher));
+            } else {
+                builder.setIcon(Icon.createWithResource(context, R.drawable.ic_launcher));
+            }
+            
+            return builder.build();
+        }
+        return null;
     }
 }
