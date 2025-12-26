@@ -1,0 +1,146 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.google.android.exoplayer",
+    "module": "exoplayer-core",
+    "version": "2.18.2",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.4.2"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.android.exoplayer",
+          "module": "exoplayer-common",
+          "version": {
+            "requires": "2.18.2"
+          }
+        },
+        {
+          "group": "com.google.android.exoplayer",
+          "module": "exoplayer-datasource",
+          "version": {
+            "requires": "2.18.2"
+          }
+        },
+        {
+          "group": "com.google.android.exoplayer",
+          "module": "exoplayer-decoder",
+          "version": {
+            "requires": "2.18.2"
+          }
+        },
+        {
+          "group": "com.google.android.exoplayer",
+          "module": "exoplayer-extractor",
+          "version": {
+            "requires": "2.18.2"
+          }
+        },
+        {
+          "group": "com.google.android.exoplayer",
+          "module": "exoplayer-database",
+          "version": {
+            "requires": "2.18.2"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "exoplayer-core-2.18.2.aar",
+          "url": "exoplayer-core-2.18.2.aar",
+          "size": 1179135,
+          "sha512": "770cf228a80fd794dbe4e899a3f91c6f3db648822feca2713ec1d36ca86ca27ca2186f52bd59c0956db8aa00d3c10eb7b2ebf774a5eeb7969aacce7bcf3ddcf8",
+          "sha256": "da79f29746a1708724d3cb1b0c9e4adb984539a95ecd70a852d4fc1d928774e8",
+          "sha1": "5d04ea47beb09fdbaf90f8d25371d51cb08545b4",
+          "md5": "d9edf899edb6a0dff21ae9d6978a4e0b"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "androidx.annotation",
+          "module": "annotation",
+          "version": {
+            "requires": "1.3.0"
+          }
+        },
+        {
+          "group": "androidx.core",
+          "module": "core",
+          "version": {
+            "requires": "1.7.0"
+          }
+        },
+        {
+          "group": "com.google.android.exoplayer",
+          "module": "exoplayer-common",
+          "version": {
+            "requires": "2.18.2"
+          }
+        },
+        {
+          "group": "com.google.android.exoplayer",
+          "module": "exoplayer-datasource",
+          "version": {
+            "requires": "2.18.2"
+          }
+        },
+        {
+          "group": "com.google.android.exoplayer",
+          "module": "exoplayer-decoder",
+          "version": {
+            "requires": "2.18.2"
+          }
+        },
+        {
+          "group": "com.google.android.exoplayer",
+          "module": "exoplayer-extractor",
+          "version": {
+            "requires": "2.18.2"
+          }
+        },
+        {
+          "group": "com.google.android.exoplayer",
+          "module": "exoplayer-database",
+          "version": {
+            "requires": "2.18.2"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "exoplayer-core-2.18.2.aar",
+          "url": "exoplayer-core-2.18.2.aar",
+          "size": 1179135,
+          "sha512": "770cf228a80fd794dbe4e899a3f91c6f3db648822feca2713ec1d36ca86ca27ca2186f52bd59c0956db8aa00d3c10eb7b2ebf774a5eeb7969aacce7bcf3ddcf8",
+          "sha256": "da79f29746a1708724d3cb1b0c9e4adb984539a95ecd70a852d4fc1d928774e8",
+          "sha1": "5d04ea47beb09fdbaf90f8d25371d51cb08545b4",
+          "md5": "d9edf899edb6a0dff21ae9d6978a4e0b"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="default_background_color">0</integer>
+    <integer name="default_color">0</integer>
+    <integer name="default_contour_color">0</integer>
+    <integer name="default_contour_width">-1</integer>
+    <integer name="default_corner_radius">-1</integer>
+    <integer name="default_padding">-1</integer>
+    <integer name="default_size">-1</integer>
+    <string name="default_icon"> </string>
+    <declare-styleable name="IconicsAnimateChanges">
+        <attr format="boolean" name="iiv_animate_icon_changes"/>
+    </declare-styleable>
+    <declare-styleable name="IconicsCheckableTextView">
+        <!--region start icon-->
+        <attr format="string" name="iiv_start_checked_icon"/>
+        <attr format="color|reference" name="iiv_start_checked_color"/>
+        <attr format="dimension|reference" name="iiv_start_checked_size"/>
+        <attr format="dimension|reference" name="iiv_start_checked_padding"/>
+        <attr format="color|reference" name="iiv_start_checked_contour_color"/>
+        <attr format="dimension|reference" name="iiv_start_checked_contour_width"/>
+        <attr format="color|reference" name="iiv_start_checked_background_color"/>
+        <attr format="dimension|reference" name="iiv_start_checked_corner_radius"/>
+        <attr format="color|reference" name="iiv_start_checked_background_contour_color"/>
+        <attr format="dimension|reference" name="iiv_start_checked_background_contour_width"/>
+        <attr format="dimension|reference" name="iiv_start_checked_shadow_radius"/>
+        <attr format="dimension|reference" name="iiv_start_checked_shadow_dx"/>
+        <attr format="dimension|reference" name="iiv_start_checked_shadow_dy"/>
+        <attr format="color|reference" name="iiv_start_checked_shadow_color"/>
+        <attr format="string" name="iiv_start_checked_animations"/>
+        <attr format="boolean" name="iiv_start_checked_automirror"/>
+        <!--endregion-->
+
+        <!--region top icon-->
+        <attr format="string" name="iiv_top_checked_icon"/>
+        <attr format="color|reference" name="iiv_top_checked_color"/>
+        <attr format="dimension|reference" name="iiv_top_checked_size"/>
+        <attr format="dimension|reference" name="iiv_top_checked_padding"/>
+        <attr format="color|reference" name="iiv_top_checked_contour_color"/>
+        <attr format="dimension|reference" name="iiv_top_checked_contour_width"/>
+        <attr format="color|reference" name="iiv_top_checked_background_color"/>
+        <attr format="dimension|reference" name="iiv_top_checked_corner_radius"/>
+        <attr format="color|reference" name="iiv_top_checked_background_contour_color"/>
+        <attr format="dimension|reference" name="iiv_top_checked_background_contour_width"/>v
+        <attr format="dimension|reference" name="iiv_top_checked_shadow_radius"/>
+        <attr format="dimension|reference" name="iiv_top_checked_shadow_dx"/>
+        <attr format="dimension|reference" name="iiv_top_checked_shadow_dy"/>
+        <attr format="color|reference" name="iiv_top_checked_shadow_color"/>
+        <attr format="string" name="iiv_top_checked_animations"/>
+        <attr format="boolean" name="iiv_top_checked_automirror"/>
+        <!--endregion-->
+
+        <!--region end icon-->
+        <attr format="string" name="iiv_end_checked_icon"/>
+        <attr format="color|reference" name="iiv_end_checked_color"/>
+        <attr format="dimension|reference" name="iiv_end_checked_size"/>
+        <attr format="dimension|reference" name="iiv_end_checked_padding"/>
+        <attr format="color|reference" name="iiv_end_checked_contour_color"/>
+        <attr format="dimension|reference" name="iiv_end_checked_contour_width"/>
+        <attr format="color|reference" name="iiv_end_checked_background_color"/>
+        <attr format="dimension|reference" name="iiv_end_checked_corner_radius"/>
+        <attr format="color|reference" name="iiv_end_checked_background_contour_color"/>
+        <attr format="dimension|reference" name="iiv_end_checked_background_contour_width"/>
+        <attr format="dimension|reference" name="iiv_end_checked_shadow_radius"/>
+        <attr format="dimension|reference" name="iiv_end_checked_shadow_dx"/>
+        <attr format="dimension|reference" name="iiv_end_checked_shadow_dy"/>
+        <attr format="color|reference" name="iiv_end_checked_shadow_color"/>
+        <attr format="string" name="iiv_end_checked_animations"/>
+        <attr format="boolean" name="iiv_end_checked_automirror"/>
+        <!--endregion-->
+
+        <!--region bottom icon-->
+        <attr format="string" name="iiv_bottom_checked_icon"/>
+        <attr format="color|reference" name="iiv_bottom_checked_color"/>
+        <attr format="dimension|reference" name="iiv_bottom_checked_size"/>
+        <attr format="dimension|reference" name="iiv_bottom_checked_padding"/>
+        <attr format="color|reference" name="iiv_bottom_checked_contour_color"/>
+        <attr format="dimension|reference" name="iiv_bottom_checked_contour_width"/>
+        <attr format="color|reference" name="iiv_bottom_checked_background_color"/>
+        <attr format="dimension|reference" name="iiv_bottom_checked_corner_radius"/>
+        <attr format="color|reference" name="iiv_bottom_checked_background_contour_color"/>
+        <attr format="dimension|reference" name="iiv_bottom_checked_background_contour_width"/>
+        <attr format="dimension|reference" name="iiv_bottom_checked_shadow_radius"/>
+        <attr format="dimension|reference" name="iiv_bottom_checked_shadow_dx"/>
+        <attr format="dimension|reference" name="iiv_bottom_checked_shadow_dy"/>
+        <attr format="color|reference" name="iiv_bottom_checked_shadow_color"/>
+        <attr format="string" name="iiv_bottom_checked_animations"/>
+        <attr format="boolean" name="iiv_bottom_checked_automirror"/>
+        <!--endregion-->
+
+        <!--region all icons-->
+        <attr format="string" name="iiv_all_checked_icon"/>
+        <attr format="color|reference" name="iiv_all_checked_color"/>
+        <attr format="dimension|reference" name="iiv_all_checked_size"/>
+        <attr format="dimension|reference" name="iiv_all_checked_padding"/>
+        <attr format="color|reference" name="iiv_all_checked_contour_color"/>
+        <attr format="dimension|reference" name="iiv_all_checked_contour_width"/>
+        <attr format="color|reference" name="iiv_all_checked_background_color"/>
+        <attr format="dimension|reference" name="iiv_all_checked_corner_radius"/>
+        <attr format="color|reference" name="iiv_all_checked_background_contour_color"/>
+        <attr format="dimension|reference" name="iiv_all_checked_background_contour_width"/>
+        <attr format="dimension|reference" name="iiv_all_checked_shadow_radius"/>
+        <attr format="dimension|reference" name="iiv_all_checked_shadow_dx"/>
+        <attr format="dimension|reference" name="iiv_all_checked_shadow_dy"/>
+        <attr format="color|reference" name="iiv_all_checked_shadow_color"/>
+        <attr format="string" name="iiv_all_checked_animations"/>
+        <attr format="boolean" name="iiv_all_checked_automirror"/>
+        <!--endregion-->
+    </declare-styleable>
+    <declare-styleable name="IconicsCompoundButton">
+        <!--region checked icons-->
+        <attr format="string" name="iiv_checked_icon"/>
+        <attr format="color|reference" name="iiv_checked_color"/>
+        <attr format="dimension|reference" name="iiv_checked_size"/>
+        <attr format="dimension|reference" name="iiv_checked_padding"/>
+        <attr format="color|reference" name="iiv_checked_contour_color"/>
+        <attr format="dimension|reference" name="iiv_checked_contour_width"/>
+        <attr format="color|reference" name="iiv_checked_background_color"/>
+        <attr format="dimension|reference" name="iiv_checked_corner_radius"/>
+        <attr format="color|reference" name="iiv_checked_background_contour_color"/>
+        <attr format="dimension|reference" name="iiv_checked_background_contour_width"/>
+        <attr format="dimension|reference" name="iiv_checked_shadow_radius"/>
+        <attr format="dimension|reference" name="iiv_checked_shadow_dx"/>
+        <attr format="dimension|reference" name="iiv_checked_shadow_dy"/>
+        <attr format="color|reference" name="iiv_checked_shadow_color"/>
+        <attr format="string" name="iiv_checked_animations"/>
+        <attr format="boolean" name="iiv_checked_automirror"/>
+        <!--endregion-->
+
+        <!--region unchecked icons-->
+        <attr format="string" name="iiv_unchecked_icon"/>
+        <attr format="color|reference" name="iiv_unchecked_color"/>
+        <attr format="dimension|reference" name="iiv_unchecked_size"/>
+        <attr format="dimension|reference" name="iiv_unchecked_padding"/>
+        <attr format="color|reference" name="iiv_unchecked_contour_color"/>
+        <attr format="dimension|reference" name="iiv_unchecked_contour_width"/>
+        <attr format="color|reference" name="iiv_unchecked_background_color"/>
+        <attr format="dimension|reference" name="iiv_unchecked_corner_radius"/>
+        <attr format="color|reference" name="iiv_unchecked_background_contour_color"/>
+        <attr format="dimension|reference" name="iiv_unchecked_background_contour_width"/>
+        <attr format="dimension|reference" name="iiv_unchecked_shadow_radius"/>
+        <attr format="dimension|reference" name="iiv_unchecked_shadow_dx"/>
+        <attr format="dimension|reference" name="iiv_unchecked_shadow_dy"/>
+        <attr format="color|reference" name="iiv_unchecked_shadow_color"/>
+        <attr format="string" name="iiv_unchecked_animations"/>
+        <attr format="boolean" name="iiv_unchecked_automirror"/>
+        <!--endregion-->
+    </declare-styleable>
+    <declare-styleable name="IconicsImageView">
+        <attr format="string" name="iiv_icon"/>
+        <attr format="color|reference" name="iiv_color"/>
+        <attr format="dimension|reference" name="iiv_size"/>
+        <attr format="dimension|reference" name="iiv_padding"/>
+        <attr format="color|reference" name="iiv_contour_color"/>
+        <attr format="dimension|reference" name="iiv_contour_width"/>
+        <attr format="color|reference" name="iiv_background_color"/>
+        <attr format="dimension|reference" name="iiv_corner_radius"/>
+        <attr format="color|reference" name="iiv_background_contour_color"/>
+        <attr format="dimension|reference" name="iiv_background_contour_width"/>
+        <attr format="dimension|reference" name="iiv_shadow_radius"/>
+        <attr format="dimension|reference" name="iiv_shadow_dx"/>
+        <attr format="dimension|reference" name="iiv_shadow_dy"/>
+        <attr format="color|reference" name="iiv_shadow_color"/>
+        <attr format="string" name="iiv_animations"/>
+        <attr format="boolean" name="iiv_automirror"/>
+    </declare-styleable>
+    <declare-styleable name="IconicsTextView">
+        <!--region start icon-->
+        <attr format="string" name="iiv_start_icon"/>
+        <attr format="color|reference" name="iiv_start_color"/>
+        <attr format="dimension|reference" name="iiv_start_size"/>
+        <attr format="dimension|reference" name="iiv_start_padding"/>
+        <attr format="color|reference" name="iiv_start_contour_color"/>
+        <attr format="dimension|reference" name="iiv_start_contour_width"/>
+        <attr format="color|reference" name="iiv_start_background_color"/>
+        <attr format="dimension|reference" name="iiv_start_corner_radius"/>
+        <attr format="color|reference" name="iiv_start_background_contour_color"/>
+        <attr format="dimension|reference" name="iiv_start_background_contour_width"/>
+        <attr format="dimension|reference" name="iiv_start_shadow_radius"/>
+        <attr format="dimension|reference" name="iiv_start_shadow_dx"/>
+        <attr format="dimension|reference" name="iiv_start_shadow_dy"/>
+        <attr format="color|reference" name="iiv_start_shadow_color"/>
+        <attr format="string" name="iiv_start_animations"/>
+        <attr format="boolean" name="iiv_start_automirror"/>
+        <!--endregion-->
+
+        <!--region top icon-->
+        <attr format="string" name="iiv_top_icon"/>
+        <attr format="color|reference" name="iiv_top_color"/>
+        <attr format="dimension|reference" name="iiv_top_size"/>
+        <attr format="dimension|reference" name="iiv_top_padding"/>
+        <attr format="color|reference" name="iiv_top_contour_color"/>
+        <attr format="dimension|reference" name="iiv_top_contour_width"/>
+        <attr format="color|reference" name="iiv_top_background_color"/>
+        <attr format="dimension|reference" name="iiv_top_corner_radius"/>
+        <attr format="color|reference" name="iiv_top_background_contour_color"/>
+        <attr format="dimension|reference" name="iiv_top_background_contour_width"/>
+        <attr format="dimension|reference" name="iiv_top_shadow_radius"/>
+        <attr format="dimension|reference" name="iiv_top_shadow_dx"/>
+        <attr format="dimension|reference" name="iiv_top_shadow_dy"/>
+        <attr format="color|reference" name="iiv_top_shadow_color"/>
+        <attr format="string" name="iiv_top_animations"/>
+        <attr format="boolean" name="iiv_top_automirror"/>
+        <!--endregion-->
+
+        <!--region end icon-->
+        <attr format="string" name="iiv_end_icon"/>
+        <attr format="color|reference" name="iiv_end_color"/>
+        <attr format="dimension|reference" name="iiv_end_size"/>
+        <attr format="dimension|reference" name="iiv_end_padding"/>
+        <attr format="color|reference" name="iiv_end_contour_color"/>
+        <attr format="dimension|reference" name="iiv_end_contour_width"/>
+        <attr format="color|reference" name="iiv_end_background_color"/>
+        <attr format="dimension|reference" name="iiv_end_corner_radius"/>
+        <attr format="color|reference" name="iiv_end_background_contour_color"/>
+        <attr format="dimension|reference" name="iiv_end_background_contour_width"/>
+        <attr format="dimension|reference" name="iiv_end_shadow_radius"/>
+        <attr format="dimension|reference" name="iiv_end_shadow_dx"/>
+        <attr format="dimension|reference" name="iiv_end_shadow_dy"/>
+        <attr format="color|reference" name="iiv_end_shadow_color"/>
+        <attr format="string" name="iiv_end_animations"/>
+        <attr format="boolean" name="iiv_end_automirror"/>
+        <!--endregion-->
+
+        <!--region bottom icon-->
+        <attr format="string" name="iiv_bottom_icon"/>
+        <attr format="color|reference" name="iiv_bottom_color"/>
+        <attr format="dimension|reference" name="iiv_bottom_size"/>
+        <attr format="dimension|reference" name="iiv_bottom_padding"/>
+        <attr format="color|reference" name="iiv_bottom_contour_color"/>
+        <attr format="dimension|reference" name="iiv_bottom_contour_width"/>
+        <attr format="color|reference" name="iiv_bottom_background_color"/>
+        <attr format="dimension|reference" name="iiv_bottom_corner_radius"/>
+        <attr format="color|reference" name="iiv_bottom_background_contour_color"/>
+        <attr format="dimension|reference" name="iiv_bottom_background_contour_width"/>
+        <attr format="dimension|reference" name="iiv_bottom_shadow_radius"/>
+        <attr format="dimension|reference" name="iiv_bottom_shadow_dx"/>
+        <attr format="dimension|reference" name="iiv_bottom_shadow_dy"/>
+        <attr format="color|reference" name="iiv_bottom_shadow_color"/>
+        <attr format="string" name="iiv_bottom_animations"/>
+        <attr format="boolean" name="iiv_bottom_automirror"/>
+        <!--endregion-->
+
+        <!--region all icons-->
+        <attr format="string" name="iiv_all_icon"/>
+        <attr format="color|reference" name="iiv_all_color"/>
+        <attr format="dimension|reference" name="iiv_all_size"/>
+        <attr format="dimension|reference" name="iiv_all_padding"/>
+        <attr format="color|reference" name="iiv_all_contour_color"/>
+        <attr format="dimension|reference" name="iiv_all_contour_width"/>
+        <attr format="color|reference" name="iiv_all_background_color"/>
+        <attr format="dimension|reference" name="iiv_all_corner_radius"/>
+        <attr format="color|reference" name="iiv_all_background_contour_color"/>
+        <attr format="dimension|reference" name="iiv_all_background_contour_width"/>
+        <attr format="dimension|reference" name="iiv_all_shadow_radius"/>
+        <attr format="dimension|reference" name="iiv_all_shadow_dx"/>
+        <attr format="dimension|reference" name="iiv_all_shadow_dy"/>
+        <attr format="color|reference" name="iiv_all_shadow_color"/>
+        <attr format="string" name="iiv_all_animations"/>
+        <attr format="boolean" name="iiv_all_automirror"/>
+        <!--endregion-->
+    </declare-styleable>
+</resources>

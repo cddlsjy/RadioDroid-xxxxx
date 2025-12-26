@@ -78,6 +78,44 @@ public class RadioStationRepository {
         });
     }
     
+    /**
+     * 清空临时数据库
+     * 用于取消更新时清除临时数据，防止恢复时从上次进度继续
+     */
+    public void clearTempDatabase() {
+        synchronized (sSyncLock) {
+            try {
+                if (tempRadioStationDao != null) {
+                    tempRadioStationDao.deleteAll();
+                    Log.d(TAG, "Successfully cleared temporary database");
+                } else {
+                    Log.w(TAG, "tempRadioStationDao is null, cannot clear temporary database");
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error clearing temporary database", e);
+            }
+        }
+    }
+    
+    /**
+     * 获取临时数据库中的电台数量
+     */
+    public int getTempDatabaseCount() {
+        synchronized (sSyncLock) {
+            try {
+                if (tempRadioStationDao != null) {
+                    return tempRadioStationDao.getCount();
+                } else {
+                    Log.w(TAG, "tempRadioStationDao is null, returning 0");
+                    return 0;
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error getting temp database count", e);
+                return 0;
+            }
+        }
+    }
+    
     // 内部同步方法，不使用Executor，直接在当前线程执行
     public void syncAllStationsFromNetworkInternal(Context context, SyncCallback callback) {
         syncAllStationsFromNetworkInternal(context, callback, false);
@@ -370,42 +408,15 @@ public class RadioStationRepository {
     // 检查网络并获取最快的服务器
     private RadioBrowserServerManager.ServerInfo checkNetworkAndGetFastestServer(Context context, SyncCallback callback) {
         try {
-            // 检查是否有保存的网络检查结果
-            SharedPreferences sharedPref = context.getSharedPreferences("NetworkCheckResults", Context.MODE_PRIVATE);
-            long timestamp = sharedPref.getLong("timestamp", 0);
-            
-            if (timestamp > 0) {
-                // 有保存的结果，检查是否在24小时内
-                long currentTime = System.currentTimeMillis();
-                long hours24 = 24 * 60 * 60 * 1000; // 24小时的毫秒数
-                
-                if (currentTime - timestamp < hours24) {
-                    // 结果在24小时内，使用保存的结果
-                    Log.d(TAG, "使用24小时内的网络检查结果");
-                    
-                    // 从保存的结果中找到最快的服务器
-                    Map<String, Long> results = new HashMap<>();
-                    results.put("fi1.api.radio-browser.info_HTTP", 
-                        sharedPref.getLong("fi1.api.radio-browser.info_HTTP", Long.MAX_VALUE));
-                    results.put("fi1.api.radio-browser.info_HTTPS", 
-                        sharedPref.getLong("fi1.api.radio-browser.info_HTTPS", Long.MAX_VALUE));
-                    results.put("de2.api.radio-browser.info_HTTP", 
-                        sharedPref.getLong("de2.api.radio-browser.info_HTTP", Long.MAX_VALUE));
-                    results.put("de2.api.radio-browser.info_HTTPS", 
-                        sharedPref.getLong("de2.api.radio-browser.info_HTTPS", Long.MAX_VALUE));
-                    
-                    return findFastestServerFromResults(results);
-                }
-            }
-            
-            // 没有保存的结果或结果超过24小时，执行新的网络检查
+            // 不再使用缓存结果，每次都执行新的网络检查
             Log.d(TAG, "执行新的网络检查");
             callback.onProgress("正在检查网络连接速度", 0, 100);
             
             // 测试所有连接速度
             Map<String, Long> results = RadioBrowserServerManager.testAllConnectionSpeeds(context);
             
-            // 保存结果
+            // 保存结果供参考
+            SharedPreferences sharedPref = context.getSharedPreferences("NetworkCheckResults", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             for (Map.Entry<String, Long> entry : results.entrySet()) {
                 editor.putLong(entry.getKey(), entry.getValue());
@@ -750,14 +761,6 @@ public class RadioStationRepository {
     public void closeDatabase() {
         // 由于无法直接访问RadioDroidDatabase.INSTANCE，我们只能重置Repository实例
         INSTANCE = null;
-    }
-    
-    // 获取临时数据库中的电台数量
-    public int getTempDatabaseCount() {
-        if (tempRadioStationDao != null) {
-            return tempRadioStationDao.getCount();
-        }
-        return 0;
     }
     
     // 重新初始化数据库

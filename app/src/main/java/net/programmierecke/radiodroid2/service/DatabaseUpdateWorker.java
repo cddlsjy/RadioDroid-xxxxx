@@ -37,6 +37,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
     private static final String KEY_UPDATE_ID = "update_id";
     private static final String KEY_UPDATE_START_TIME = "update_start_time";
     private static final String KEY_APP_LAST_FOREGROUND_TIME = "app_last_foreground_time";
+    private static final String KEY_UPDATE_CANCELLED = "update_cancelled";
     
     private static final String CHANNEL_ID = "database_update_channel";
     private static final int NOTIFICATION_ID = 1001;
@@ -137,12 +138,37 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
             
             // 检查是否已有更新在进行中
             boolean isAlreadyUpdating = prefs.getBoolean(KEY_IS_UPDATING, false);
+            boolean isCancelled = prefs.getBoolean(KEY_UPDATE_CANCELLED, false);
             long existingUpdateId = prefs.getLong(KEY_UPDATE_ID, 0);
             long updateStartTime = prefs.getLong(KEY_UPDATE_START_TIME, 0);
+            long cancelTimestamp = prefs.getLong("cancel_timestamp", 0);
             long currentTime = System.currentTimeMillis();
             
+            // 如果设置了取消标志，或者取消时间戳在最近10分钟内，不恢复更新
+            if (isCancelled || (cancelTimestamp > 0 && (currentTime - cancelTimestamp) < 10 * 60 * 1000)) {
+                Log.d(TAG, "Previous update was cancelled, not resuming. isCancelled=" + isCancelled + 
+                          ", cancelTimestamp=" + cancelTimestamp + ", currentTime=" + currentTime);
+                
+                // 生成新的更新ID并重置状态
+                updateId = System.currentTimeMillis();
+                updateStartTime = System.currentTimeMillis();
+                
+                // 设置更新状态，并清除取消标志，因为我们现在开始新的更新
+                prefs.edit()
+                    .putBoolean(KEY_IS_UPDATING, true)
+                    .putLong(KEY_UPDATE_ID, updateId)
+                    .putLong(KEY_UPDATE_START_TIME, updateStartTime)
+                    .putString(KEY_PROGRESS_MESSAGE, "正在准备更新...")
+                    .putInt(KEY_PROGRESS_CURRENT, 0)
+                    .putInt(KEY_PROGRESS_TOTAL, 0)
+                    .putBoolean(KEY_UPDATE_CANCELLED, false)  // 清除取消标志
+                    .putLong("cancel_timestamp", 0)  // 清除取消时间戳
+                    .commit();
+                
+                Log.d(TAG, "Starting new update after cancelled one with ID: " + updateId + ", cleared cancel flags");
+            }
             // 如果已有更新在进行中且开始时间在30分钟内，继续该更新
-            if (isAlreadyUpdating && existingUpdateId > 0 && updateStartTime > 0 && 
+            else if (isAlreadyUpdating && existingUpdateId > 0 && updateStartTime > 0 && 
                 (currentTime - updateStartTime) < 30 * 60 * 1000) {
                 Log.d(TAG, "Resuming existing update with ID: " + existingUpdateId);
                 updateId = existingUpdateId;
@@ -161,7 +187,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
                     .putString(KEY_PROGRESS_MESSAGE, "正在准备更新...")
                     .putInt(KEY_PROGRESS_CURRENT, 0)
                     .putInt(KEY_PROGRESS_TOTAL, 0)
-                    .apply();
+                    .commit();
                 
                 Log.d(TAG, "Starting new update with ID: " + updateId);
             }
@@ -179,6 +205,14 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
                 // 检查是否是恢复的更新任务
                 boolean isResuming = isAlreadyUpdating && existingUpdateId > 0;
                 
+                // 如果是最近取消的更新（10分钟内），不使用恢复模式
+                if (isCancelled || (cancelTimestamp > 0 && (currentTime - cancelTimestamp) < 10 * 60 * 1000)) {
+                    Log.d(TAG, "Detected recent cancellation, forcing new update instead of resume");
+                    isResuming = false;
+                    
+                    // 不在这里清除取消标志，等到真正开始新更新时再清除
+                }
+                
                 if (isResuming) {
                     Log.d(TAG, "Resuming existing update with ID: " + existingUpdateId);
                     updateId = existingUpdateId;
@@ -192,12 +226,24 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
                     onProgress(lastProgressMessage, lastProgressCurrent, lastProgressTotal);
                 } else {
                     Log.d(TAG, "Starting new update with ID: " + updateId);
+                    
+                    // 在真正开始新更新时，清除取消标志
+                    if (isCancelled || (cancelTimestamp > 0 && (currentTime - cancelTimestamp) < 10 * 60 * 1000)) {
+                        prefs.edit()
+                            .putBoolean(KEY_UPDATE_CANCELLED, false)
+                            .putLong("cancel_timestamp", 0)
+                            .commit();
+                        Log.d(TAG, "Cleared cancellation flags for new update");
+                    }
                 }
                 
                 // 执行数据库更新，根据是否是恢复模式传递相应参数
                 if (isResuming) {
                     repository.syncAllStationsFromNetworkInternal(getApplicationContext(), this, true);
                 } else {
+                    // 清空临时数据库，确保全新开始
+                    repository.clearTempDatabase();
+                    Log.d(TAG, "Cleared temporary database for new update");
                     repository.syncAllStationsFromNetworkInternal(getApplicationContext(), this, false);
                 }
                 Log.d(TAG, "Database update completed successfully");
@@ -253,8 +299,18 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
     public void onProgress(String message, int progress, int total) {
         Log.d(TAG, "Progress: " + message + " (" + progress + "/" + total + ")");
         
-        // 不检查isStopped()，确保进度始终被写入，即使Worker被停止
-        // 这样可以避免多个Worker实例互相干扰导致进度不更新
+        // 检查是否已被取消
+        if (isStopped()) {
+            Log.d(TAG, "Worker is stopped, throwing exception to interrupt sync process");
+            throw new RuntimeException("更新已被取消");
+        }
+        
+        // 检查SharedPreferences中的取消标志
+        boolean isCancelled = prefs.getBoolean(KEY_UPDATE_CANCELLED, false);
+        if (isCancelled) {
+            Log.d(TAG, "Update cancelled flag detected, throwing exception to interrupt sync process");
+            throw new RuntimeException("更新已被取消");
+        }
         
         prefs.edit()
             .putString(KEY_PROGRESS_MESSAGE, message)
@@ -350,10 +406,24 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
      * 检查是否有正在进行的更新
      */
     public static boolean isUpdating(Context context) {
-        // 首先检查SharedPreferences中的状态，不使用同步块避免主线程阻塞
+        // 首先检查取消标志，如果设置了取消标志，直接返回false
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        boolean isCancelled = prefs.getBoolean(KEY_UPDATE_CANCELLED, false);
+        if (isCancelled) {
+            Log.d(TAG, "Update was cancelled, returning false");
+            return false;
+        }
+        
+        // 检查更新ID，如果为0表示没有更新
+        long updateId = prefs.getLong(KEY_UPDATE_ID, 0);
+        if (updateId == 0) {
+            Log.d(TAG, "Update ID is 0, no update in progress");
+            return false;
+        }
+        
+        // 首先检查SharedPreferences中的状态，不使用同步块避免主线程阻塞
         boolean isUpdatingInPrefs = prefs.getBoolean(KEY_IS_UPDATING, false);
-        Log.d(TAG, "SharedPreferences isUpdating: " + isUpdatingInPrefs);
+        Log.d(TAG, "SharedPreferences isUpdating: " + isUpdatingInPrefs + ", updateId: " + updateId);
         
         // 如果SharedPreferences中显示正在更新，检查更新开始时间
         if (isUpdatingInPrefs) {
@@ -397,7 +467,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
                             }
                             
                             Log.d(TAG, "No evidence of active update found, resetting state");
-                            prefs.edit().putBoolean(KEY_IS_UPDATING, false).apply();
+                            prefs.edit().putBoolean(KEY_IS_UPDATING, false).commit();
                             return false;
                         } catch (Exception e) {
                             Log.e(TAG, "Error checking WorkManager status", e);
@@ -440,7 +510,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
                 }
             } else {
                 Log.d(TAG, "Update started too long ago, resetting state");
-                prefs.edit().putBoolean(KEY_IS_UPDATING, false).apply();
+                prefs.edit().putBoolean(KEY_IS_UPDATING, false).commit();
                 return false;
             }
         }
@@ -461,7 +531,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
                         Log.d(TAG, "Found running or enqueued work, updating SharedPreferences");
                         
                         // 更新SharedPreferences状态
-                        prefs.edit().putBoolean(KEY_IS_UPDATING, true).apply();
+                        prefs.edit().putBoolean(KEY_IS_UPDATING, true).commit();
                         
                         Log.d(TAG, "Returning true - update is in progress");
                         return true;
@@ -514,14 +584,110 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
     public static void cancelUpdate(Context context) {
         // 使用同步块确保与doWork和isUpdating方法保持一致性
         synchronized (sLock) {
-            // 清除更新状态
+            Log.d(TAG, "Starting cancelUpdate process");
+            
+            // 清除更新状态，包括所有相关字段，确保下次启动新更新而不是恢复
             SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+            
+            // 设置取消标志，防止恢复逻辑误判
             prefs.edit()
                 .putBoolean(KEY_IS_UPDATING, false)
-                .apply();
-        
-            // 取消WorkManager任务
-            androidx.work.WorkManager.getInstance(context).cancelAllWorkByTag("database_update");
+                .putLong(KEY_UPDATE_ID, 0)  // 清除更新ID
+                .putLong(KEY_UPDATE_START_TIME, 0)  // 清除开始时间
+                .putLong(KEY_APP_LAST_FOREGROUND_TIME, 0)  // 清除应用前台时间
+                .putString(KEY_PROGRESS_MESSAGE, "更新已取消")
+                .putInt(KEY_PROGRESS_CURRENT, 0)  // 重置当前进度
+                .putInt(KEY_PROGRESS_TOTAL, 0)  // 重置总进度
+                .putBoolean(KEY_UPDATE_CANCELLED, true)  // 设置取消标志
+                .putLong("cancel_timestamp", System.currentTimeMillis())  // 添加取消时间戳
+                .commit();  // 使用commit()确保立即写入
+            
+            // 强制删除SharedPreferences文件并重新创建，确保彻底清除状态
+            try {
+                String prefsPath = context.getApplicationInfo().dataDir + "/shared_prefs/" + PREFS_NAME + ".xml";
+                java.io.File prefsFile = new java.io.File(prefsPath);
+                if (prefsFile.exists()) {
+                    // 删除文件
+                    prefsFile.delete();
+                    Log.d(TAG, "Deleted SharedPreferences file: " + prefsPath);
+                    
+                    // 重新创建文件，只写入取消状态
+                    SharedPreferences newPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                    newPrefs.edit()
+                        .putBoolean(KEY_IS_UPDATING, false)
+                        .putLong(KEY_UPDATE_ID, 0)
+                        .putLong(KEY_UPDATE_START_TIME, 0)
+                        .putLong(KEY_APP_LAST_FOREGROUND_TIME, 0)
+                        .putString(KEY_PROGRESS_MESSAGE, "更新已取消")
+                        .putInt(KEY_PROGRESS_CURRENT, 0)
+                        .putInt(KEY_PROGRESS_TOTAL, 0)
+                        .putBoolean(KEY_UPDATE_CANCELLED, true)
+                        .putLong("cancel_timestamp", System.currentTimeMillis())  // 添加取消时间戳
+                        .commit();
+                    
+                    Log.d(TAG, "Recreated SharedPreferences with cancelled state");
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error recreating SharedPreferences file", e);
+            }
+            
+            // 取消WorkManager任务 - 使用多种方式确保彻底取消
+            androidx.work.WorkManager workManager = androidx.work.WorkManager.getInstance(context);
+            
+            // 方法1：取消唯一工作
+            workManager.cancelUniqueWork("database_update_work");
+            Log.d(TAG, "Cancelled unique work: database_update_work");
+            
+            // 方法2：通过标签取消所有相关工作
+            workManager.cancelAllWorkByTag("database_update");
+            Log.d(TAG, "Cancelled all work by tag: database_update");
+            
+            // 方法3：尝试获取所有工作并取消
+            try {
+                java.util.List<androidx.work.WorkInfo> workInfos = workManager.getWorkInfosByTag("database_update").get();
+                if (workInfos != null) {
+                    for (androidx.work.WorkInfo workInfo : workInfos) {
+                        Log.d(TAG, "Cancelling work: " + workInfo.getId() + ", state: " + workInfo.getState());
+                        workManager.cancelWorkById(workInfo.getId());
+                        
+                        // 额外措施：如果是正在运行的任务，尝试立即终止
+                        if (workInfo.getState() == androidx.work.WorkInfo.State.RUNNING) {
+                            try {
+                                // 尝试强制停止工作
+                                workManager.pruneWork();
+                                Log.d(TAG, "Pruned work to force termination: " + workInfo.getId());
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error pruning work", e);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error cancelling work by ID", e);
+            }
+            
+            // 方法4：尝试清除所有已完成的工作，确保状态干净
+            try {
+                workManager.pruneWork();
+                Log.d(TAG, "Pruned all completed work");
+            } catch (Exception e) {
+                Log.e(TAG, "Error pruning work", e);
+            }
+            
+            // 取消通知
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(NOTIFICATION_ID);
+            
+            // 额外措施：清空临时数据库，确保取消后不会从上次进度恢复
+            try {
+                RadioStationRepository repository = RadioStationRepository.getInstance(context);
+                repository.clearTempDatabase();
+                Log.d(TAG, "Successfully cleared temporary database to prevent resume after cancellation");
+            } catch (Exception e) {
+                Log.e(TAG, "Error clearing temporary database", e);
+            }
+            
+            Log.d(TAG, "CancelUpdate process completed");
         } // 结束synchronized块
     }
     

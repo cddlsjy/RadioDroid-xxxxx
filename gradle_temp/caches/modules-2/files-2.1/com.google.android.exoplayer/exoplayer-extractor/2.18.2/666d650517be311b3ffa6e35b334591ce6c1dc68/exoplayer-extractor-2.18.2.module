@@ -1,0 +1,81 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.google.android.exoplayer",
+    "module": "exoplayer-extractor",
+    "version": "2.18.2",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.4.2"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "exoplayer-extractor-2.18.2.aar",
+          "url": "exoplayer-extractor-2.18.2.aar",
+          "size": 710693,
+          "sha512": "aeb79c3a6b961b3d02a7137dfd11d4c7d89b3c8bc4f7a9080b44fc053bb00160857a71a83949fe50d9f3444222e28bd4b72da84799dd14bb6fcb510ce94e460b",
+          "sha256": "b43f94912c9a9e6e0663c4047229c7018abb17f64aae39ee8caa71fd2d38b329",
+          "sha1": "9eda0ac825eb16347b6212e6deaa09f10488b101",
+          "md5": "882256082809afdc9a8f9ba450a86fdc"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "androidx.annotation",
+          "module": "annotation",
+          "version": {
+            "requires": "1.3.0"
+          }
+        },
+        {
+          "group": "com.google.android.exoplayer",
+          "module": "exoplayer-common",
+          "version": {
+            "requires": "2.18.2"
+          }
+        },
+        {
+          "group": "com.google.android.exoplayer",
+          "module": "exoplayer-decoder",
+          "version": {
+            "requires": "2.18.2"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "exoplayer-extractor-2.18.2.aar",
+          "url": "exoplayer-extractor-2.18.2.aar",
+          "size": 710693,
+          "sha512": "aeb79c3a6b961b3d02a7137dfd11d4c7d89b3c8bc4f7a9080b44fc053bb00160857a71a83949fe50d9f3444222e28bd4b72da84799dd14bb6fcb510ce94e460b",
+          "sha256": "b43f94912c9a9e6e0663c4047229c7018abb17f64aae39ee8caa71fd2d38b329",
+          "sha1": "9eda0ac825eb16347b6212e6deaa09f10488b101",
+          "md5": "882256082809afdc9a8f9ba450a86fdc"
+        }
+      ]
+    }
+  ]
+}

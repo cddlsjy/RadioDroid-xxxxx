@@ -90,14 +90,10 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
         boolean isUpdating = DatabaseUpdateManager.isUpdating(requireContext());
         Log.d("FragmentSettings", "DatabaseUpdateManager.isUpdating() returned: " + isUpdating);
         
-        // 检查对话框内部状态，即使isUpdating返回false，如果对话框已存在，也应该尝试恢复
-        boolean dialogExists = (updateDialog != null);
-        Log.d("FragmentSettings", "updateDialog exists: " + dialogExists);
-        
-        // 只有在真正有更新进行或对话框已存在时才恢复显示
-        if (isUpdating || dialogExists) {
-            Log.d("FragmentSettings", "Restoring dialog - isUpdating: " + isUpdating + ", dialogExists: " + dialogExists);
-            // 如果有正在进行的更新或对话框已存在，显示进度对话框
+        // 只有在真正有更新进行时才恢复显示对话框
+        if (isUpdating) {
+            Log.d("FragmentSettings", "Restoring dialog - isUpdating: " + isUpdating);
+            // 如果有正在进行的更新，显示进度对话框
             try {
                 // 先检查是否已有对话框实例
                 if (updateDialog == null) {
@@ -118,23 +114,16 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                             public void run() {
                                 try {
                                     // 再次检查所有条件，确保状态没有改变
-                                    // 注意：这里只检查对话框状态，不再检查isUpdating，避免重复启动更新
                                     Log.d("FragmentSettings", "In delayed runnable: updateDialog.isShowing=" + (updateDialog != null ? updateDialog.isShowing() : "null"));
                                     
-                                    // 如果对话框存在且之前是显示状态，显示它
-                                    if (updateDialog != null && dialogExists && 
+                                    // 只有在真正有更新进行时才显示对话框
+                                    if (updateDialog != null && DatabaseUpdateManager.isUpdating(requireContext()) && 
                                         isAdded() && getActivity() != null && !getActivity().isFinishing() && !getActivity().isDestroyed()) {
                                         updateDialog.show();
                                         Log.d("FragmentSettings", "Dialog shown successfully");
-                                    } else if (updateDialog != null && isUpdating && 
-                                        isAdded() && getActivity() != null && !getActivity().isFinishing() && !getActivity().isDestroyed()) {
-                                        // 只有在真正有更新进行时才显示对话框
-                                        updateDialog.show();
-                                        Log.d("FragmentSettings", "Dialog shown for active update");
                                     } else {
                                         Log.d("FragmentSettings", "Cannot show dialog: conditions not met - updateDialog=" + (updateDialog != null ? "not null" : "null") + 
-                                                  ", isUpdating=" + isUpdating + 
-                                                  ", dialogExists=" + dialogExists +
+                                                  ", isUpdating=" + DatabaseUpdateManager.isUpdating(requireContext()) + 
                                                   ", isAdded=" + isAdded() + 
                                                   ", activity=" + (getActivity() != null ? "not null" : "null"));
                                     }

@@ -1,0 +1,1772 @@
+﻿--------- beginning of main
+12-23 12:26:52.165  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=150, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:26:52.671  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=150, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:26:53.175  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=150, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:26:53.425  8634  9980 D RadioStationRepository: 宸蹭笅杞?200/50225 涓數鍙?
+12-23 12:26:53.425  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (200/50225)
+12-23 12:26:53.680  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:26:54.193  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:26:54.352  8634  8757 D RadioStationRepository: 宸蹭笅杞?550/50225 涓數鍙?
+12-23 12:26:54.352  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (550/50225)
+12-23 12:26:54.704  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:26:55.214  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:26:55.721  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:26:56.229  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:26:56.719  8634  8757 D RadioStationRepository: 宸蹭笅杞?600/50225 涓數鍙?
+12-23 12:26:56.719  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (600/50225)
+12-23 12:26:56.736  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:26:56.771  8634  9980 D RadioStationRepository: 宸蹭笅杞?250/50225 涓數鍙?
+12-23 12:26:56.771  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (250/50225)
+12-23 12:26:57.246  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:26:57.757  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:26:58.264  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:26:58.496  8634  8757 D RadioStationRepository: 宸蹭笅杞?650/50225 涓數鍙?
+12-23 12:26:58.496  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (650/50225)
+12-23 12:26:58.769  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:26:59.280  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:26:59.788  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:00.299  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:00.736  8634  8757 D RadioStationRepository: 宸蹭笅杞?700/50225 涓數鍙?
+12-23 12:27:00.737  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (700/50225)
+12-23 12:27:00.799  8634  9980 D RadioStationRepository: 宸蹭笅杞?300/50225 涓數鍙?
+12-23 12:27:00.799  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (300/50225)
+12-23 12:27:00.807  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=300, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:01.323  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=300, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:01.833  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=300, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:01.920  8634  8757 D RadioStationRepository: 宸蹭笅杞?750/50225 涓數鍙?
+12-23 12:27:01.920  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (750/50225)
+12-23 12:27:02.338  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=300, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:02.841  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=300, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:03.345  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=300, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:03.848  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=300, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:04.046  8634  8757 D RadioStationRepository: 宸蹭笅杞?800/50225 涓數鍙?
+12-23 12:27:04.046  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (800/50225)
+12-23 12:27:04.351  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=300, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:04.463  8634  9980 D RadioStationRepository: 宸蹭笅杞?350/50225 涓數鍙?
+12-23 12:27:04.463  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (350/50225)
+12-23 12:27:04.855  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=350, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:05.358  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=350, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:05.862  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=350, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:06.124  8634  8757 D RadioStationRepository: 宸蹭笅杞?850/50225 涓數鍙?
+12-23 12:27:06.124  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (850/50225)
+12-23 12:27:06.367  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=350, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:06.873  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=350, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:06.933  8634  9980 D RadioStationRepository: 宸蹭笅杞?400/50225 涓數鍙?
+12-23 12:27:06.933  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (400/50225)
+12-23 12:27:07.380  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=400, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:07.892  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=400, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:08.209  8634  8757 D RadioStationRepository: 宸蹭笅杞?900/50225 涓數鍙?
+12-23 12:27:08.210  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (900/50225)
+12-23 12:27:08.402  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=400, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:08.594  8634  9980 D RadioStationRepository: 宸蹭笅杞?450/50225 涓數鍙?
+12-23 12:27:08.594  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (450/50225)
+12-23 12:27:08.911  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=450, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:09.420  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=450, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:09.930  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=450, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:10.441  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=450, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:10.746  8634  8757 D RadioStationRepository: 宸蹭笅杞?950/50225 涓數鍙?
+12-23 12:27:10.746  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (950/50225)
+12-23 12:27:10.747  8634  9980 D RadioStationRepository: 宸蹭笅杞?500/50225 涓數鍙?
+12-23 12:27:10.854  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:27:10.855  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (500/50225)
+12-23 12:27:10.950  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=500, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:11.457  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=500, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:11.961  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=500, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:12.465  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=500, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:12.704  8634  9980 D RadioStationRepository: 宸蹭笅杞?550/50225 涓數鍙?
+12-23 12:27:12.704  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (550/50225)
+12-23 12:27:12.969  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=550, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:13.087  8634  8757 D RadioStationRepository: 宸蹭笅杞?1000/50225 涓數鍙?
+12-23 12:27:13.168  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:27:13.168  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1000/50225)
+12-23 12:27:13.482  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=550, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:13.987  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=550, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:14.231  8634  8757 D RadioStationRepository: 宸蹭笅杞?1050/50225 涓數鍙?
+12-23 12:27:14.231  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1050/50225)
+12-23 12:27:14.342  8634  9980 D RadioStationRepository: 宸蹭笅杞?600/50225 涓數鍙?
+12-23 12:27:14.342  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (600/50225)
+12-23 12:27:14.492  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=600, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:15.008  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=600, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:15.152  8634  8757 D RadioStationRepository: 宸蹭笅杞?1100/50225 涓數鍙?
+12-23 12:27:15.152  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1100/50225)
+12-23 12:27:15.517  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=600, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:16.026  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=600, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:16.031  8634  9980 D RadioStationRepository: 宸蹭笅杞?650/50225 涓數鍙?
+12-23 12:27:16.031  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (650/50225)
+12-23 12:27:16.533  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:16.882  8634  8757 D RadioStationRepository: 宸蹭笅杞?1150/50225 涓數鍙?
+12-23 12:27:16.883  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1150/50225)
+12-23 12:27:17.042  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:17.549  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:18.058  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:18.563  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:19.071  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:19.361  8634  8757 D RadioStationRepository: 宸蹭笅杞?1200/50225 涓數鍙?
+12-23 12:27:19.362  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1200/50225)
+12-23 12:27:19.577  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:20.086  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:20.595  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:20.659  8634  8757 D RadioStationRepository: 宸蹭笅杞?1250/50225 涓數鍙?
+12-23 12:27:20.660  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1250/50225)
+12-23 12:27:21.103  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:21.471  8634  9980 D RadioStationRepository: 宸蹭笅杞?700/50225 涓數鍙?
+12-23 12:27:21.471  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (700/50225)
+12-23 12:27:21.611  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=700, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:22.126  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=700, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:22.638  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=700, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:22.699  8634  9980 D RadioStationRepository: 宸蹭笅杞?750/50225 涓數鍙?
+12-23 12:27:22.699  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (750/50225)
+12-23 12:27:23.147  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=750, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:23.650  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=750, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:24.158  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=750, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:24.160  8634  8757 D RadioStationRepository: 宸蹭笅杞?1300/50225 涓數鍙?
+12-23 12:27:24.160  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1300/50225)
+12-23 12:27:24.665  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=750, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:24.876  8634  9980 D RadioStationRepository: 宸蹭笅杞?800/50225 涓數鍙?
+12-23 12:27:24.877  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (800/50225)
+12-23 12:27:25.175  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=800, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:25.690  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=800, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:25.895  8634  8757 D RadioStationRepository: 宸蹭笅杞?1350/50225 涓數鍙?
+12-23 12:27:25.895  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1350/50225)
+12-23 12:27:26.199  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=800, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:26.710  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=800, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:27.223  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=800, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:27.599  8634  8757 D RadioStationRepository: 宸蹭笅杞?1400/50225 涓數鍙?
+12-23 12:27:27.599  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1400/50225)
+12-23 12:27:27.733  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=800, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:28.239  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=800, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:28.585  8634  9980 D RadioStationRepository: 宸蹭笅杞?850/50225 涓數鍙?
+12-23 12:27:28.585  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (850/50225)
+12-23 12:27:28.747  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=850, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:29.259  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=850, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:29.681  8634  8757 D RadioStationRepository: 宸蹭笅杞?1450/50225 涓數鍙?
+12-23 12:27:29.681  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1450/50225)
+12-23 12:27:29.769  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=850, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:30.280  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=850, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:30.670  8634  9980 D RadioStationRepository: 宸蹭笅杞?900/50225 涓數鍙?
+12-23 12:27:30.671  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (900/50225)
+12-23 12:27:30.788  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=900, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:31.292  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=900, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:31.798  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=900, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:31.840  8634  8757 D RadioStationRepository: 宸蹭笅杞?1500/50225 涓數鍙?
+12-23 12:27:31.931  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:27:31.931  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1500/50225)
+12-23 12:27:32.304  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=900, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:32.811  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=900, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:32.815  8634  9980 D RadioStationRepository: 宸蹭笅杞?950/50225 涓數鍙?
+12-23 12:27:32.815  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (950/50225)
+12-23 12:27:33.316  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=950, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:33.821  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=950, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:34.327  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=950, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:34.838  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=950, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:35.217  8634  9980 D RadioStationRepository: 宸蹭笅杞?1000/50225 涓數鍙?
+12-23 12:27:35.338  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:27:35.339  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1000/50225)
+12-23 12:27:35.341  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1000, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:35.846  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1000, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:36.320  8634  8757 D RadioStationRepository: 宸蹭笅杞?1550/50225 涓數鍙?
+12-23 12:27:36.320  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1550/50225)
+12-23 12:27:36.352  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1000, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:36.857  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1000, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:37.270  8634  9980 D RadioStationRepository: 宸蹭笅杞?1050/50225 涓數鍙?
+12-23 12:27:37.270  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1050/50225)
+12-23 12:27:37.368  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1050, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:37.876  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1050, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:37.947  8634  8757 D RadioStationRepository: 宸蹭笅杞?1600/50225 涓數鍙?
+12-23 12:27:37.947  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1600/50225)
+12-23 12:27:38.385  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1050, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:38.591  8634  9980 D RadioStationRepository: 宸蹭笅杞?1100/50225 涓數鍙?
+12-23 12:27:38.591  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1100/50225)
+12-23 12:27:38.896  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1100, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:39.407  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1100, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:39.917  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1100, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:40.031  8634  8757 D RadioStationRepository: 宸蹭笅杞?1650/50225 涓數鍙?
+12-23 12:27:40.031  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1650/50225)
+12-23 12:27:40.431  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1100, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:40.941  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1100, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:41.355  8634  9980 D RadioStationRepository: 宸蹭笅杞?1150/50225 涓數鍙?
+12-23 12:27:41.355  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1150/50225)
+12-23 12:27:41.446  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1150, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:41.951  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1150, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:42.128  8634  8757 D RadioStationRepository: 宸蹭笅杞?1700/50225 涓數鍙?
+12-23 12:27:42.128  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1700/50225)
+12-23 12:27:42.458  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1150, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:42.969  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1150, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:43.477  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1150, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:43.510  8634  8757 D RadioStationRepository: 宸蹭笅杞?1750/50225 涓數鍙?
+12-23 12:27:43.510  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1750/50225)
+12-23 12:27:43.985  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1150, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:44.433  8634  8757 D RadioStationRepository: 宸蹭笅杞?1800/50225 涓數鍙?
+12-23 12:27:44.433  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1800/50225)
+12-23 12:27:44.458  8634  9980 D RadioStationRepository: 宸蹭笅杞?1200/50225 涓數鍙?
+12-23 12:27:44.458  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1200/50225)
+12-23 12:27:44.490  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:44.995  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:45.505  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:45.762  8634  8757 D RadioStationRepository: 宸蹭笅杞?1850/50225 涓數鍙?
+12-23 12:27:45.762  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1850/50225)
+12-23 12:27:46.016  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:46.524  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:47.035  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:47.427  8634  8757 D RadioStationRepository: 宸蹭笅杞?1900/50225 涓數鍙?
+12-23 12:27:47.427  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1900/50225)
+12-23 12:27:47.544  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:48.049  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:48.367  8634  9980 D RadioStationRepository: 宸蹭笅杞?1250/50225 涓數鍙?
+12-23 12:27:48.367  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1250/50225)
+12-23 12:27:48.553  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:49.057  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:49.562  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:50.071  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:50.283  8634  8757 D RadioStationRepository: 宸蹭笅杞?1950/50225 涓數鍙?
+12-23 12:27:50.283  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1950/50225)
+12-23 12:27:50.575  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:50.681  8634  9980 D RadioStationRepository: 宸蹭笅杞?1300/50225 涓數鍙?
+12-23 12:27:50.681  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1300/50225)
+12-23 12:27:51.085  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1300, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:51.597  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1300, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:52.103  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1300, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:52.611  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1300, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:53.123  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1300, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:53.631  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1300, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:53.636  8634  9980 D RadioStationRepository: 宸蹭笅杞?1350/50225 涓數鍙?
+12-23 12:27:53.636  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1350/50225)
+12-23 12:27:53.647  8634  8757 D RadioStationRepository: 宸蹭笅杞?2000/50225 涓數鍙?
+12-23 12:27:53.725  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:27:53.725  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2000/50225)
+12-23 12:27:54.138  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1350, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:54.643  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1350, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:55.148  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1350, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:55.182  8634  9980 D RadioStationRepository: 宸蹭笅杞?1400/50225 涓數鍙?
+12-23 12:27:55.182  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1400/50225)
+12-23 12:27:55.656  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1400, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:56.166  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1400, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:56.306  8634  8757 D RadioStationRepository: 宸蹭笅杞?2050/50225 涓數鍙?
+12-23 12:27:56.306  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2050/50225)
+12-23 12:27:56.674  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1400, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:57.104  8634  9980 D RadioStationRepository: 宸蹭笅杞?1450/50225 涓數鍙?
+12-23 12:27:57.104  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1450/50225)
+12-23 12:27:57.185  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1450, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:57.698  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1450, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:57.742  8634  8757 D RadioStationRepository: 宸蹭笅杞?2100/50225 涓數鍙?
+12-23 12:27:57.742  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2100/50225)
+12-23 12:27:58.208  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1450, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:58.649  8634  9980 D RadioStationRepository: 宸蹭笅杞?1500/50225 涓數鍙?
+12-23 12:27:58.718  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1450, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:58.756  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:27:58.756  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1500/50225)
+12-23 12:27:59.102  8634  8757 D RadioStationRepository: 宸蹭笅杞?2150/50225 涓數鍙?
+12-23 12:27:59.103  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2150/50225)
+12-23 12:27:59.220  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1500, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:27:59.728  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1500, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:00.239  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1500, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:00.747  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1500, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:01.256  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1500, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:01.306  8634  9980 D RadioStationRepository: 宸蹭笅杞?1550/50225 涓數鍙?
+12-23 12:28:01.306  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1550/50225)
+12-23 12:28:01.310  8634  8757 D RadioStationRepository: 宸蹭笅杞?2200/50225 涓數鍙?
+12-23 12:28:01.310  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2200/50225)
+12-23 12:28:01.766  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1550, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:02.273  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1550, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:02.781  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1550, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:02.959  8634  9980 D RadioStationRepository: 宸蹭笅杞?1600/50225 涓數鍙?
+12-23 12:28:02.959  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1600/50225)
+12-23 12:28:03.290  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1600, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:03.797  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1600, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:03.845  8634  8757 D RadioStationRepository: 宸蹭笅杞?2250/50225 涓數鍙?
+12-23 12:28:03.845  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2250/50225)
+12-23 12:28:04.308  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1600, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:04.818  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1600, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:05.328  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1600, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:05.728  8634  9980 D RadioStationRepository: 宸蹭笅杞?1650/50225 涓數鍙?
+12-23 12:28:05.728  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1650/50225)
+12-23 12:28:05.837  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:06.139  8634  8757 D RadioStationRepository: 宸蹭笅杞?2300/50225 涓數鍙?
+12-23 12:28:06.139  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2300/50225)
+12-23 12:28:06.351  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:06.860  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:07.371  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:07.881  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:07.897  8634  8757 D RadioStationRepository: 宸蹭笅杞?2350/50225 涓數鍙?
+12-23 12:28:07.897  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2350/50225)
+12-23 12:28:08.388  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:08.899  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1650, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:08.905  8634  9980 D RadioStationRepository: 宸蹭笅杞?1700/50225 涓數鍙?
+12-23 12:28:08.905  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1700/50225)
+12-23 12:28:09.322  8634  8757 D RadioStationRepository: 宸蹭笅杞?2400/50225 涓數鍙?
+12-23 12:28:09.323  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2400/50225)
+12-23 12:28:09.408  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1700, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:09.922  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1700, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:10.431  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1700, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:10.931  8634  9980 D RadioStationRepository: 宸蹭笅杞?1750/50225 涓數鍙?
+12-23 12:28:10.931  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1750/50225)
+12-23 12:28:10.941  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1750, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:11.451  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1750, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:11.960  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1750, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:12.176  8634  8757 D RadioStationRepository: 宸蹭笅杞?2450/50225 涓數鍙?
+12-23 12:28:12.176  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2450/50225)
+12-23 12:28:12.471  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1750, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:12.981  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1750, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:12.999  8634  9980 D RadioStationRepository: 宸蹭笅杞?1800/50225 涓數鍙?
+12-23 12:28:12.999  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1800/50225)
+12-23 12:28:13.489  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1800, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:13.999  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1800, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:14.507  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1800, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:14.943  8634  9980 D RadioStationRepository: 宸蹭笅杞?1850/50225 涓數鍙?
+12-23 12:28:14.943  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1850/50225)
+12-23 12:28:15.017  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1850, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:15.140  8634  8757 D RadioStationRepository: 宸蹭笅杞?2500/50225 涓數鍙?
+12-23 12:28:15.235  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:28:15.235  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2500/50225)
+12-23 12:28:15.528  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1850, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:16.033  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1850, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:16.357  8634  9980 D RadioStationRepository: 宸蹭笅杞?1900/50225 涓數鍙?
+12-23 12:28:16.357  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1900/50225)
+12-23 12:28:16.542  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1900, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:17.050  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1900, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:17.249  8634  8757 D RadioStationRepository: 宸蹭笅杞?2550/50225 涓數鍙?
+12-23 12:28:17.249  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2550/50225)
+12-23 12:28:17.559  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1900, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:18.069  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1900, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:18.402  8634  9980 D RadioStationRepository: 宸蹭笅杞?1950/50225 涓數鍙?
+12-23 12:28:18.402  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1950/50225)
+12-23 12:28:18.579  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1950, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:19.094  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1950, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:19.605  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1950, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:20.114  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1950, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:20.449  8634  9980 D RadioStationRepository: 宸蹭笅杞?2000/50225 涓數鍙?
+12-23 12:28:20.455  8634  8757 D RadioStationRepository: 宸蹭笅杞?2600/50225 涓數鍙?
+12-23 12:28:20.456  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2600/50225)
+12-23 12:28:20.567  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:28:20.567  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2000/50225)
+12-23 12:28:20.625  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2000, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:21.132  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2000, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:21.637  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2000, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:22.145  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2000, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:22.332  8634  9980 D RadioStationRepository: 宸蹭笅杞?2050/50225 涓數鍙?
+12-23 12:28:22.332  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2050/50225)
+12-23 12:28:22.655  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2050, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:22.671  8634  8757 D RadioStationRepository: 宸蹭笅杞?2650/50225 涓數鍙?
+12-23 12:28:22.671  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2650/50225)
+12-23 12:28:23.161  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2050, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:23.631  8634  9980 D RadioStationRepository: 宸蹭笅杞?2100/50225 涓數鍙?
+12-23 12:28:23.631  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2100/50225)
+12-23 12:28:23.672  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2100, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:24.056  8634  8757 D RadioStationRepository: 宸蹭笅杞?2700/50225 涓數鍙?
+12-23 12:28:24.056  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2700/50225)
+12-23 12:28:24.179  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2100, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:24.688  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2100, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:25.196  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2100, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:25.552  8634  8757 D RadioStationRepository: 宸蹭笅杞?2750/50225 涓數鍙?
+12-23 12:28:25.552  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2750/50225)
+12-23 12:28:25.662  8634  9980 D RadioStationRepository: 宸蹭笅杞?2150/50225 涓數鍙?
+12-23 12:28:25.662  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2150/50225)
+12-23 12:28:25.707  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2150, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:26.222  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2150, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:26.731  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2150, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:27.241  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2150, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:27.405  8634  9980 D RadioStationRepository: 宸蹭笅杞?2200/50225 涓數鍙?
+12-23 12:28:27.405  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2200/50225)
+12-23 12:28:27.748  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:28.256  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:28.277  8634  8757 D RadioStationRepository: 宸蹭笅杞?2800/50225 涓數鍙?
+12-23 12:28:28.278  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2800/50225)
+12-23 12:28:28.764  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:29.275  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2200, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:29.470  8634  9980 D RadioStationRepository: 宸蹭笅杞?2250/50225 涓數鍙?
+12-23 12:28:29.471  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2250/50225)
+12-23 12:28:29.787  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:30.304  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=2250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:28:30.339  8634  8634 D DatabaseUpdateProgressDialog: hide() called, isShowing=true, dialog=not null, dialog.isShowing=true
+12-23 12:28:30.340  8634  8634 D DatabaseUpdateProgressDialog: Dialog hidden successfully, isShowing=true
+12-23 12:28:30.341  8634  8634 D DatabaseUpdateProgressDialog: Dialog hidden but internal state preserved, isShowing=true
+12-23 12:28:30.359  8634  8715 D DatabaseUpdateWorker: Worker stopped
+12-23 12:28:31.005  8634  8757 D RadioStationRepository: 宸蹭笅杞?2850/50225 涓數鍙?
+12-23 12:28:31.005  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2850/50225)
+12-23 12:28:31.005  8634  9980 D RadioStationRepository: 宸蹭笅杞?2300/50225 涓數鍙?
+12-23 12:28:31.005  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2300/50225)
+12-23 12:28:32.644  8634  9980 D RadioStationRepository: 宸蹭笅杞?2350/50225 涓數鍙?
+12-23 12:28:32.644  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2350/50225)
+12-23 12:28:33.231  8634  8757 D RadioStationRepository: 宸蹭笅杞?2900/50225 涓數鍙?
+12-23 12:28:33.231  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2900/50225)
+12-23 12:28:35.516  8634  9980 D RadioStationRepository: 宸蹭笅杞?2400/50225 涓數鍙?
+12-23 12:28:35.516  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2400/50225)
+12-23 12:28:36.679  8634  8757 D RadioStationRepository: 宸蹭笅杞?2950/50225 涓數鍙?
+12-23 12:28:36.679  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2950/50225)
+12-23 12:28:37.450  8634  9980 D RadioStationRepository: 宸蹭笅杞?2450/50225 涓數鍙?
+12-23 12:28:37.450  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2450/50225)
+12-23 12:28:38.896  8634  8757 D RadioStationRepository: 宸蹭笅杞?3000/50225 涓數鍙?
+12-23 12:28:38.970  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:28:38.970  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3000/50225)
+12-23 12:28:38.972  8634  9980 D RadioStationRepository: 宸蹭笅杞?2500/50225 涓數鍙?
+12-23 12:28:39.044  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:28:39.044  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2500/50225)
+12-23 12:28:42.519  8634  9980 D RadioStationRepository: 宸蹭笅杞?2550/50225 涓數鍙?
+12-23 12:28:42.519  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2550/50225)
+12-23 12:28:43.291  8634  8757 D RadioStationRepository: 宸蹭笅杞?3050/50225 涓數鍙?
+12-23 12:28:43.291  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3050/50225)
+12-23 12:28:44.634  8634  9980 D RadioStationRepository: 宸蹭笅杞?2600/50225 涓數鍙?
+12-23 12:28:44.635  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2600/50225)
+12-23 12:28:45.360  8634  8757 D RadioStationRepository: 宸蹭笅杞?3100/50225 涓數鍙?
+12-23 12:28:45.360  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3100/50225)
+12-23 12:28:45.385  8634  9980 D RadioStationRepository: 宸蹭笅杞?2650/50225 涓數鍙?
+12-23 12:28:45.385  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2650/50225)
+12-23 12:28:47.181  8634  8757 D RadioStationRepository: 宸蹭笅杞?3150/50225 涓數鍙?
+12-23 12:28:47.181  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3150/50225)
+12-23 12:28:47.560  8634  9980 D RadioStationRepository: 宸蹭笅杞?2700/50225 涓數鍙?
+12-23 12:28:47.560  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2700/50225)
+12-23 12:28:48.821  8634  8757 D RadioStationRepository: 宸蹭笅杞?3200/50225 涓數鍙?
+12-23 12:28:48.822  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3200/50225)
+12-23 12:28:48.828  8634  9980 D RadioStationRepository: 宸蹭笅杞?2750/50225 涓數鍙?
+12-23 12:28:48.828  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2750/50225)
+12-23 12:28:50.319  8634  8757 D RadioStationRepository: 宸蹭笅杞?3250/50225 涓數鍙?
+12-23 12:28:50.319  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3250/50225)
+12-23 12:28:50.528  8634  9980 D RadioStationRepository: 宸蹭笅杞?2800/50225 涓數鍙?
+12-23 12:28:50.528  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2800/50225)
+12-23 12:28:52.320  8634  8757 D RadioStationRepository: 宸蹭笅杞?3300/50225 涓數鍙?
+12-23 12:28:52.320  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3300/50225)
+12-23 12:28:52.720  8634  9980 D RadioStationRepository: 宸蹭笅杞?2850/50225 涓數鍙?
+12-23 12:28:52.720  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2850/50225)
+12-23 12:28:54.464  8634  9980 D RadioStationRepository: 宸蹭笅杞?2900/50225 涓數鍙?
+12-23 12:28:54.465  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2900/50225)
+12-23 12:28:54.512  8634  8757 D RadioStationRepository: 宸蹭笅杞?3350/50225 涓數鍙?
+12-23 12:28:54.512  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3350/50225)
+12-23 12:28:55.806  8634  9980 D RadioStationRepository: 宸蹭笅杞?2950/50225 涓數鍙?
+12-23 12:28:55.807  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (2950/50225)
+12-23 12:28:55.810  8634  8757 D RadioStationRepository: 宸蹭笅杞?3400/50225 涓數鍙?
+12-23 12:28:55.810  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3400/50225)
+12-23 12:28:58.063  8634  8757 D RadioStationRepository: 宸蹭笅杞?3450/50225 涓數鍙?
+12-23 12:28:58.063  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3450/50225)
+12-23 12:28:58.559  8634  9980 D RadioStationRepository: 宸蹭笅杞?3000/50225 涓數鍙?
+12-23 12:28:58.664  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:28:58.664  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3000/50225)
+12-23 12:29:00.568  8634  9980 D RadioStationRepository: 宸蹭笅杞?3050/50225 涓數鍙?
+12-23 12:29:00.568  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3050/50225)
+12-23 12:29:01.555  8634  8757 D RadioStationRepository: 宸蹭笅杞?3500/50225 涓數鍙?
+12-23 12:29:01.653  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:29:01.653  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3500/50225)
+12-23 12:29:01.775  8634  9980 D RadioStationRepository: 宸蹭笅杞?3100/50225 涓數鍙?
+12-23 12:29:01.775  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3100/50225)
+12-23 12:29:04.213  8634  8757 D RadioStationRepository: 宸蹭笅杞?3550/50225 涓數鍙?
+12-23 12:29:04.214  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3550/50225)
+12-23 12:29:04.511  8634  9980 D RadioStationRepository: 宸蹭笅杞?3150/50225 涓數鍙?
+12-23 12:29:04.511  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3150/50225)
+12-23 12:29:06.512  8634  8757 D RadioStationRepository: 宸蹭笅杞?3600/50225 涓數鍙?
+12-23 12:29:06.512  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3600/50225)
+12-23 12:29:06.513  8634  9980 D RadioStationRepository: 宸蹭笅杞?3200/50225 涓數鍙?
+12-23 12:29:06.513  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3200/50225)
+12-23 12:29:07.811  8634  8757 D RadioStationRepository: 宸蹭笅杞?3650/50225 涓數鍙?
+12-23 12:29:07.811  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3650/50225)
+12-23 12:29:08.821  8634  8757 D RadioStationRepository: 宸蹭笅杞?3700/50225 涓數鍙?
+12-23 12:29:08.822  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3700/50225)
+12-23 12:29:10.847  8634  9980 D RadioStationRepository: 宸蹭笅杞?3250/50225 涓數鍙?
+12-23 12:29:10.847  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3250/50225)
+12-23 12:29:11.394  8634  8757 D RadioStationRepository: 宸蹭笅杞?3750/50225 涓數鍙?
+12-23 12:29:11.394  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3750/50225)
+12-23 12:29:13.409  8634  9980 D RadioStationRepository: 宸蹭笅杞?3300/50225 涓數鍙?
+12-23 12:29:13.409  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3300/50225)
+12-23 12:29:13.809  8634  8757 D RadioStationRepository: 宸蹭笅杞?3800/50225 涓數鍙?
+12-23 12:29:13.809  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3800/50225)
+12-23 12:29:15.448  8634  8757 D RadioStationRepository: 宸蹭笅杞?3850/50225 涓數鍙?
+12-23 12:29:15.448  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3850/50225)
+12-23 12:29:15.975  8634  9980 D RadioStationRepository: 宸蹭笅杞?3350/50225 涓數鍙?
+12-23 12:29:15.975  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3350/50225)
+12-23 12:29:16.907  8634  8757 D RadioStationRepository: 宸蹭笅杞?3900/50225 涓數鍙?
+12-23 12:29:16.907  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3900/50225)
+12-23 12:29:18.206  8634  9980 D RadioStationRepository: 宸蹭笅杞?3400/50225 涓數鍙?
+12-23 12:29:18.206  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3400/50225)
+12-23 12:29:18.536  8634  8757 D RadioStationRepository: 宸蹭笅杞?3950/50225 涓數鍙?
+12-23 12:29:18.536  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3950/50225)
+12-23 12:29:19.425  8634  9980 D RadioStationRepository: 宸蹭笅杞?3450/50225 涓數鍙?
+12-23 12:29:19.426  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3450/50225)
+12-23 12:29:19.959  8634  8757 D RadioStationRepository: 宸蹭笅杞?4000/50225 涓數鍙?
+12-23 12:29:20.057  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:29:20.058  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4000/50225)
+12-23 12:29:20.652  8634  9980 D RadioStationRepository: 宸蹭笅杞?3500/50225 涓數鍙?
+12-23 12:29:20.744  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:29:20.744  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3500/50225)
+12-23 12:29:21.860  8634  9980 D RadioStationRepository: 宸蹭笅杞?3550/50225 涓數鍙?
+12-23 12:29:21.861  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3550/50225)
+12-23 12:29:23.185  8634  8757 D RadioStationRepository: 宸蹭笅杞?4050/50225 涓數鍙?
+12-23 12:29:23.185  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4050/50225)
+12-23 12:29:23.566  8634  9980 D RadioStationRepository: 宸蹭笅杞?3600/50225 涓數鍙?
+12-23 12:29:23.567  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3600/50225)
+12-23 12:29:24.881  8634  9980 D RadioStationRepository: 宸蹭笅杞?3650/50225 涓數鍙?
+12-23 12:29:24.881  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3650/50225)
+12-23 12:29:25.296  8634  8757 D RadioStationRepository: 宸蹭笅杞?4100/50225 涓數鍙?
+12-23 12:29:25.296  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4100/50225)
+12-23 12:29:26.753  8634  9980 D RadioStationRepository: 宸蹭笅杞?3700/50225 涓數鍙?
+12-23 12:29:26.753  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3700/50225)
+12-23 12:29:27.148  8634  8757 D RadioStationRepository: 宸蹭笅杞?4150/50225 涓數鍙?
+12-23 12:29:27.148  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4150/50225)
+12-23 12:29:27.153  8634  9980 D RadioStationRepository: 宸蹭笅杞?3750/50225 涓數鍙?
+12-23 12:29:27.154  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3750/50225)
+12-23 12:29:28.463  8634  9980 D RadioStationRepository: 宸蹭笅杞?3800/50225 涓數鍙?
+12-23 12:29:28.464  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3800/50225)
+12-23 12:29:29.280  8634  8757 D RadioStationRepository: 宸蹭笅杞?4200/50225 涓數鍙?
+12-23 12:29:29.281  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4200/50225)
+12-23 12:29:30.607  8634  9980 D RadioStationRepository: 宸蹭笅杞?3850/50225 涓數鍙?
+12-23 12:29:30.608  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3850/50225)
+12-23 12:29:30.640  8634  8757 D RadioStationRepository: 宸蹭笅杞?4250/50225 涓數鍙?
+12-23 12:29:30.640  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4250/50225)
+12-23 12:29:31.934  8634  8757 D RadioStationRepository: 宸蹭笅杞?4300/50225 涓數鍙?
+12-23 12:29:31.934  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4300/50225)
+12-23 12:29:32.403  8634  9980 D RadioStationRepository: 宸蹭笅杞?3900/50225 涓數鍙?
+12-23 12:29:32.403  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3900/50225)
+12-23 12:29:33.770  8634  8757 D RadioStationRepository: 宸蹭笅杞?4350/50225 涓數鍙?
+12-23 12:29:33.770  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4350/50225)
+12-23 12:29:34.196  8634  9980 D RadioStationRepository: 宸蹭笅杞?3950/50225 涓數鍙?
+12-23 12:29:34.197  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (3950/50225)
+12-23 12:29:35.600  8634  9980 D RadioStationRepository: 宸蹭笅杞?4000/50225 涓數鍙?
+12-23 12:29:35.604  8634  8757 D RadioStationRepository: 宸蹭笅杞?4400/50225 涓數鍙?
+12-23 12:29:35.605  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4400/50225)
+12-23 12:29:35.690  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:29:35.690  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4000/50225)
+12-23 12:29:37.074  8634  8757 D RadioStationRepository: 宸蹭笅杞?4450/50225 涓數鍙?
+12-23 12:29:37.074  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4450/50225)
+12-23 12:29:39.119  8634  8757 D RadioStationRepository: 宸蹭笅杞?4500/50225 涓數鍙?
+12-23 12:29:39.120  8634  9980 D RadioStationRepository: 宸蹭笅杞?4050/50225 涓數鍙?
+12-23 12:29:39.121  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4050/50225)
+12-23 12:29:39.236  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:29:39.236  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4500/50225)
+12-23 12:29:40.725  8634  9980 D RadioStationRepository: 宸蹭笅杞?4100/50225 涓數鍙?
+12-23 12:29:40.725  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4100/50225)
+12-23 12:29:41.168  8634  8757 D RadioStationRepository: 宸蹭笅杞?4550/50225 涓數鍙?
+12-23 12:29:41.168  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4550/50225)
+12-23 12:29:42.910  8634  9980 D RadioStationRepository: 宸蹭笅杞?4150/50225 涓數鍙?
+12-23 12:29:42.910  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4150/50225)
+12-23 12:29:43.503  8634  8757 D RadioStationRepository: 宸蹭笅杞?4600/50225 涓數鍙?
+12-23 12:29:43.503  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4600/50225)
+12-23 12:29:44.929  8634  8757 D RadioStationRepository: 宸蹭笅杞?4650/50225 涓數鍙?
+12-23 12:29:44.929  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4650/50225)
+12-23 12:29:45.567  8634  9980 D RadioStationRepository: 宸蹭笅杞?4200/50225 涓數鍙?
+12-23 12:29:45.567  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4200/50225)
+12-23 12:29:46.873  8634  8757 D RadioStationRepository: 宸蹭笅杞?4700/50225 涓數鍙?
+12-23 12:29:46.873  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4700/50225)
+12-23 12:29:47.578  8634  9980 D RadioStationRepository: 宸蹭笅杞?4250/50225 涓數鍙?
+12-23 12:29:47.578  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4250/50225)
+12-23 12:29:51.201  8634  9980 D RadioStationRepository: 宸蹭笅杞?4300/50225 涓數鍙?
+12-23 12:29:51.201  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4300/50225)
+12-23 12:29:52.322  8634  8757 D RadioStationRepository: 宸蹭笅杞?4750/50225 涓數鍙?
+12-23 12:29:52.322  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4750/50225)
+12-23 12:29:53.386  8634  9980 D RadioStationRepository: 宸蹭笅杞?4350/50225 涓數鍙?
+12-23 12:29:53.386  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4350/50225)
+12-23 12:29:55.090  8634  9980 D RadioStationRepository: 宸蹭笅杞?4400/50225 涓數鍙?
+12-23 12:29:55.091  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4400/50225)
+12-23 12:29:55.099  8634  8757 D RadioStationRepository: 宸蹭笅杞?4800/50225 涓數鍙?
+12-23 12:29:55.100  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4800/50225)
+12-23 12:29:56.830  8634  9980 D RadioStationRepository: 宸蹭笅杞?4450/50225 涓數鍙?
+12-23 12:29:56.830  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4450/50225)
+12-23 12:29:56.878  8634  8757 D RadioStationRepository: 宸蹭笅杞?4850/50225 涓數鍙?
+12-23 12:29:56.878  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4850/50225)
+12-23 12:29:58.367  8634  8757 D RadioStationRepository: 宸蹭笅杞?4900/50225 涓數鍙?
+12-23 12:29:58.368  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4900/50225)
+12-23 12:29:59.184  8634  9980 D RadioStationRepository: 宸蹭笅杞?4500/50225 涓數鍙?
+12-23 12:29:59.293  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:29:59.293  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4500/50225)
+12-23 12:29:59.844  8634  8757 D RadioStationRepository: 宸蹭笅杞?4950/50225 涓數鍙?
+12-23 12:29:59.844  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4950/50225)
+12-23 12:30:00.671  8634  8757 D RadioStationRepository: 宸蹭笅杞?5000/50225 涓數鍙?
+12-23 12:30:00.780  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:30:00.780  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5000/50225)
+12-23 12:30:01.814  8634  8757 D RadioStationRepository: 宸蹭笅杞?5050/50225 涓數鍙?
+12-23 12:30:01.815  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5050/50225)
+12-23 12:30:01.857  8634  9980 D RadioStationRepository: 宸蹭笅杞?4550/50225 涓數鍙?
+12-23 12:30:01.857  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4550/50225)
+12-23 12:30:03.690  8634  8757 D RadioStationRepository: 宸蹭笅杞?5100/50225 涓數鍙?
+12-23 12:30:03.690  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5100/50225)
+12-23 12:30:05.222  8634  9980 D RadioStationRepository: 宸蹭笅杞?4600/50225 涓數鍙?
+12-23 12:30:05.222  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4600/50225)
+12-23 12:30:07.020  8634  8757 D RadioStationRepository: 宸蹭笅杞?5150/50225 涓數鍙?
+12-23 12:30:07.020  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5150/50225)
+12-23 12:30:07.759  8634  9980 D RadioStationRepository: 宸蹭笅杞?4650/50225 涓數鍙?
+12-23 12:30:07.759  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4650/50225)
+12-23 12:30:08.912  8634  8757 D RadioStationRepository: 宸蹭笅杞?5200/50225 涓數鍙?
+12-23 12:30:08.912  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5200/50225)
+12-23 12:30:09.698  8634  9980 D RadioStationRepository: 宸蹭笅杞?4700/50225 涓數鍙?
+12-23 12:30:09.699  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4700/50225)
+12-23 12:30:10.864  8634  8757 D RadioStationRepository: 宸蹭笅杞?5250/50225 涓數鍙?
+12-23 12:30:10.864  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5250/50225)
+12-23 12:30:11.656  8634  9980 D RadioStationRepository: 宸蹭笅杞?4750/50225 涓數鍙?
+12-23 12:30:11.656  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4750/50225)
+12-23 12:30:12.817  8634  9980 D RadioStationRepository: 宸蹭笅杞?4800/50225 涓數鍙?
+12-23 12:30:12.817  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4800/50225)
+12-23 12:30:14.133  8634  8757 D RadioStationRepository: 宸蹭笅杞?5300/50225 涓數鍙?
+12-23 12:30:14.133  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5300/50225)
+12-23 12:30:14.271  8634  9980 D RadioStationRepository: 宸蹭笅杞?4850/50225 涓數鍙?
+12-23 12:30:14.271  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4850/50225)
+12-23 12:30:15.466  8634  9980 D RadioStationRepository: 宸蹭笅杞?4900/50225 涓數鍙?
+12-23 12:30:15.466  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4900/50225)
+12-23 12:30:16.417  8634  9980 D RadioStationRepository: 宸蹭笅杞?4950/50225 涓數鍙?
+12-23 12:30:16.417  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (4950/50225)
+12-23 12:30:17.508  8634  8757 D RadioStationRepository: 宸蹭笅杞?5350/50225 涓數鍙?
+12-23 12:30:17.509  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5350/50225)
+12-23 12:30:18.446  8634  9980 D RadioStationRepository: 宸蹭笅杞?5000/50225 涓數鍙?
+12-23 12:30:18.567  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:30:18.568  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5000/50225)
+12-23 12:30:19.951  8634  9980 D RadioStationRepository: 宸蹭笅杞?5050/50225 涓數鍙?
+12-23 12:30:19.951  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5050/50225)
+12-23 12:30:20.606  8634  8757 D RadioStationRepository: 宸蹭笅杞?5400/50225 涓數鍙?
+12-23 12:30:20.607  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5400/50225)
+12-23 12:30:22.228  8634  9980 D RadioStationRepository: 宸蹭笅杞?5100/50225 涓數鍙?
+12-23 12:30:22.228  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5100/50225)
+12-23 12:30:22.402  8634  8757 D RadioStationRepository: 宸蹭笅杞?5450/50225 涓數鍙?
+12-23 12:30:22.402  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5450/50225)
+12-23 12:30:23.562  8634  9980 D RadioStationRepository: 宸蹭笅杞?5150/50225 涓數鍙?
+12-23 12:30:23.563  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5150/50225)
+12-23 12:30:23.938  8634  8757 D RadioStationRepository: 宸蹭笅杞?5500/50225 涓數鍙?
+12-23 12:30:24.043  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:30:24.043  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5500/50225)
+12-23 12:30:25.711  8634  8757 D RadioStationRepository: 宸蹭笅杞?5550/50225 涓數鍙?
+12-23 12:30:25.711  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5550/50225)
+12-23 12:30:26.096  8634  9980 D RadioStationRepository: 宸蹭笅杞?5200/50225 涓數鍙?
+12-23 12:30:26.096  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5200/50225)
+12-23 12:30:27.104  8634  8757 D RadioStationRepository: 宸蹭笅杞?5600/50225 涓數鍙?
+12-23 12:30:27.104  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5600/50225)
+12-23 12:30:27.919  8634  9980 D RadioStationRepository: 宸蹭笅杞?5250/50225 涓數鍙?
+12-23 12:30:27.920  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5250/50225)
+12-23 12:30:28.168  8634  8757 D RadioStationRepository: 宸蹭笅杞?5650/50225 涓數鍙?
+12-23 12:30:28.168  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5650/50225)
+12-23 12:30:30.312  8634  8757 D RadioStationRepository: 宸蹭笅杞?5700/50225 涓數鍙?
+12-23 12:30:30.312  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5700/50225)
+12-23 12:30:30.621  8634  9980 D RadioStationRepository: 宸蹭笅杞?5300/50225 涓數鍙?
+12-23 12:30:30.622  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5300/50225)
+12-23 12:30:31.951  8634  8757 D RadioStationRepository: 宸蹭笅杞?5750/50225 涓數鍙?
+12-23 12:30:31.951  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5750/50225)
+12-23 12:30:33.063  8634  9980 D RadioStationRepository: 宸蹭笅杞?5350/50225 涓數鍙?
+12-23 12:30:33.064  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5350/50225)
+12-23 12:30:33.399  8634  8757 D RadioStationRepository: 宸蹭笅杞?5800/50225 涓數鍙?
+12-23 12:30:33.400  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5800/50225)
+12-23 12:30:34.719  8634  9980 D RadioStationRepository: 宸蹭笅杞?5400/50225 涓數鍙?
+12-23 12:30:34.719  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5400/50225)
+12-23 12:30:36.111  8634  8757 D RadioStationRepository: 宸蹭笅杞?5850/50225 涓數鍙?
+12-23 12:30:36.111  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5850/50225)
+12-23 12:30:36.639  8634  9980 D RadioStationRepository: 宸蹭笅杞?5450/50225 涓數鍙?
+12-23 12:30:36.640  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5450/50225)
+12-23 12:30:38.063  8634  8757 D RadioStationRepository: 宸蹭笅杞?5900/50225 涓數鍙?
+12-23 12:30:38.063  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5900/50225)
+12-23 12:30:38.694  8634  9980 D RadioStationRepository: 宸蹭笅杞?5500/50225 涓數鍙?
+12-23 12:30:38.800  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:30:38.800  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5500/50225)
+12-23 12:30:39.431  8634  8757 D RadioStationRepository: 宸蹭笅杞?5950/50225 涓數鍙?
+12-23 12:30:39.431  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5950/50225)
+12-23 12:30:41.472  8634  8757 D RadioStationRepository: 宸蹭笅杞?6000/50225 涓數鍙?
+12-23 12:30:41.473  8634  9980 D RadioStationRepository: 宸蹭笅杞?5550/50225 涓數鍙?
+12-23 12:30:41.473  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5550/50225)
+12-23 12:30:41.560  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:30:41.560  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6000/50225)
+12-23 12:30:42.949  8634  9980 D RadioStationRepository: 宸蹭笅杞?5600/50225 涓數鍙?
+12-23 12:30:42.949  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5600/50225)
+12-23 12:30:44.544  8634  8757 D RadioStationRepository: 宸蹭笅杞?6050/50225 涓數鍙?
+12-23 12:30:44.544  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6050/50225)
+12-23 12:30:44.669  8634  9980 D RadioStationRepository: 宸蹭笅杞?5650/50225 涓數鍙?
+12-23 12:30:44.669  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5650/50225)
+12-23 12:30:45.864  8634  9980 D RadioStationRepository: 宸蹭笅杞?5700/50225 涓數鍙?
+12-23 12:30:45.865  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5700/50225)
+12-23 12:30:46.686  8634  8757 D RadioStationRepository: 宸蹭笅杞?6100/50225 涓數鍙?
+12-23 12:30:46.686  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6100/50225)
+12-23 12:30:46.717  8634  9980 D RadioStationRepository: 宸蹭笅杞?5750/50225 涓數鍙?
+12-23 12:30:46.718  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5750/50225)
+12-23 12:30:49.138  8634  9980 D RadioStationRepository: 宸蹭笅杞?5800/50225 涓數鍙?
+12-23 12:30:49.138  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5800/50225)
+12-23 12:30:49.960  8634  8757 D RadioStationRepository: 宸蹭笅杞?6150/50225 涓數鍙?
+12-23 12:30:49.960  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6150/50225)
+12-23 12:30:50.356  8634  9980 D RadioStationRepository: 宸蹭笅杞?5850/50225 涓數鍙?
+12-23 12:30:50.356  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5850/50225)
+12-23 12:30:51.211  8634  9980 D RadioStationRepository: 宸蹭笅杞?5900/50225 涓數鍙?
+12-23 12:30:51.211  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5900/50225)
+12-23 12:30:52.636  8634  9980 D RadioStationRepository: 宸蹭笅杞?5950/50225 涓數鍙?
+12-23 12:30:52.636  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (5950/50225)
+12-23 12:30:52.705  8634  8757 D RadioStationRepository: 宸蹭笅杞?6200/50225 涓數鍙?
+12-23 12:30:52.705  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6200/50225)
+12-23 12:30:55.468  8634  9980 D RadioStationRepository: 宸蹭笅杞?6000/50225 涓數鍙?
+12-23 12:30:55.573  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:30:55.573  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6000/50225)
+12-23 12:30:58.261  8634  8757 D RadioStationRepository: 宸蹭笅杞?6250/50225 涓數鍙?
+12-23 12:30:58.262  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6250/50225)
+12-23 12:31:00.304  8634  9980 D RadioStationRepository: 宸蹭笅杞?6050/50225 涓數鍙?
+12-23 12:31:00.304  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6050/50225)
+12-23 12:31:01.531  8634  8757 D RadioStationRepository: 宸蹭笅杞?6300/50225 涓數鍙?
+12-23 12:31:01.531  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6300/50225)
+12-23 12:31:02.363  8634  9980 D RadioStationRepository: 宸蹭笅杞?6100/50225 涓數鍙?
+12-23 12:31:02.363  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6100/50225)
+12-23 12:31:04.801  8634  9980 D RadioStationRepository: 宸蹭笅杞?6150/50225 涓數鍙?
+12-23 12:31:04.802  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6150/50225)
+12-23 12:31:05.033  8634  8757 D RadioStationRepository: 宸蹭笅杞?6350/50225 涓數鍙?
+12-23 12:31:05.033  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6350/50225)
+12-23 12:31:07.580  8634  9980 D RadioStationRepository: 宸蹭笅杞?6200/50225 涓數鍙?
+12-23 12:31:07.580  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6200/50225)
+12-23 12:31:09.404  8634  8757 D RadioStationRepository: 宸蹭笅杞?6400/50225 涓數鍙?
+12-23 12:31:09.405  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6400/50225)
+12-23 12:31:09.405  8634  9980 D RadioStationRepository: 宸蹭笅杞?6250/50225 涓數鍙?
+12-23 12:31:09.405  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6250/50225)
+12-23 12:31:11.279  8634  8757 D RadioStationRepository: 宸蹭笅杞?6450/50225 涓數鍙?
+12-23 12:31:11.280  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6450/50225)
+12-23 12:31:11.484  8634  9980 D RadioStationRepository: 宸蹭笅杞?6300/50225 涓數鍙?
+12-23 12:31:11.485  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6300/50225)
+12-23 12:31:12.976  8634  8757 D RadioStationRepository: 宸蹭笅杞?6500/50225 涓數鍙?
+12-23 12:31:13.074  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:31:13.074  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6500/50225)
+12-23 12:31:13.297  8634  9980 D RadioStationRepository: 宸蹭笅杞?6350/50225 涓數鍙?
+12-23 12:31:13.298  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6350/50225)
+12-23 12:31:15.200  8634  8757 D RadioStationRepository: 宸蹭笅杞?6550/50225 涓數鍙?
+12-23 12:31:15.200  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6550/50225)
+12-23 12:31:17.120  8634  8757 D RadioStationRepository: 宸蹭笅杞?6600/50225 涓數鍙?
+12-23 12:31:17.120  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6600/50225)
+12-23 12:31:17.161  8634  9980 D RadioStationRepository: 宸蹭笅杞?6400/50225 涓數鍙?
+12-23 12:31:17.161  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6400/50225)
+12-23 12:31:19.777  8634  8757 D RadioStationRepository: 宸蹭笅杞?6650/50225 涓數鍙?
+12-23 12:31:19.778  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6650/50225)
+12-23 12:31:20.591  8634  9980 D RadioStationRepository: 宸蹭笅杞?6450/50225 涓數鍙?
+12-23 12:31:20.591  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6450/50225)
+12-23 12:31:21.905  8634  8757 D RadioStationRepository: 宸蹭笅杞?6700/50225 涓數鍙?
+12-23 12:31:21.905  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6700/50225)
+12-23 12:31:22.337  8634  9980 D RadioStationRepository: 宸蹭笅杞?6500/50225 涓數鍙?
+12-23 12:31:22.459  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:31:22.459  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6500/50225)
+12-23 12:31:24.346  8634  8757 D RadioStationRepository: 宸蹭笅杞?6750/50225 涓數鍙?
+12-23 12:31:24.346  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6750/50225)
+12-23 12:31:24.467  8634  9980 D RadioStationRepository: 宸蹭笅杞?6550/50225 涓數鍙?
+12-23 12:31:24.467  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6550/50225)
+12-23 12:31:25.740  8634  8757 D RadioStationRepository: 宸蹭笅杞?6800/50225 涓數鍙?
+12-23 12:31:25.741  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6800/50225)
+12-23 12:31:26.634  8634  9980 D RadioStationRepository: 宸蹭笅杞?6600/50225 涓數鍙?
+12-23 12:31:26.636  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6600/50225)
+12-23 12:31:27.072  8634  8757 D RadioStationRepository: 宸蹭笅杞?6850/50225 涓數鍙?
+12-23 12:31:27.073  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6850/50225)
+12-23 12:31:28.448  8634  8757 D RadioStationRepository: 宸蹭笅杞?6900/50225 涓數鍙?
+12-23 12:31:28.448  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6900/50225)
+12-23 12:31:30.144  8634  9980 D RadioStationRepository: 宸蹭笅杞?6650/50225 涓數鍙?
+12-23 12:31:30.144  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6650/50225)
+12-23 12:31:30.286  8634  8757 D RadioStationRepository: 宸蹭笅杞?6950/50225 涓數鍙?
+12-23 12:31:30.287  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6950/50225)
+12-23 12:31:31.343  8634  8757 D RadioStationRepository: 宸蹭笅杞?7000/50225 涓數鍙?
+12-23 12:31:31.440  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:31:31.440  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7000/50225)
+12-23 12:31:33.393  8634  8757 D RadioStationRepository: 宸蹭笅杞?7050/50225 涓數鍙?
+12-23 12:31:33.393  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7050/50225)
+12-23 12:31:33.687  8634  9980 D RadioStationRepository: 宸蹭笅杞?6700/50225 涓數鍙?
+12-23 12:31:33.687  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6700/50225)
+12-23 12:31:34.895  8634  9980 D RadioStationRepository: 宸蹭笅杞?6750/50225 涓數鍙?
+12-23 12:31:34.896  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6750/50225)
+12-23 12:31:35.778  8634  8757 D RadioStationRepository: 宸蹭笅杞?7100/50225 涓數鍙?
+12-23 12:31:35.778  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7100/50225)
+12-23 12:31:36.262  8634  9980 D RadioStationRepository: 宸蹭笅杞?6800/50225 涓數鍙?
+12-23 12:31:36.262  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6800/50225)
+12-23 12:31:38.927  8634  8757 D RadioStationRepository: 宸蹭笅杞?7150/50225 涓數鍙?
+12-23 12:31:38.927  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7150/50225)
+12-23 12:31:38.976  8634  9980 D RadioStationRepository: 宸蹭笅杞?6850/50225 涓數鍙?
+12-23 12:31:38.976  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6850/50225)
+12-23 12:31:40.472  8634  9980 D RadioStationRepository: 宸蹭笅杞?6900/50225 涓數鍙?
+12-23 12:31:40.473  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6900/50225)
+12-23 12:31:41.791  8634  9980 D RadioStationRepository: 宸蹭笅杞?6950/50225 涓數鍙?
+12-23 12:31:41.791  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (6950/50225)
+12-23 12:31:41.792  8634  8757 D RadioStationRepository: 宸蹭笅杞?7200/50225 涓數鍙?
+12-23 12:31:41.792  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7200/50225)
+12-23 12:31:43.120  8634  9980 D RadioStationRepository: 宸蹭笅杞?7000/50225 涓數鍙?
+12-23 12:31:43.222  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:31:43.222  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7000/50225)
+12-23 12:31:44.559  8634  8757 D RadioStationRepository: 宸蹭笅杞?7250/50225 涓數鍙?
+12-23 12:31:44.559  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7250/50225)
+12-23 12:31:44.582  8634  9980 D RadioStationRepository: 宸蹭笅杞?7050/50225 涓數鍙?
+12-23 12:31:44.582  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7050/50225)
+12-23 12:31:45.887  8634  9980 D RadioStationRepository: 宸蹭笅杞?7100/50225 涓數鍙?
+12-23 12:31:45.887  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7100/50225)
+12-23 12:31:47.120  8634  8757 D RadioStationRepository: 宸蹭笅杞?7300/50225 涓數鍙?
+12-23 12:31:47.120  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7300/50225)
+12-23 12:31:47.917  8634  9980 D RadioStationRepository: 宸蹭笅杞?7150/50225 涓數鍙?
+12-23 12:31:47.918  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7150/50225)
+12-23 12:31:49.677  8634  9980 D RadioStationRepository: 宸蹭笅杞?7200/50225 涓數鍙?
+12-23 12:31:49.679  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7200/50225)
+12-23 12:31:51.521  8634  8757 D RadioStationRepository: 宸蹭笅杞?7350/50225 涓數鍙?
+12-23 12:31:51.522  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7350/50225)
+12-23 12:31:52.319  8634  9980 D RadioStationRepository: 宸蹭笅杞?7250/50225 涓數鍙?
+12-23 12:31:52.319  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7250/50225)
+12-23 12:31:54.287  8634  8757 D RadioStationRepository: 宸蹭笅杞?7400/50225 涓數鍙?
+12-23 12:31:54.288  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7400/50225)
+12-23 12:31:55.453  8634  9980 D RadioStationRepository: 宸蹭笅杞?7300/50225 涓數鍙?
+12-23 12:31:55.453  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7300/50225)
+12-23 12:31:57.549  8634  9980 D RadioStationRepository: 宸蹭笅杞?7350/50225 涓數鍙?
+12-23 12:31:57.549  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7350/50225)
+12-23 12:31:57.557  8634  8757 D RadioStationRepository: 宸蹭笅杞?7450/50225 涓數鍙?
+12-23 12:31:57.558  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7450/50225)
+12-23 12:31:59.073  8634  8757 D RadioStationRepository: 宸蹭笅杞?7500/50225 涓數鍙?
+12-23 12:31:59.165  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:31:59.165  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7500/50225)
+12-23 12:32:00.506  8634  9980 D RadioStationRepository: 宸蹭笅杞?7400/50225 涓數鍙?
+12-23 12:32:00.506  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7400/50225)
+12-23 12:32:00.889  8634  8757 D RadioStationRepository: 宸蹭笅杞?7550/50225 涓數鍙?
+12-23 12:32:00.890  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7550/50225)
+12-23 12:32:02.065  8634  9980 D RadioStationRepository: 宸蹭笅杞?7450/50225 涓數鍙?
+12-23 12:32:02.065  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7450/50225)
+12-23 12:32:03.291  8634  9980 D RadioStationRepository: 宸蹭笅杞?7500/50225 涓數鍙?
+12-23 12:32:03.293  8634  8757 D RadioStationRepository: 宸蹭笅杞?7600/50225 涓數鍙?
+12-23 12:32:03.293  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7600/50225)
+12-23 12:32:03.382  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:32:03.382  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7500/50225)
+12-23 12:32:04.753  8634  8757 D RadioStationRepository: 宸蹭笅杞?7650/50225 涓數鍙?
+12-23 12:32:04.753  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7650/50225)
+12-23 12:32:05.742  8634  8757 D RadioStationRepository: 宸蹭笅杞?7700/50225 涓數鍙?
+12-23 12:32:05.743  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7700/50225)
+12-23 12:32:06.861  8634  9980 D RadioStationRepository: 宸蹭笅杞?7550/50225 涓數鍙?
+12-23 12:32:06.863  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7550/50225)
+12-23 12:32:08.143  8634  8757 D RadioStationRepository: 宸蹭笅杞?7750/50225 涓數鍙?
+12-23 12:32:08.143  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7750/50225)
+12-23 12:32:08.638  8634  9980 D RadioStationRepository: 宸蹭笅杞?7600/50225 涓數鍙?
+12-23 12:32:08.639  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7600/50225)
+12-23 12:32:10.081  8634  8757 D RadioStationRepository: 宸蹭笅杞?7800/50225 涓數鍙?
+12-23 12:32:10.081  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7800/50225)
+12-23 12:32:10.761  8634  9980 D RadioStationRepository: 宸蹭笅杞?7650/50225 涓數鍙?
+12-23 12:32:10.761  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7650/50225)
+12-23 12:32:11.183  8634  8757 D RadioStationRepository: 宸蹭笅杞?7850/50225 涓數鍙?
+12-23 12:32:11.184  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7850/50225)
+12-23 12:32:12.304  8634  8757 D RadioStationRepository: 宸蹭笅杞?7900/50225 涓數鍙?
+12-23 12:32:12.304  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7900/50225)
+12-23 12:32:13.024  8634  8757 D RadioStationRepository: 宸蹭笅杞?7950/50225 涓數鍙?
+12-23 12:32:13.024  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7950/50225)
+12-23 12:32:13.229  8634  9980 D RadioStationRepository: 宸蹭笅杞?7700/50225 涓數鍙?
+12-23 12:32:13.229  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7700/50225)
+12-23 12:32:14.865  8634  8757 D RadioStationRepository: 宸蹭笅杞?8000/50225 涓數鍙?
+12-23 12:32:14.964  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:32:14.965  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8000/50225)
+12-23 12:32:15.010  8634  9980 D RadioStationRepository: 宸蹭笅杞?7750/50225 涓數鍙?
+12-23 12:32:15.010  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7750/50225)
+12-23 12:32:16.911  8634  9980 D RadioStationRepository: 宸蹭笅杞?7800/50225 涓數鍙?
+12-23 12:32:16.912  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7800/50225)
+12-23 12:32:16.948  8634  8757 D RadioStationRepository: 宸蹭笅杞?8050/50225 涓數鍙?
+12-23 12:32:16.949  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8050/50225)
+12-23 12:32:18.080  8634  9980 D RadioStationRepository: 宸蹭笅杞?7850/50225 涓數鍙?
+12-23 12:32:18.081  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7850/50225)
+12-23 12:32:19.787  8634  9980 D RadioStationRepository: 宸蹭笅杞?7900/50225 涓數鍙?
+12-23 12:32:19.788  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7900/50225)
+12-23 12:32:20.603  8634  8757 D RadioStationRepository: 宸蹭笅杞?8100/50225 涓數鍙?
+12-23 12:32:20.603  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8100/50225)
+12-23 12:32:20.603  8634  9980 D RadioStationRepository: 宸蹭笅杞?7950/50225 涓數鍙?
+12-23 12:32:20.603  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (7950/50225)
+12-23 12:32:22.848  8634  9980 D RadioStationRepository: 宸蹭笅杞?8000/50225 涓數鍙?
+12-23 12:32:22.853  8634  8757 D RadioStationRepository: 宸蹭笅杞?8150/50225 涓數鍙?
+12-23 12:32:22.853  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8150/50225)
+12-23 12:32:22.949  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:32:22.949  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8000/50225)
+12-23 12:32:25.191  8634  8757 D RadioStationRepository: 宸蹭笅杞?8200/50225 涓數鍙?
+12-23 12:32:25.191  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8200/50225)
+12-23 12:32:26.524  8634  9980 D RadioStationRepository: 宸蹭笅杞?8050/50225 涓數鍙?
+12-23 12:32:26.524  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8050/50225)
+12-23 12:32:27.040  8634  8757 D RadioStationRepository: 宸蹭笅杞?8250/50225 涓數鍙?
+12-23 12:32:27.040  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8250/50225)
+12-23 12:32:28.656  8634  9980 D RadioStationRepository: 宸蹭笅杞?8100/50225 涓數鍙?
+12-23 12:32:28.656  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8100/50225)
+12-23 12:32:28.715  8634  8757 D RadioStationRepository: 宸蹭笅杞?8300/50225 涓數鍙?
+12-23 12:32:28.715  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8300/50225)
+12-23 12:32:30.624  8634  8757 D RadioStationRepository: 宸蹭笅杞?8350/50225 涓數鍙?
+12-23 12:32:30.624  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8350/50225)
+12-23 12:32:31.104  8634  9980 D RadioStationRepository: 宸蹭笅杞?8150/50225 涓數鍙?
+12-23 12:32:31.104  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8150/50225)
+12-23 12:32:33.597  8634  8757 D RadioStationRepository: 宸蹭笅杞?8400/50225 涓數鍙?
+12-23 12:32:33.598  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8400/50225)
+12-23 12:32:33.991  8634  9980 D RadioStationRepository: 宸蹭笅杞?8200/50225 涓數鍙?
+12-23 12:32:33.991  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8200/50225)
+12-23 12:32:35.671  8634  9980 D RadioStationRepository: 宸蹭笅杞?8250/50225 涓數鍙?
+12-23 12:32:35.671  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8250/50225)
+12-23 12:32:35.945  8634  8757 D RadioStationRepository: 宸蹭笅杞?8450/50225 涓數鍙?
+12-23 12:32:35.946  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8450/50225)
+12-23 12:32:38.514  8634  9980 D RadioStationRepository: 宸蹭笅杞?8300/50225 涓數鍙?
+12-23 12:32:38.514  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8300/50225)
+12-23 12:32:40.159  8634  9980 D RadioStationRepository: 宸蹭笅杞?8350/50225 涓數鍙?
+12-23 12:32:40.159  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8350/50225)
+12-23 12:32:40.159  8634  8757 D RadioStationRepository: 宸蹭笅杞?8500/50225 涓數鍙?
+12-23 12:32:40.259  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:32:40.259  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8500/50225)
+12-23 12:32:41.895  8634  8757 D RadioStationRepository: 宸蹭笅杞?8550/50225 涓數鍙?
+12-23 12:32:41.896  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8550/50225)
+12-23 12:32:44.045  8634  8757 D RadioStationRepository: 宸蹭笅杞?8600/50225 涓數鍙?
+12-23 12:32:44.045  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8600/50225)
+12-23 12:32:44.256  8634  9980 D RadioStationRepository: 宸蹭笅杞?8400/50225 涓數鍙?
+12-23 12:32:44.256  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8400/50225)
+12-23 12:32:45.172  8634  8757 D RadioStationRepository: 宸蹭笅杞?8650/50225 涓數鍙?
+12-23 12:32:45.172  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8650/50225)
+12-23 12:32:46.202  8634  9980 D RadioStationRepository: 宸蹭笅杞?8450/50225 涓數鍙?
+12-23 12:32:46.202  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8450/50225)
+12-23 12:32:47.494  8634  8757 D RadioStationRepository: 宸蹭笅杞?8700/50225 涓數鍙?
+12-23 12:32:47.494  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8700/50225)
+12-23 12:32:48.620  8634  9980 D RadioStationRepository: 宸蹭笅杞?8500/50225 涓數鍙?
+12-23 12:32:48.752  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:32:48.752  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8500/50225)
+12-23 12:32:51.296  8634  8757 D RadioStationRepository: 宸蹭笅杞?8750/50225 涓數鍙?
+12-23 12:32:51.296  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8750/50225)
+12-23 12:32:51.742  8634  9980 D RadioStationRepository: 宸蹭笅杞?8550/50225 涓數鍙?
+12-23 12:32:51.742  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8550/50225)
+12-23 12:32:53.042  8634  9980 D RadioStationRepository: 宸蹭笅杞?8600/50225 涓數鍙?
+12-23 12:32:53.042  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8600/50225)
+12-23 12:32:54.283  8634  8757 D RadioStationRepository: 宸蹭笅杞?8800/50225 涓數鍙?
+12-23 12:32:54.283  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8800/50225)
+12-23 12:32:54.328  8634  9980 D RadioStationRepository: 宸蹭笅杞?8650/50225 涓數鍙?
+12-23 12:32:54.328  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8650/50225)
+12-23 12:32:55.786  8634  9980 D RadioStationRepository: 宸蹭笅杞?8700/50225 涓數鍙?
+12-23 12:32:55.786  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8700/50225)
+12-23 12:32:57.775  8634  8757 D RadioStationRepository: 宸蹭笅杞?8850/50225 涓數鍙?
+12-23 12:32:57.775  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8850/50225)
+12-23 12:32:57.935  8634  9980 D RadioStationRepository: 宸蹭笅杞?8750/50225 涓數鍙?
+12-23 12:32:57.935  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8750/50225)
+12-23 12:33:01.422  8634  9980 D RadioStationRepository: 宸蹭笅杞?8800/50225 涓數鍙?
+12-23 12:33:01.422  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8800/50225)
+12-23 12:33:01.423  8634  8757 D RadioStationRepository: 宸蹭笅杞?8900/50225 涓數鍙?
+12-23 12:33:01.423  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8900/50225)
+12-23 12:33:03.023  8634  9980 D RadioStationRepository: 宸蹭笅杞?8850/50225 涓數鍙?
+12-23 12:33:03.023  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8850/50225)
+12-23 12:33:03.806  8634  8757 D RadioStationRepository: 宸蹭笅杞?8950/50225 涓數鍙?
+12-23 12:33:03.807  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8950/50225)
+12-23 12:33:04.943  8634  9980 D RadioStationRepository: 宸蹭笅杞?8900/50225 涓數鍙?
+12-23 12:33:04.943  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8900/50225)
+12-23 12:33:05.334  8634  8757 D RadioStationRepository: 宸蹭笅杞?9000/50225 涓數鍙?
+12-23 12:33:05.442  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:33:05.442  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9000/50225)
+12-23 12:33:07.615  8634  9980 D RadioStationRepository: 宸蹭笅杞?8950/50225 涓數鍙?
+12-23 12:33:07.615  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (8950/50225)
+12-23 12:33:07.792  8634  8757 D RadioStationRepository: 宸蹭笅杞?9050/50225 涓數鍙?
+12-23 12:33:07.792  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9050/50225)
+12-23 12:33:09.231  8634  8757 D RadioStationRepository: 宸蹭笅杞?9100/50225 涓數鍙?
+12-23 12:33:09.231  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9100/50225)
+12-23 12:33:09.275  8634  9980 D RadioStationRepository: 宸蹭笅杞?9000/50225 涓數鍙?
+12-23 12:33:09.393  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:33:09.393  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9000/50225)
+12-23 12:33:10.783  8634  8757 D RadioStationRepository: 宸蹭笅杞?9150/50225 涓數鍙?
+12-23 12:33:10.784  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9150/50225)
+12-23 12:33:11.181  8634  9980 D RadioStationRepository: 宸蹭笅杞?9050/50225 涓數鍙?
+12-23 12:33:11.181  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9050/50225)
+12-23 12:33:12.286  8634  8757 D RadioStationRepository: 宸蹭笅杞?9200/50225 涓數鍙?
+12-23 12:33:12.286  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9200/50225)
+12-23 12:33:12.344  8634  9980 D RadioStationRepository: 宸蹭笅杞?9100/50225 涓數鍙?
+12-23 12:33:12.344  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9100/50225)
+12-23 12:33:14.465  8634  9980 D RadioStationRepository: 宸蹭笅杞?9150/50225 涓數鍙?
+12-23 12:33:14.465  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9150/50225)
+12-23 12:33:15.069  8634  8757 D RadioStationRepository: 宸蹭笅杞?9250/50225 涓數鍙?
+12-23 12:33:15.069  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9250/50225)
+12-23 12:33:18.463  8634  9980 D RadioStationRepository: 宸蹭笅杞?9200/50225 涓數鍙?
+12-23 12:33:18.463  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9200/50225)
+12-23 12:33:18.964  8634  8757 D RadioStationRepository: 宸蹭笅杞?9300/50225 涓數鍙?
+12-23 12:33:18.964  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9300/50225)
+12-23 12:33:20.905  8634  8757 D RadioStationRepository: 宸蹭笅杞?9350/50225 涓數鍙?
+12-23 12:33:20.905  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9350/50225)
+12-23 12:33:21.216  8634  9980 D RadioStationRepository: 宸蹭笅杞?9250/50225 涓數鍙?
+12-23 12:33:21.216  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9250/50225)
+12-23 12:33:23.168  8634  8757 D RadioStationRepository: 宸蹭笅杞?9400/50225 涓數鍙?
+12-23 12:33:23.168  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9400/50225)
+12-23 12:33:23.571  8634  9980 D RadioStationRepository: 宸蹭笅杞?9300/50225 涓數鍙?
+12-23 12:33:23.571  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9300/50225)
+12-23 12:33:25.936  8634  8757 D RadioStationRepository: 宸蹭笅杞?9450/50225 涓數鍙?
+12-23 12:33:25.936  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9450/50225)
+12-23 12:33:27.069  8634  9980 D RadioStationRepository: 宸蹭笅杞?9350/50225 涓數鍙?
+12-23 12:33:27.069  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9350/50225)
+12-23 12:33:27.876  8634  8757 D RadioStationRepository: 宸蹭笅杞?9500/50225 涓數鍙?
+12-23 12:33:27.989  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:33:27.989  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9500/50225)
+12-23 12:33:30.591  8634  9980 D RadioStationRepository: 宸蹭笅杞?9400/50225 涓數鍙?
+12-23 12:33:30.591  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9400/50225)
+12-23 12:33:31.051  8634  8757 D RadioStationRepository: 宸蹭笅杞?9550/50225 涓數鍙?
+12-23 12:33:31.051  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9550/50225)
+12-23 12:33:33.294  8634  9980 D RadioStationRepository: 宸蹭笅杞?9450/50225 涓數鍙?
+12-23 12:33:33.294  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9450/50225)
+12-23 12:33:33.504  8634  8757 D RadioStationRepository: 宸蹭笅杞?9600/50225 涓數鍙?
+12-23 12:33:33.504  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9600/50225)
+12-23 12:33:34.951  8634  9980 D RadioStationRepository: 宸蹭笅杞?9500/50225 涓數鍙?
+12-23 12:33:35.066  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:33:35.066  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9500/50225)
+12-23 12:33:35.315  8634  8757 D RadioStationRepository: 宸蹭笅杞?9650/50225 涓數鍙?
+12-23 12:33:35.316  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9650/50225)
+12-23 12:33:36.897  8634  8757 D RadioStationRepository: 宸蹭笅杞?9700/50225 涓數鍙?
+12-23 12:33:36.898  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9700/50225)
+12-23 12:33:37.895  8634  9980 D RadioStationRepository: 宸蹭笅杞?9550/50225 涓數鍙?
+12-23 12:33:37.895  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9550/50225)
+12-23 12:33:39.149  8634  8757 D RadioStationRepository: 宸蹭笅杞?9750/50225 涓數鍙?
+12-23 12:33:39.150  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9750/50225)
+12-23 12:33:40.990  8634  9980 D RadioStationRepository: 宸蹭笅杞?9600/50225 涓數鍙?
+12-23 12:33:40.991  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9600/50225)
+12-23 12:33:41.192  8634  8757 D RadioStationRepository: 宸蹭笅杞?9800/50225 涓數鍙?
+12-23 12:33:41.192  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9800/50225)
+12-23 12:33:42.799  8634  9980 D RadioStationRepository: 宸蹭笅杞?9650/50225 涓數鍙?
+12-23 12:33:42.799  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9650/50225)
+12-23 12:33:43.987  8634  9980 D RadioStationRepository: 宸蹭笅杞?9700/50225 涓數鍙?
+12-23 12:33:43.987  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9700/50225)
+12-23 12:33:45.535  8634  8757 D RadioStationRepository: 宸蹭笅杞?9850/50225 涓數鍙?
+12-23 12:33:45.535  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9850/50225)
+12-23 12:33:47.419  8634  9980 D RadioStationRepository: 宸蹭笅杞?9750/50225 涓數鍙?
+12-23 12:33:47.419  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9750/50225)
+12-23 12:33:47.521  8634  8757 D RadioStationRepository: 宸蹭笅杞?9900/50225 涓數鍙?
+12-23 12:33:47.521  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9900/50225)
+12-23 12:33:50.193  8634  9980 D RadioStationRepository: 宸蹭笅杞?9800/50225 涓數鍙?
+12-23 12:33:50.193  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9800/50225)
+12-23 12:33:50.864  8634  8757 D RadioStationRepository: 宸蹭笅杞?9950/50225 涓數鍙?
+12-23 12:33:50.864  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9950/50225)
+12-23 12:33:51.820  8634  9980 D RadioStationRepository: 宸蹭笅杞?9850/50225 涓數鍙?
+12-23 12:33:51.820  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9850/50225)
+12-23 12:33:53.675  8634  9980 D RadioStationRepository: 宸蹭笅杞?9900/50225 涓數鍙?
+12-23 12:33:53.676  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9900/50225)
+12-23 12:33:54.264  8634  8757 D RadioStationRepository: 宸蹭笅杞?10000/50225 涓數鍙?
+12-23 12:33:54.368  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:33:54.368  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10000/50225)
+12-23 12:33:55.520  8634  9980 D RadioStationRepository: 宸蹭笅杞?9950/50225 涓數鍙?
+12-23 12:33:55.520  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (9950/50225)
+12-23 12:33:56.348  8634  8757 D RadioStationRepository: 宸蹭笅杞?10050/50225 涓數鍙?
+12-23 12:33:56.348  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10050/50225)
+12-23 12:33:57.373  8634  9980 D RadioStationRepository: 宸蹭笅杞?10000/50225 涓數鍙?
+12-23 12:33:57.483  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:33:57.483  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10000/50225)
+12-23 12:34:00.013  8634  8757 D RadioStationRepository: 宸蹭笅杞?10100/50225 涓數鍙?
+12-23 12:34:00.013  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10100/50225)
+12-23 12:34:02.176  8634  9980 D RadioStationRepository: 宸蹭笅杞?10050/50225 涓數鍙?
+12-23 12:34:02.177  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10050/50225)
+12-23 12:34:03.403  8634  9980 D RadioStationRepository: 宸蹭笅杞?10100/50225 涓數鍙?
+12-23 12:34:03.403  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10100/50225)
+12-23 12:34:03.421  8634  8757 D RadioStationRepository: 宸蹭笅杞?10150/50225 涓數鍙?
+12-23 12:34:03.421  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10150/50225)
+12-23 12:34:04.431  8634  9980 D RadioStationRepository: 宸蹭笅杞?10150/50225 涓數鍙?
+12-23 12:34:04.431  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10150/50225)
+12-23 12:34:06.180  8634  8757 D RadioStationRepository: 宸蹭笅杞?10200/50225 涓數鍙?
+12-23 12:34:06.180  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10200/50225)
+12-23 12:34:06.560  8634  9980 D RadioStationRepository: 宸蹭笅杞?10200/50225 涓數鍙?
+12-23 12:34:06.560  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10200/50225)
+12-23 12:34:07.820  8634  9980 D RadioStationRepository: 宸蹭笅杞?10250/50225 涓數鍙?
+12-23 12:34:07.820  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10250/50225)
+12-23 12:34:09.856  8634  8757 D RadioStationRepository: 宸蹭笅杞?10250/50225 涓數鍙?
+12-23 12:34:09.856  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10250/50225)
+12-23 12:34:09.887  8634  9980 D RadioStationRepository: 宸蹭笅杞?10300/50225 涓數鍙?
+12-23 12:34:09.888  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10300/50225)
+12-23 12:34:11.721  8634  8757 D RadioStationRepository: 宸蹭笅杞?10300/50225 涓數鍙?
+12-23 12:34:11.721  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10300/50225)
+12-23 12:34:13.651  8634  8757 D RadioStationRepository: 宸蹭笅杞?10350/50225 涓數鍙?
+12-23 12:34:13.652  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10350/50225)
+12-23 12:34:14.463  8634  9980 D RadioStationRepository: 宸蹭笅杞?10350/50225 涓數鍙?
+12-23 12:34:14.463  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10350/50225)
+12-23 12:34:15.758  8634  9980 D RadioStationRepository: 宸蹭笅杞?10400/50225 涓數鍙?
+12-23 12:34:15.758  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10400/50225)
+12-23 12:34:16.008  8634  8757 D RadioStationRepository: 宸蹭笅杞?10400/50225 涓數鍙?
+12-23 12:34:16.008  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10400/50225)
+12-23 12:34:17.135  8634  8757 D RadioStationRepository: 宸蹭笅杞?10450/50225 涓數鍙?
+12-23 12:34:17.135  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10450/50225)
+12-23 12:34:18.348  8634  9980 D RadioStationRepository: 宸蹭笅杞?10450/50225 涓數鍙?
+12-23 12:34:18.348  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10450/50225)
+12-23 12:34:18.671  8634  8757 D RadioStationRepository: 宸蹭笅杞?10500/50225 涓數鍙?
+12-23 12:34:18.777  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:34:18.777  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10500/50225)
+12-23 12:34:20.024  8634  9980 D RadioStationRepository: 宸蹭笅杞?10500/50225 涓數鍙?
+12-23 12:34:20.149  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:34:20.149  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10500/50225)
+12-23 12:34:20.815  8634  8757 D RadioStationRepository: 宸蹭笅杞?10550/50225 涓數鍙?
+12-23 12:34:20.815  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10550/50225)
+12-23 12:34:22.384  8634  9980 D RadioStationRepository: 宸蹭笅杞?10550/50225 涓數鍙?
+12-23 12:34:22.384  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10550/50225)
+12-23 12:34:22.771  8634  8757 D RadioStationRepository: 宸蹭笅杞?10600/50225 涓數鍙?
+12-23 12:34:22.772  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10600/50225)
+12-23 12:34:23.652  8634  9980 D RadioStationRepository: 宸蹭笅杞?10600/50225 涓數鍙?
+12-23 12:34:23.652  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10600/50225)
+12-23 12:34:25.641  8634  8757 D RadioStationRepository: 宸蹭笅杞?10650/50225 涓數鍙?
+12-23 12:34:25.641  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10650/50225)
+12-23 12:34:25.916  8634  9980 D RadioStationRepository: 宸蹭笅杞?10650/50225 涓數鍙?
+12-23 12:34:25.916  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10650/50225)
+12-23 12:34:27.152  8634  8757 D RadioStationRepository: 宸蹭笅杞?10700/50225 涓數鍙?
+12-23 12:34:27.152  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10700/50225)
+12-23 12:34:27.805  8634  9980 D RadioStationRepository: 宸蹭笅杞?10700/50225 涓數鍙?
+12-23 12:34:27.806  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10700/50225)
+12-23 12:34:29.863  8634  8757 D RadioStationRepository: 宸蹭笅杞?10750/50225 涓數鍙?
+12-23 12:34:29.863  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10750/50225)
+12-23 12:34:30.297  8634  9980 D RadioStationRepository: 宸蹭笅杞?10750/50225 涓數鍙?
+12-23 12:34:30.297  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10750/50225)
+12-23 12:34:32.936  8634  9980 D RadioStationRepository: 宸蹭笅杞?10800/50225 涓數鍙?
+12-23 12:34:32.936  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10800/50225)
+12-23 12:34:33.520  8634  8757 D RadioStationRepository: 宸蹭笅杞?10800/50225 涓數鍙?
+12-23 12:34:33.520  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10800/50225)
+12-23 12:34:35.150  8634  8757 D RadioStationRepository: 宸蹭笅杞?10850/50225 涓數鍙?
+12-23 12:34:35.151  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10850/50225)
+12-23 12:34:35.743  8634  9980 D RadioStationRepository: 宸蹭笅杞?10850/50225 涓數鍙?
+12-23 12:34:35.743  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10850/50225)
+12-23 12:34:37.023  8634  9980 D RadioStationRepository: 宸蹭笅杞?10900/50225 涓數鍙?
+12-23 12:34:37.023  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10900/50225)
+12-23 12:34:37.818  8634  8757 D RadioStationRepository: 宸蹭笅杞?10900/50225 涓數鍙?
+12-23 12:34:37.818  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10900/50225)
+12-23 12:34:39.409  8634  9980 D RadioStationRepository: 宸蹭笅杞?10950/50225 涓數鍙?
+12-23 12:34:39.409  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10950/50225)
+12-23 12:34:40.560  8634  8757 D RadioStationRepository: 宸蹭笅杞?10950/50225 涓數鍙?
+12-23 12:34:40.560  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (10950/50225)
+12-23 12:34:42.403  8634  9980 D RadioStationRepository: 宸蹭笅杞?11000/50225 涓數鍙?
+12-23 12:34:42.519  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:34:42.519  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11000/50225)
+12-23 12:34:42.607  8634  8757 D RadioStationRepository: 宸蹭笅杞?11000/50225 涓數鍙?
+12-23 12:34:42.724  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:34:42.724  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11000/50225)
+12-23 12:34:44.811  8634  9980 D RadioStationRepository: 宸蹭笅杞?11050/50225 涓數鍙?
+12-23 12:34:44.811  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11050/50225)
+12-23 12:34:46.517  8634  9980 D RadioStationRepository: 宸蹭笅杞?11100/50225 涓數鍙?
+12-23 12:34:46.518  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11100/50225)
+12-23 12:34:48.408  8634  8757 D RadioStationRepository: 宸蹭笅杞?11050/50225 涓數鍙?
+12-23 12:34:48.408  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11050/50225)
+12-23 12:34:49.746  8634  9980 D RadioStationRepository: 宸蹭笅杞?11150/50225 涓數鍙?
+12-23 12:34:49.746  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11150/50225)
+12-23 12:34:51.423  8634  8757 D RadioStationRepository: 宸蹭笅杞?11100/50225 涓數鍙?
+12-23 12:34:51.423  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11100/50225)
+12-23 12:34:52.513  8634  9980 D RadioStationRepository: 宸蹭笅杞?11200/50225 涓數鍙?
+12-23 12:34:52.513  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11200/50225)
+12-23 12:34:53.034  8634  8757 D RadioStationRepository: 宸蹭笅杞?11150/50225 涓數鍙?
+12-23 12:34:53.034  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11150/50225)
+12-23 12:34:53.977  8634  9980 D RadioStationRepository: 宸蹭笅杞?11250/50225 涓數鍙?
+12-23 12:34:53.977  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11250/50225)
+12-23 12:34:54.752  8634  8757 D RadioStationRepository: 宸蹭笅杞?11200/50225 涓數鍙?
+12-23 12:34:54.752  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11200/50225)
+12-23 12:34:55.952  8634  9980 D RadioStationRepository: 宸蹭笅杞?11300/50225 涓數鍙?
+12-23 12:34:55.952  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11300/50225)
+12-23 12:34:55.958  8634  8757 D RadioStationRepository: 宸蹭笅杞?11250/50225 涓數鍙?
+12-23 12:34:55.959  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11250/50225)
+12-23 12:34:57.683  8634  8757 D RadioStationRepository: 宸蹭笅杞?11300/50225 涓數鍙?
+12-23 12:34:57.683  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11300/50225)
+12-23 12:34:57.759  8634  9980 D RadioStationRepository: 宸蹭笅杞?11350/50225 涓數鍙?
+12-23 12:34:57.759  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11350/50225)
+12-23 12:35:00.127  8634  9980 D RadioStationRepository: 宸蹭笅杞?11400/50225 涓數鍙?
+12-23 12:35:00.127  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11400/50225)
+12-23 12:35:00.248  8634  8757 D RadioStationRepository: 宸蹭笅杞?11350/50225 涓數鍙?
+12-23 12:35:00.248  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11350/50225)
+12-23 12:35:02.281  8634  8757 D RadioStationRepository: 宸蹭笅杞?11400/50225 涓數鍙?
+12-23 12:35:02.281  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11400/50225)
+12-23 12:35:03.816  8634  8757 D RadioStationRepository: 宸蹭笅杞?11450/50225 涓數鍙?
+12-23 12:35:03.817  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11450/50225)
+12-23 12:35:04.236  8634  9980 D RadioStationRepository: 宸蹭笅杞?11450/50225 涓數鍙?
+12-23 12:35:04.237  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11450/50225)
+12-23 12:35:05.055  8634  8757 D RadioStationRepository: 宸蹭笅杞?11500/50225 涓數鍙?
+12-23 12:35:05.164  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:35:05.164  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11500/50225)
+12-23 12:35:06.929  8634  8757 D RadioStationRepository: 宸蹭笅杞?11550/50225 涓數鍙?
+12-23 12:35:06.929  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11550/50225)
+12-23 12:35:07.099  8634  9980 D RadioStationRepository: 宸蹭笅杞?11500/50225 涓數鍙?
+12-23 12:35:07.213  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:35:07.213  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11500/50225)
+12-23 12:35:09.258  8634  9980 D RadioStationRepository: 宸蹭笅杞?11550/50225 涓數鍙?
+12-23 12:35:09.258  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11550/50225)
+12-23 12:35:09.407  8634  8757 D RadioStationRepository: 宸蹭笅杞?11600/50225 涓數鍙?
+12-23 12:35:09.407  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11600/50225)
+12-23 12:35:10.982  8634  8757 D RadioStationRepository: 宸蹭笅杞?11650/50225 涓數鍙?
+12-23 12:35:10.982  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11650/50225)
+12-23 12:35:12.016  8634  9980 D RadioStationRepository: 宸蹭笅杞?11600/50225 涓數鍙?
+12-23 12:35:12.016  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11600/50225)
+12-23 12:35:14.473  8634  8757 D RadioStationRepository: 宸蹭笅杞?11700/50225 涓數鍙?
+12-23 12:35:14.473  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11700/50225)
+12-23 12:35:15.603  8634  9980 D RadioStationRepository: 宸蹭笅杞?11650/50225 涓數鍙?
+12-23 12:35:15.603  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11650/50225)
+12-23 12:35:16.493  8634  8757 D RadioStationRepository: 宸蹭笅杞?11750/50225 涓數鍙?
+12-23 12:35:16.493  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11750/50225)
+12-23 12:35:16.831  8634  9980 D RadioStationRepository: 宸蹭笅杞?11700/50225 涓數鍙?
+12-23 12:35:16.831  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11700/50225)
+12-23 12:35:18.920  8634  8757 D RadioStationRepository: 宸蹭笅杞?11800/50225 涓數鍙?
+12-23 12:35:18.920  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11800/50225)
+12-23 12:35:19.693  8634  9980 D RadioStationRepository: 宸蹭笅杞?11750/50225 涓數鍙?
+12-23 12:35:19.693  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11750/50225)
+12-23 12:35:20.965  8634  8757 D RadioStationRepository: 宸蹭笅杞?11850/50225 涓數鍙?
+12-23 12:35:20.965  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11850/50225)
+12-23 12:35:21.236  8634  9980 D RadioStationRepository: 宸蹭笅杞?11800/50225 涓數鍙?
+12-23 12:35:21.236  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11800/50225)
+12-23 12:35:21.520  8634  8634 D DatabaseUpdateProgressDialog: isShowing() called, returning false (dialog=not null, dialog.isShowing=false, internal isShowing=true)
+12-23 12:35:22.330  8634  9980 D RadioStationRepository: 宸蹭笅杞?11850/50225 涓數鍙?
+12-23 12:35:22.330  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11850/50225)
+12-23 12:35:23.135  8634  8757 D RadioStationRepository: 宸蹭笅杞?11900/50225 涓數鍙?
+12-23 12:35:23.135  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11900/50225)
+12-23 12:35:23.821  8634  9980 D RadioStationRepository: 宸蹭笅杞?11900/50225 涓數鍙?
+12-23 12:35:23.821  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11900/50225)
+12-23 12:35:24.660  8634  8757 D RadioStationRepository: 宸蹭笅杞?11950/50225 涓數鍙?
+12-23 12:35:24.660  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11950/50225)
+12-23 12:35:36.954  8634  9980 W RadioStationRepository: 绗?239 椤典笅杞藉け璐?
+12-23 12:35:36.982  8634  8757 D RadioStationRepository: 宸蹭笅杞?12000/50225 涓數鍙?
+12-23 12:35:37.014  8634  8634 D FragmentSettings: onResume called
+12-23 12:35:37.014  8634  8634 D FragmentSettings: checkAndRestoreUpdateDialog called
+12-23 12:35:37.014  8634  8634 D DatabaseUpdateWorker: isUpdating called
+12-23 12:35:37.014  8634  8634 D DatabaseUpdateWorker: SharedPreferences isUpdating: false
+12-23 12:35:37.025  8634  8634 D DatabaseUpdateWorker: WorkManager workInfos: 1 items
+12-23 12:35:37.025  8634  8634 D DatabaseUpdateWorker: WorkInfo state: CANCELLED, id: 8fa777ba-e826-484c-bd5a-9d02161bd854
+12-23 12:35:37.025  8634  8634 D DatabaseUpdateWorker: No update in progress, returning false
+12-23 12:35:37.025  8634  8634 D FragmentSettings: DatabaseUpdateManager.isUpdating() returned: false
+12-23 12:35:37.025  8634  8634 D FragmentSettings: updateDialog exists: true
+12-23 12:35:37.025  8634  8634 D FragmentSettings: Restoring dialog - isUpdating: false, dialogInternalState: true
+12-23 12:35:37.025  8634  8634 D DatabaseUpdateProgressDialog: isShowing() called, returning false (dialog=not null, dialog.isShowing=false, internal isShowing=true)
+12-23 12:35:37.025  8634  8634 D FragmentSettings: Reusing existing DatabaseUpdateProgressDialog, isShowing=false
+12-23 12:35:37.025  8634  8634 D DatabaseUpdateProgressDialog: isShowing() called, returning false (dialog=not null, dialog.isShowing=false, internal isShowing=true)
+12-23 12:35:37.025  8634  8634 D FragmentSettings: Dialog is not showing, calling show()
+12-23 12:35:37.026  8634  8634 D DatabaseUpdateWorker: App foreground time updated
+12-23 12:35:37.143  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:35:37.144  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12000/50225)
+12-23 12:35:37.526  8634  8634 D DatabaseUpdateWorker: isUpdating called
+12-23 12:35:37.526  8634  8634 D DatabaseUpdateWorker: SharedPreferences isUpdating: false
+12-23 12:35:37.528  8634  8634 D DatabaseUpdateWorker: WorkManager workInfos: 1 items
+12-23 12:35:37.528  8634  8634 D DatabaseUpdateWorker: WorkInfo state: CANCELLED, id: 8fa777ba-e826-484c-bd5a-9d02161bd854
+12-23 12:35:37.528  8634  8634 D DatabaseUpdateWorker: No update in progress, returning false
+12-23 12:35:37.528  8634  8634 D DatabaseUpdateProgressDialog: isShowing() called, returning false (dialog=not null, dialog.isShowing=false, internal isShowing=true)
+12-23 12:35:37.528  8634  8634 D FragmentSettings: In delayed runnable: stillUpdating=false, updateDialog.isShowing=false
+12-23 12:35:37.528  8634  8634 D DatabaseUpdateProgressDialog: show() called, isShowing=true, dialog=not null, dialog.isShowing=false
+12-23 12:35:37.528  8634  8634 D DatabaseUpdateProgressDialog: Existing dialog shown successfully, isShowing=true
+12-23 12:35:37.528  8634  8634 D FragmentSettings: Dialog shown successfully
+12-23 12:35:37.551  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=false, current=2250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:35:37.551  8634  8634 D DatabaseUpdateProgressDialog: Update not in progress, scheduling delayed check
+12-23 12:35:38.052  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=false, current=2250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:35:38.052  8634  8634 D DatabaseUpdateProgressDialog: Update not in progress, scheduling delayed check
+12-23 12:35:38.553  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=false, current=2250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:35:38.554  8634  8634 D DatabaseUpdateProgressDialog: Update not in progress, scheduling delayed check
+12-23 12:35:39.055  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=false, current=2250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:35:39.055  8634  8634 D DatabaseUpdateProgressDialog: Update not in progress, scheduling delayed check
+12-23 12:35:39.375  8634  8757 D RadioStationRepository: 宸蹭笅杞?12050/50225 涓數鍙?
+12-23 12:35:39.375  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12050/50225)
+12-23 12:35:39.424  8634  9980 D RadioStationRepository: 宸蹭笅杞?11950/50225 涓數鍙?
+12-23 12:35:39.534  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?450 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:35:39.534  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (11950/50225)
+12-23 12:35:39.557  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=false, current=2250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:35:39.557  8634  8634 D DatabaseUpdateProgressDialog: Update not in progress, scheduling delayed check
+12-23 12:35:40.053  8634  8757 D RadioStationRepository: 宸蹭笅杞?12100/50225 涓數鍙?
+12-23 12:35:40.054  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12100/50225)
+12-23 12:35:40.058  8634  8634 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=false, current=2250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:35:40.058  8634  8634 D DatabaseUpdateProgressDialog: Update not in progress, scheduling delayed check
+12-23 12:35:40.252  8634  9980 D RadioStationRepository: 宸蹭笅杞?12000/50225 涓數鍙?
+12-23 12:35:40.252  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12000/50225)
+12-23 12:35:40.552  8634  8634 D DatabaseUpdateWorker: isUpdating called
+12-23 12:35:40.552  8634  8634 D DatabaseUpdateWorker: SharedPreferences isUpdating: false
+12-23 12:35:40.553  8634  8634 D DatabaseUpdateWorker: WorkManager workInfos: 1 items
+12-23 12:35:40.553  8634  8634 D DatabaseUpdateWorker: WorkInfo state: CANCELLED, id: 8fa777ba-e826-484c-bd5a-9d02161bd854
+12-23 12:35:40.553  8634  8634 D DatabaseUpdateWorker: No update in progress, returning false
+12-23 12:35:40.553  8634  8634 D DatabaseUpdateProgressDialog: Delayed check: isUpdating=false, isShowing=true, dialogActuallyShowing=true, workManagerUpdating=false
+12-23 12:35:40.553  8634  8634 D DatabaseUpdateProgressDialog: Update confirmed finished, dismissing dialog
+12-23 12:35:40.553  8634  8634 D DatabaseUpdateProgressDialog: dismiss() called, isShowing=true
+12-23 12:35:40.573  8634  8634 D DatabaseUpdateProgressDialog: Dialog dismissed and nullified successfully
+12-23 12:35:40.712  8634  9980 D RadioStationRepository: 宸蹭笅杞?12050/50225 涓數鍙?
+12-23 12:35:40.712  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12050/50225)
+12-23 12:35:40.986  8634  8757 D RadioStationRepository: 宸蹭笅杞?12150/50225 涓數鍙?
+12-23 12:35:40.987  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12150/50225)
+12-23 12:35:41.053  8634  8634 D DatabaseUpdateWorker: isUpdating called
+12-23 12:35:41.054  8634  8634 D DatabaseUpdateWorker: SharedPreferences isUpdating: false
+12-23 12:35:41.058  8634  8634 D DatabaseUpdateWorker: WorkManager workInfos: 1 items
+12-23 12:35:41.058  8634  8634 D DatabaseUpdateWorker: WorkInfo state: CANCELLED, id: 8fa777ba-e826-484c-bd5a-9d02161bd854
+12-23 12:35:41.058  8634  8634 D DatabaseUpdateWorker: No update in progress, returning false
+12-23 12:35:41.058  8634  8634 D DatabaseUpdateProgressDialog: Delayed check: isUpdating=false, isShowing=false, dialogActuallyShowing=false, workManagerUpdating=false
+12-23 12:35:41.058  8634  8634 D DatabaseUpdateProgressDialog: Keeping dialog open: delayedProgress.isUpdating=false, dialogActuallyShowing=false, workManagerUpdating=false
+12-23 12:35:41.555  8634  8634 D DatabaseUpdateWorker: isUpdating called
+12-23 12:35:41.555  8634  8634 D DatabaseUpdateWorker: SharedPreferences isUpdating: false
+12-23 12:35:41.559  8634  8634 D DatabaseUpdateWorker: WorkManager workInfos: 1 items
+12-23 12:35:41.559  8634  8634 D DatabaseUpdateWorker: WorkInfo state: CANCELLED, id: 8fa777ba-e826-484c-bd5a-9d02161bd854
+12-23 12:35:41.559  8634  8634 D DatabaseUpdateWorker: No update in progress, returning false
+12-23 12:35:41.559  8634  8634 D DatabaseUpdateProgressDialog: Delayed check: isUpdating=false, isShowing=false, dialogActuallyShowing=false, workManagerUpdating=false
+12-23 12:35:41.559  8634  8634 D DatabaseUpdateProgressDialog: Keeping dialog open: delayedProgress.isUpdating=false, dialogActuallyShowing=false, workManagerUpdating=false
+12-23 12:35:42.057  8634  8634 D DatabaseUpdateWorker: isUpdating called
+12-23 12:35:42.057  8634  8634 D DatabaseUpdateWorker: SharedPreferences isUpdating: false
+12-23 12:35:42.060  8634  8634 D DatabaseUpdateWorker: WorkManager workInfos: 1 items
+12-23 12:35:42.061  8634  8634 D DatabaseUpdateWorker: WorkInfo state: CANCELLED, id: 8fa777ba-e826-484c-bd5a-9d02161bd854
+12-23 12:35:42.061  8634  8634 D DatabaseUpdateWorker: No update in progress, returning false
+12-23 12:35:42.061  8634  8634 D DatabaseUpdateProgressDialog: Delayed check: isUpdating=false, isShowing=false, dialogActuallyShowing=false, workManagerUpdating=false
+12-23 12:35:42.061  8634  8634 D DatabaseUpdateProgressDialog: Keeping dialog open: delayedProgress.isUpdating=false, dialogActuallyShowing=false, workManagerUpdating=false
+12-23 12:35:42.558  8634  8634 D DatabaseUpdateWorker: isUpdating called
+12-23 12:35:42.559  8634  8634 D DatabaseUpdateWorker: SharedPreferences isUpdating: false
+12-23 12:35:42.567  8634  8634 D DatabaseUpdateWorker: WorkManager workInfos: 1 items
+12-23 12:35:42.567  8634  8634 D DatabaseUpdateWorker: WorkInfo state: CANCELLED, id: 8fa777ba-e826-484c-bd5a-9d02161bd854
+12-23 12:35:42.567  8634  8634 D DatabaseUpdateWorker: No update in progress, returning false
+12-23 12:35:42.567  8634  8634 D DatabaseUpdateProgressDialog: Delayed check: isUpdating=false, isShowing=false, dialogActuallyShowing=false, workManagerUpdating=false
+12-23 12:35:42.567  8634  8634 D DatabaseUpdateProgressDialog: Keeping dialog open: delayedProgress.isUpdating=false, dialogActuallyShowing=false, workManagerUpdating=false
+12-23 12:35:42.841  8634  8757 D RadioStationRepository: 宸蹭笅杞?12200/50225 涓數鍙?
+12-23 12:35:42.841  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12200/50225)
+12-23 12:35:43.059  8634  8634 D DatabaseUpdateWorker: isUpdating called
+12-23 12:35:43.060  8634  8634 D DatabaseUpdateWorker: SharedPreferences isUpdating: false
+12-23 12:35:43.068  8634  8634 D DatabaseUpdateWorker: WorkManager workInfos: 1 items
+12-23 12:35:43.068  8634  8634 D DatabaseUpdateWorker: WorkInfo state: CANCELLED, id: 8fa777ba-e826-484c-bd5a-9d02161bd854
+12-23 12:35:43.068  8634  8634 D DatabaseUpdateWorker: No update in progress, returning false
+12-23 12:35:43.068  8634  8634 D DatabaseUpdateProgressDialog: Delayed check: isUpdating=false, isShowing=false, dialogActuallyShowing=false, workManagerUpdating=false
+12-23 12:35:43.069  8634  8634 D DatabaseUpdateProgressDialog: Keeping dialog open: delayedProgress.isUpdating=false, dialogActuallyShowing=false, workManagerUpdating=false
+12-23 12:35:43.872  8634  8757 D RadioStationRepository: 宸蹭笅杞?12250/50225 涓數鍙?
+12-23 12:35:43.872  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12250/50225)
+12-23 12:35:45.096  8634  9980 D RadioStationRepository: 宸蹭笅杞?12100/50225 涓數鍙?
+12-23 12:35:45.096  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12100/50225)
+12-23 12:35:45.295  8634  8757 D RadioStationRepository: 宸蹭笅杞?12300/50225 涓數鍙?
+12-23 12:35:45.295  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12300/50225)
+12-23 12:35:46.941  8634  8757 D RadioStationRepository: 宸蹭笅杞?12350/50225 涓數鍙?
+12-23 12:35:46.942  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12350/50225)
+12-23 12:35:48.392  8634  9980 D RadioStationRepository: 宸蹭笅杞?12150/50225 涓數鍙?
+12-23 12:35:48.393  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12150/50225)
+12-23 12:35:48.975  8634  8757 D RadioStationRepository: 宸蹭笅杞?12400/50225 涓數鍙?
+12-23 12:35:48.975  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12400/50225)
+12-23 12:35:50.762  8634  8757 D RadioStationRepository: 宸蹭笅杞?12450/50225 涓數鍙?
+12-23 12:35:50.762  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12450/50225)
+12-23 12:35:50.765  8634  9980 D RadioStationRepository: 宸蹭笅杞?12200/50225 涓數鍙?
+12-23 12:35:50.765  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12200/50225)
+12-23 12:35:52.145  8634  8757 D RadioStationRepository: 宸蹭笅杞?12500/50225 涓數鍙?
+12-23 12:35:52.216  8634  9980 D RadioStationRepository: 宸蹭笅杞?12250/50225 涓數鍙?
+12-23 12:35:52.216  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12250/50225)
+12-23 12:35:52.282  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:35:52.282  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12500/50225)
+12-23 12:35:54.205  8634  9980 D RadioStationRepository: 宸蹭笅杞?12300/50225 涓數鍙?
+12-23 12:35:54.206  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12300/50225)
+12-23 12:35:54.685  8634  8757 D RadioStationRepository: 宸蹭笅杞?12550/50225 涓數鍙?
+12-23 12:35:54.685  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12550/50225)
+12-23 12:35:56.376  8634  8757 D RadioStationRepository: 宸蹭笅杞?12600/50225 涓數鍙?
+12-23 12:35:56.377  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12600/50225)
+12-23 12:35:56.725  8634  9980 D RadioStationRepository: 宸蹭笅杞?12350/50225 涓數鍙?
+12-23 12:35:56.726  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12350/50225)
+12-23 12:35:58.208  8634  8757 D RadioStationRepository: 宸蹭笅杞?12650/50225 涓數鍙?
+12-23 12:35:58.208  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12650/50225)
+12-23 12:35:58.240  8634  9980 D RadioStationRepository: 宸蹭笅杞?12400/50225 涓數鍙?
+12-23 12:35:58.240  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12400/50225)
+12-23 12:35:59.817  8634  9980 D RadioStationRepository: 宸蹭笅杞?12450/50225 涓數鍙?
+12-23 12:35:59.913  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:35:59.913  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12450/50225)
+12-23 12:36:00.433  8634  8757 D RadioStationRepository: 宸蹭笅杞?12700/50225 涓數鍙?
+12-23 12:36:00.433  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12700/50225)
+12-23 12:36:02.685  8634  9980 D RadioStationRepository: 宸蹭笅杞?12500/50225 涓數鍙?
+12-23 12:36:02.685  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12500/50225)
+12-23 12:36:02.994  8634  8757 D RadioStationRepository: 宸蹭笅杞?12750/50225 涓數鍙?
+12-23 12:36:02.994  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12750/50225)
+12-23 12:36:04.749  8634  9980 D RadioStationRepository: 宸蹭笅杞?12550/50225 涓數鍙?
+12-23 12:36:04.750  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12550/50225)
+12-23 12:36:04.784  8634  8757 D RadioStationRepository: 宸蹭笅杞?12800/50225 涓數鍙?
+12-23 12:36:04.784  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12800/50225)
+12-23 12:36:06.912  8634  9980 D RadioStationRepository: 宸蹭笅杞?12600/50225 涓數鍙?
+12-23 12:36:06.913  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12600/50225)
+12-23 12:36:09.148  8634  9980 D RadioStationRepository: 宸蹭笅杞?12650/50225 涓數鍙?
+12-23 12:36:09.148  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12650/50225)
+12-23 12:36:09.791  8634  8757 D RadioStationRepository: 宸蹭笅杞?12850/50225 涓數鍙?
+12-23 12:36:09.791  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12850/50225)
+12-23 12:36:10.808  8634  9980 D RadioStationRepository: 宸蹭笅杞?12700/50225 涓數鍙?
+12-23 12:36:10.808  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12700/50225)
+12-23 12:36:13.297  8634  9980 D RadioStationRepository: 宸蹭笅杞?12750/50225 涓數鍙?
+12-23 12:36:13.297  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12750/50225)
+12-23 12:36:14.332  8634  8757 D RadioStationRepository: 宸蹭笅杞?12900/50225 涓數鍙?
+12-23 12:36:14.332  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12900/50225)
+12-23 12:36:15.997  8634  8757 D RadioStationRepository: 宸蹭笅杞?12950/50225 涓數鍙?
+12-23 12:36:15.997  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12950/50225)
+12-23 12:36:16.608  8634  9980 D RadioStationRepository: 宸蹭笅杞?12800/50225 涓數鍙?
+12-23 12:36:16.608  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12800/50225)
+12-23 12:36:17.761  8634  8757 D RadioStationRepository: 宸蹭笅杞?13000/50225 涓數鍙?
+12-23 12:36:17.808  8634  9980 D RadioStationRepository: 宸蹭笅杞?12850/50225 涓數鍙?
+12-23 12:36:17.808  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12850/50225)
+12-23 12:36:17.887  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:36:17.888  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13000/50225)
+12-23 12:36:19.455  8634  9980 D RadioStationRepository: 宸蹭笅杞?12900/50225 涓數鍙?
+12-23 12:36:19.455  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12900/50225)
+12-23 12:36:19.817  8634  8757 D RadioStationRepository: 宸蹭笅杞?13050/50225 涓數鍙?
+12-23 12:36:19.817  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13050/50225)
+12-23 12:36:21.049  8634  9980 D RadioStationRepository: 宸蹭笅杞?12950/50225 涓數鍙?
+12-23 12:36:21.174  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:36:21.174  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (12950/50225)
+12-23 12:36:22.064  8634  8757 D RadioStationRepository: 宸蹭笅杞?13100/50225 涓數鍙?
+12-23 12:36:22.064  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13100/50225)
+12-23 12:36:23.689  8634  9980 D RadioStationRepository: 宸蹭笅杞?13000/50225 涓數鍙?
+12-23 12:36:23.690  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13000/50225)
+12-23 12:36:25.551  8634  8757 D RadioStationRepository: 宸蹭笅杞?13150/50225 涓數鍙?
+12-23 12:36:25.551  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13150/50225)
+12-23 12:36:28.303  8634  9980 D RadioStationRepository: 宸蹭笅杞?13050/50225 涓數鍙?
+12-23 12:36:28.304  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13050/50225)
+12-23 12:36:28.336  8634  8757 D RadioStationRepository: 宸蹭笅杞?13200/50225 涓數鍙?
+12-23 12:36:28.337  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13200/50225)
+12-23 12:36:30.303  8634  9980 D RadioStationRepository: 宸蹭笅杞?13100/50225 涓數鍙?
+12-23 12:36:30.303  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13100/50225)
+12-23 12:36:31.685  8634  8757 D RadioStationRepository: 宸蹭笅杞?13250/50225 涓數鍙?
+12-23 12:36:31.686  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13250/50225)
+12-23 12:36:33.436  8634  9980 D RadioStationRepository: 宸蹭笅杞?13150/50225 涓數鍙?
+12-23 12:36:33.437  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13150/50225)
+12-23 12:36:34.895  8634  8757 D RadioStationRepository: 宸蹭笅杞?13300/50225 涓數鍙?
+12-23 12:36:34.895  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13300/50225)
+12-23 12:36:35.687  8634  9980 D RadioStationRepository: 宸蹭笅杞?13200/50225 涓數鍙?
+12-23 12:36:35.688  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13200/50225)
+12-23 12:36:40.720  8634  8757 D RadioStationRepository: 宸蹭笅杞?13350/50225 涓數鍙?
+12-23 12:36:40.720  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13350/50225)
+12-23 12:36:41.312  8634  9980 D RadioStationRepository: 宸蹭笅杞?13250/50225 涓數鍙?
+12-23 12:36:41.312  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13250/50225)
+12-23 12:36:43.468  8634  8757 D RadioStationRepository: 宸蹭笅杞?13400/50225 涓數鍙?
+12-23 12:36:43.468  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13400/50225)
+12-23 12:36:43.471  8634  9980 D RadioStationRepository: 宸蹭笅杞?13300/50225 涓數鍙?
+12-23 12:36:43.472  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13300/50225)
+12-23 12:36:46.336  8634  8757 D RadioStationRepository: 宸蹭笅杞?13450/50225 涓數鍙?
+12-23 12:36:46.336  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13450/50225)
+12-23 12:36:47.355  8634  9980 D RadioStationRepository: 宸蹭笅杞?13350/50225 涓數鍙?
+12-23 12:36:47.355  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13350/50225)
+12-23 12:36:49.503  8634  9980 D RadioStationRepository: 宸蹭笅杞?13400/50225 涓數鍙?
+12-23 12:36:49.503  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13400/50225)
+12-23 12:36:49.648  8634  8757 D RadioStationRepository: 宸蹭笅杞?13500/50225 涓數鍙?
+12-23 12:36:49.779  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:36:49.779  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13500/50225)
+12-23 12:36:51.949  8634  8757 D RadioStationRepository: 宸蹭笅杞?13550/50225 涓數鍙?
+12-23 12:36:51.950  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13550/50225)
+12-23 12:36:53.922  8634  8757 D RadioStationRepository: 宸蹭笅杞?13600/50225 涓數鍙?
+12-23 12:36:53.922  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13600/50225)
+12-23 12:36:53.955  8634  9980 D RadioStationRepository: 宸蹭笅杞?13450/50225 涓數鍙?
+12-23 12:36:54.075  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:36:54.075  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13450/50225)
+12-23 12:36:55.943  8634  8757 D RadioStationRepository: 宸蹭笅杞?13650/50225 涓數鍙?
+12-23 12:36:55.943  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13650/50225)
+12-23 12:36:56.736  8634  9980 D RadioStationRepository: 宸蹭笅杞?13500/50225 涓數鍙?
+12-23 12:36:56.736  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13500/50225)
+12-23 12:36:58.828  8634  9980 D RadioStationRepository: 宸蹭笅杞?13550/50225 涓數鍙?
+12-23 12:36:58.829  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13550/50225)
+12-23 12:36:59.117  8634  8757 D RadioStationRepository: 宸蹭笅杞?13700/50225 涓數鍙?
+12-23 12:36:59.117  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13700/50225)
+12-23 12:37:00.982  8634  8757 D RadioStationRepository: 宸蹭笅杞?13750/50225 涓數鍙?
+12-23 12:37:00.982  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13750/50225)
+12-23 12:37:01.486  8634  9980 D RadioStationRepository: 宸蹭笅杞?13600/50225 涓數鍙?
+12-23 12:37:01.486  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13600/50225)
+12-23 12:37:03.235  8634  8757 D RadioStationRepository: 宸蹭笅杞?13800/50225 涓數鍙?
+12-23 12:37:03.235  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13800/50225)
+12-23 12:37:03.839  8634  9980 D RadioStationRepository: 宸蹭笅杞?13650/50225 涓數鍙?
+12-23 12:37:03.840  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13650/50225)
+12-23 12:37:04.767  8634  8757 D RadioStationRepository: 宸蹭笅杞?13850/50225 涓數鍙?
+12-23 12:37:04.768  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13850/50225)
+12-23 12:37:06.736  8634  9980 D RadioStationRepository: 宸蹭笅杞?13700/50225 涓數鍙?
+12-23 12:37:06.737  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13700/50225)
+12-23 12:37:09.422  8634  8757 D RadioStationRepository: 宸蹭笅杞?13900/50225 涓數鍙?
+12-23 12:37:09.423  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13900/50225)
+12-23 12:37:11.076  8634  8757 D RadioStationRepository: 宸蹭笅杞?13950/50225 涓數鍙?
+12-23 12:37:11.076  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13950/50225)
+12-23 12:37:11.579  8634  9980 D RadioStationRepository: 宸蹭笅杞?13750/50225 涓數鍙?
+12-23 12:37:11.579  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13750/50225)
+12-23 12:37:13.608  8634  9980 D RadioStationRepository: 宸蹭笅杞?13800/50225 涓數鍙?
+12-23 12:37:13.608  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13800/50225)
+12-23 12:37:14.176  8634  8757 D RadioStationRepository: 宸蹭笅杞?14000/50225 涓數鍙?
+12-23 12:37:14.300  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:37:14.300  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14000/50225)
+12-23 12:37:16.069  8634  9980 D RadioStationRepository: 宸蹭笅杞?13850/50225 涓數鍙?
+12-23 12:37:16.069  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13850/50225)
+12-23 12:37:17.659  8634  8757 D RadioStationRepository: 宸蹭笅杞?14050/50225 涓數鍙?
+12-23 12:37:17.659  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14050/50225)
+12-23 12:37:18.077  8634  9980 D RadioStationRepository: 宸蹭笅杞?13900/50225 涓數鍙?
+12-23 12:37:18.077  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13900/50225)
+12-23 12:37:19.111  8634  8757 D RadioStationRepository: 宸蹭笅杞?14100/50225 涓數鍙?
+12-23 12:37:19.111  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14100/50225)
+12-23 12:37:20.656  8634  8757 D RadioStationRepository: 宸蹭笅杞?14150/50225 涓數鍙?
+12-23 12:37:20.656  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14150/50225)
+12-23 12:37:20.732  8634  9980 D RadioStationRepository: 宸蹭笅杞?13950/50225 涓數鍙?
+12-23 12:37:20.859  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:37:20.859  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (13950/50225)
+12-23 12:37:23.909  8634  8757 D RadioStationRepository: 宸蹭笅杞?14200/50225 涓數鍙?
+12-23 12:37:23.909  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14200/50225)
+12-23 12:37:24.696  8634  9980 D RadioStationRepository: 宸蹭笅杞?14000/50225 涓數鍙?
+12-23 12:37:24.696  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14000/50225)
+12-23 12:37:26.272  8634  8757 D RadioStationRepository: 宸蹭笅杞?14250/50225 涓數鍙?
+12-23 12:37:26.272  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14250/50225)
+12-23 12:37:27.284  8634  9980 D RadioStationRepository: 宸蹭笅杞?14050/50225 涓數鍙?
+12-23 12:37:27.284  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14050/50225)
+12-23 12:37:28.297  8634  8757 D RadioStationRepository: 宸蹭笅杞?14300/50225 涓數鍙?
+12-23 12:37:28.298  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14300/50225)
+12-23 12:37:29.807  8634  8757 D RadioStationRepository: 宸蹭笅杞?14350/50225 涓數鍙?
+12-23 12:37:29.808  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14350/50225)
+12-23 12:37:32.125  8634  8757 D RadioStationRepository: 宸蹭笅杞?14400/50225 涓數鍙?
+12-23 12:37:32.125  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14400/50225)
+12-23 12:37:32.127  8634  9980 D RadioStationRepository: 宸蹭笅杞?14100/50225 涓數鍙?
+12-23 12:37:32.127  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14100/50225)
+12-23 12:37:34.560  8634  9980 D RadioStationRepository: 宸蹭笅杞?14150/50225 涓數鍙?
+12-23 12:37:34.560  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14150/50225)
+12-23 12:37:34.567  8634  8757 D RadioStationRepository: 宸蹭笅杞?14450/50225 涓數鍙?
+12-23 12:37:34.567  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14450/50225)
+12-23 12:37:36.826  8634  8757 D RadioStationRepository: 宸蹭笅杞?14500/50225 涓數鍙?
+12-23 12:37:36.956  8634  8757 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:37:36.956  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14500/50225)
+12-23 12:37:39.465  8634  8757 D RadioStationRepository: 宸蹭笅杞?14550/50225 涓數鍙?
+12-23 12:37:39.465  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14550/50225)
+12-23 12:37:41.759  8634  8757 D RadioStationRepository: 宸蹭笅杞?14600/50225 涓數鍙?
+12-23 12:37:41.759  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14600/50225)
+12-23 12:37:43.504  8634  8757 D RadioStationRepository: 宸蹭笅杞?14650/50225 涓數鍙?
+12-23 12:37:43.504  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14650/50225)
+12-23 12:37:44.952  8634  9980 W RadioStationRepository: 绗?285 椤典笅杞藉け璐?
+12-23 12:37:45.824  8634  9980 D RadioStationRepository: 宸蹭笅杞?14200/50225 涓數鍙?
+12-23 12:37:45.824  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14200/50225)
+12-23 12:37:45.873  8634  8757 D RadioStationRepository: 宸蹭笅杞?14700/50225 涓數鍙?
+12-23 12:37:45.874  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14700/50225)
+12-23 12:37:47.138  8634  9980 D RadioStationRepository: 宸蹭笅杞?14250/50225 涓數鍙?
+12-23 12:37:47.138  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14250/50225)
+12-23 12:37:48.070  8634  9980 D RadioStationRepository: 宸蹭笅杞?14300/50225 涓數鍙?
+12-23 12:37:48.070  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14300/50225)
+12-23 12:37:48.384  8634  8757 D RadioStationRepository: 宸蹭笅杞?14750/50225 涓數鍙?
+12-23 12:37:48.384  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14750/50225)
+12-23 12:37:48.512  8634  9980 D RadioStationRepository: 宸蹭笅杞?14350/50225 涓數鍙?
+12-23 12:37:48.512  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14350/50225)
+12-23 12:37:50.235  8634  9980 D RadioStationRepository: 宸蹭笅杞?14400/50225 涓數鍙?
+12-23 12:37:50.352  8634  9980 D RadioStationRepository: 鎵归噺鎻掑叆浜?450 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:37:50.352  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14400/50225)
+12-23 12:37:50.823  8634  8757 D RadioStationRepository: 宸蹭笅杞?14800/50225 涓數鍙?
+12-23 12:37:50.824  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14800/50225)
+12-23 12:37:51.437  8634  9980 D RadioStationRepository: 宸蹭笅杞?14450/50225 涓數鍙?
+12-23 12:37:51.437  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14450/50225)
+12-23 12:37:52.890  8634  9980 D RadioStationRepository: 宸蹭笅杞?14500/50225 涓數鍙?
+12-23 12:37:52.890  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14500/50225)
+12-23 12:37:53.918  8634  9980 D RadioStationRepository: 宸蹭笅杞?14550/50225 涓數鍙?
+12-23 12:37:53.919  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14550/50225)
+12-23 12:37:55.229  8634  9980 D RadioStationRepository: 宸蹭笅杞?14600/50225 涓數鍙?
+12-23 12:37:55.230  8634  9980 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14600/50225)
+12-23 12:37:55.673  8634  8757 D RadioStationRepository: 宸蹭笅杞?14850/50225 涓數鍙?
+12-23 12:37:55.673  8634  8757 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (14850/50225)
+12-23 12:37:57.566  8634  8634 D DatabaseUpdateProgressDialog: isShowing() called, returning false (dialog=null, dialog.isShowing=N/A, internal isShowing=false)
+12-23 12:37:57.678  8634  8634 D FragmentSettings: onResume called
+12-23 12:37:57.679  8634  8634 D FragmentSettings: checkAndRestoreUpdateDialog called
+12-23 12:37:57.679  8634  8634 D DatabaseUpdateWorker: isUpdating called
+12-23 12:37:57.679  8634  8634 D DatabaseUpdateWorker: SharedPreferences isUpdating: false
+12-23 12:37:57.680  8634  8634 D DatabaseUpdateWorker: WorkManager workInfos: 1 items
+12-23 12:37:57.680  8634  8634 D DatabaseUpdateWorker: WorkInfo state: CANCELLED, id: 8fa777ba-e826-484c-bd5a-9d02161bd854
+12-23 12:37:57.680  8634  8634 D DatabaseUpdateWorker: No update in progress, returning false
+12-23 12:37:57.680  8634  8634 D FragmentSettings: DatabaseUpdateManager.isUpdating() returned: false
+12-23 12:37:57.680  8634  8634 D FragmentSettings: updateDialog exists: true
+12-23 12:37:57.680  8634  8634 D FragmentSettings: Restoring dialog - isUpdating: false, dialogInternalState: true
+12-23 12:37:57.680  8634  8634 D DatabaseUpdateProgressDialog: isShowing() called, returning false (dialog=null, dialog.isShowing=N/A, internal isShowing=false)
+12-23 12:37:57.680  8634  8634 D FragmentSettings: Reusing existing DatabaseUpdateProgressDialog, isShowing=false
+12-23 12:37:57.680  8634  8634 D DatabaseUpdateProgressDialog: isShowing() called, returning false (dialog=null, dialog.isShowing=N/A, internal isShowing=false)
+12-23 12:37:57.680  8634  8634 D FragmentSettings: Dialog is not showing, calling show()
+12-23 12:37:57.681  8634  8634 D DatabaseUpdateWorker: App foreground time updated
+12-23 12:38:06.433 27967 27967 D FragmentSettings: onResume called
+12-23 12:38:06.439 27967 27967 D FragmentSettings: checkAndRestoreUpdateDialog called
+12-23 12:38:06.439 27967 27967 D DatabaseUpdateWorker: isUpdating called with lock
+12-23 12:38:06.443 27967 27967 D DatabaseUpdateWorker: SharedPreferences isUpdating: false
+12-23 12:38:06.449 27967 27967 D DatabaseUpdateWorker: WorkManager workInfos: 1 items
+12-23 12:38:06.449 27967 27967 D DatabaseUpdateWorker: WorkInfo state: CANCELLED, id: 8fa777ba-e826-484c-bd5a-9d02161bd854
+12-23 12:38:06.449 27967 27967 D DatabaseUpdateWorker: No update in progress, returning false
+12-23 12:38:06.449 27967 27967 D FragmentSettings: DatabaseUpdateManager.isUpdating() returned: false
+12-23 12:38:06.449 27967 27967 D FragmentSettings: updateDialog exists: false
+12-23 12:38:06.449 27967 27967 D FragmentSettings: No database update in progress
+12-23 12:38:06.449 27967 27967 D DatabaseUpdateWorker: App foreground time updated
+12-23 12:38:10.984 27967 27967 D FragmentSettings: onResume called
+12-23 12:38:10.984 27967 27967 D FragmentSettings: checkAndRestoreUpdateDialog called
+12-23 12:38:10.984 27967 27967 D DatabaseUpdateWorker: isUpdating called with lock
+12-23 12:38:10.985 27967 27967 D DatabaseUpdateWorker: SharedPreferences isUpdating: false
+12-23 12:38:10.987 27967 27967 D DatabaseUpdateWorker: WorkManager workInfos: 1 items
+12-23 12:38:10.987 27967 27967 D DatabaseUpdateWorker: WorkInfo state: CANCELLED, id: 8fa777ba-e826-484c-bd5a-9d02161bd854
+12-23 12:38:10.987 27967 27967 D DatabaseUpdateWorker: No update in progress, returning false
+12-23 12:38:10.987 27967 27967 D FragmentSettings: DatabaseUpdateManager.isUpdating() returned: false
+12-23 12:38:10.987 27967 27967 D FragmentSettings: updateDialog exists: false
+12-23 12:38:10.987 27967 27967 D FragmentSettings: No database update in progress
+12-23 12:38:10.987 27967 27967 D DatabaseUpdateWorker: App foreground time updated
+12-23 12:38:12.581 27967 27967 D DatabaseUpdateWorker: isUpdating called with lock
+12-23 12:38:12.581 27967 27967 D DatabaseUpdateWorker: SharedPreferences isUpdating: false
+12-23 12:38:12.584 27967 27967 D DatabaseUpdateWorker: WorkManager workInfos: 1 items
+12-23 12:38:12.584 27967 27967 D DatabaseUpdateWorker: WorkInfo state: CANCELLED, id: 8fa777ba-e826-484c-bd5a-9d02161bd854
+12-23 12:38:12.584 27967 27967 D DatabaseUpdateWorker: No update in progress, returning false
+12-23 12:38:12.591 27967 27967 D DatabaseUpdateProgressDialog: show() called, isShowing=false, dialog=null, dialog.isShowing=N/A
+12-23 12:38:12.640 27967 27967 D DatabaseUpdateProgressDialog: Dialog created and shown successfully, isShowing=true
+12-23 12:38:12.640 27967 27967 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=false, current=2250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:38:12.640 27967 27967 D DatabaseUpdateProgressDialog: Update not in progress, scheduling delayed check
+12-23 12:38:12.663 27967 27967 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=false, current=2250, total=50225, isShowing=true, dialog.isShowing=true
+12-23 12:38:12.663 27967 27967 D DatabaseUpdateProgressDialog: Update not in progress, scheduling delayed check
+12-23 12:38:12.672 27967 28088 D DatabaseUpdateWorker: Starting database update work with lock
+12-23 12:38:12.673 27967 28088 D DatabaseUpdateWorker: Starting new update with ID: 1766464692673
+12-23 12:38:12.674 27967 28088 D DatabaseUpdateWorker: Starting new update with ID: 1766464692673
+12-23 12:38:12.674 27967 28088 D RadioStationRepository: 寮€濮嬪悓姝ョ數鍙版暟鎹?
+12-23 12:38:12.674 27967 28088 D DatabaseUpdateWorker: Progress: 姝ｅ湪妫€鏌ョ綉缁滆繛鎺?(0/100)
+12-23 12:38:12.675 27967 28088 D RadioStationRepository: 浣跨敤24灏忔椂鍐呯殑缃戠粶妫€鏌ョ粨鏋?
+12-23 12:38:12.675 27967 28088 D RadioStationRepository: 鎵惧埌鏈€蹇殑鏈嶅姟鍣? fi1.api.radio-browser.info (HTTPS: false)
+12-23 12:38:12.676 27967 28088 D DatabaseUpdateWorker: Progress: 姝ｅ湪鑾峰彇鐢靛彴鎬绘暟 (0/100)
+12-23 12:38:12.676 27967 28088 D RadioStationRepository: Attempting to download stats from: fi1.api.radio-browser.info/json/stats
+12-23 12:38:13.164 27967 27967 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=0, total=100, isShowing=true, dialog.isShowing=true
+12-23 12:38:13.642 27967 28088 D RadioStationRepository: Download completed, result is non-null
+12-23 12:38:13.642 27967 28088 D RadioStationRepository: 鏈嶅姟鍣ㄨ繑鍥炵殑鍘熷缁熻淇℃伅: {"supported_version":1,"software_version":"0.7.31","status":"OK","stations":50223,"stations_broken":344,"tags":10523,"clicks_last_hour":3301,"clicks_last_day":135444,"languages":596,"countries":238}
+12-23 12:38:13.642 27967 28088 D RadioStationRepository: 瑙ｆ瀽寰楀埌鐨勭數鍙版€绘暟: 50223
+12-23 12:38:13.642 27967 28088 D DatabaseUpdateWorker: Progress: 鏌ヨ鍒扮綉缁滄暟鎹簱鐜板瓨 50223 涓數鍙?(0/50223)
+12-23 12:38:13.643 27967 28088 D RadioStationRepository: 涓绘暟鎹簱涓殑鐢靛彴鏁伴噺: 50116
+12-23 12:38:13.643 27967 28088 D DatabaseUpdateWorker: Progress: 寮€濮嬫洿鏂颁复鏃舵暟鎹簱 (0/50223)
+12-23 12:38:13.669 27967 27967 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=0, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:38:14.171 27967 27967 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=0, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:38:14.545 27967 28088 D RadioStationRepository: 宸叉竻绌轰复鏃舵暟鎹簱
+12-23 12:38:14.675 27967 27967 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=0, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:38:15.178 27967 27967 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=0, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:38:15.560 27967 28088 D RadioStationRepository: 宸蹭笅杞?50/50223 涓數鍙?
+12-23 12:38:15.560 27967 28088 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (50/50223)
+12-23 12:38:16.528 27967 28088 D RadioStationRepository: 宸蹭笅杞?100/50223 涓數鍙?
+12-23 12:38:16.528 27967 28088 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (100/50223)
+12-23 12:38:18.359 27967 28088 D RadioStationRepository: 宸蹭笅杞?150/50223 涓數鍙?
+12-23 12:38:18.359 27967 28088 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (150/50223)
+12-23 12:38:19.401 27967 28088 D RadioStationRepository: 宸蹭笅杞?200/50223 涓數鍙?
+12-23 12:38:19.401 27967 28088 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (200/50223)
+12-23 12:38:21.245 27967 28088 D RadioStationRepository: 宸蹭笅杞?250/50223 涓數鍙?
+12-23 12:38:21.245 27967 28088 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (250/50223)
+12-23 12:38:23.101 27967 28088 D RadioStationRepository: 宸蹭笅杞?300/50223 涓數鍙?
+12-23 12:38:23.101 27967 28088 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (300/50223)
+12-23 12:38:26.569 27967 28088 D RadioStationRepository: 宸蹭笅杞?350/50223 涓數鍙?
+12-23 12:38:26.569 27967 28088 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (350/50223)
+12-23 12:38:29.657 27967 28088 D RadioStationRepository: 宸蹭笅杞?400/50223 涓數鍙?
+12-23 12:38:29.658 27967 28088 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (400/50223)
+12-23 12:38:35.088 27967 28088 D RadioStationRepository: 宸蹭笅杞?450/50223 涓數鍙?
+12-23 12:38:35.088 27967 28088 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (450/50223)
+12-23 12:38:41.720 27967 28088 D RadioStationRepository: 宸蹭笅杞?500/50223 涓數鍙?
+12-23 12:38:41.843 27967 28088 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:38:41.843 27967 28088 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (500/50223)
+12-23 12:38:44.574 27967 28088 D RadioStationRepository: 宸蹭笅杞?550/50223 涓數鍙?
+12-23 12:38:44.574 27967 28088 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (550/50223)
+12-23 12:38:46.636 27967 28088 D RadioStationRepository: 宸蹭笅杞?600/50223 涓數鍙?
+12-23 12:38:46.636 27967 28088 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (600/50223)
+12-23 12:38:58.089 28499 28499 D FragmentSettings: onResume called
+12-23 12:38:58.095 28499 28499 D FragmentSettings: checkAndRestoreUpdateDialog called
+12-23 12:38:58.095 28499 28499 D DatabaseUpdateWorker: isUpdating called with lock
+12-23 12:38:58.095 28499 28499 D DatabaseUpdateWorker: SharedPreferences isUpdating: true
+12-23 12:38:58.095 28499 28499 D DatabaseUpdateWorker: SharedPreferences shows updating, checking start time: 1766464692673, current: 1766464738095
+12-23 12:38:58.095 28499 28499 D DatabaseUpdateWorker: Update started recently, assuming still in progress
+12-23 12:38:58.097 28499 28499 D DatabaseUpdateWorker: WorkManager workInfos: 1 items
+12-23 12:38:58.097 28499 28499 D DatabaseUpdateWorker: WorkInfo state: RUNNING, id: 1a0b79b3-caba-447d-8ccd-3ea60003c89b
+12-23 12:38:58.097 28499 28499 D DatabaseUpdateWorker: Confirmed: WorkManager has running/enqueued task, update is in progress
+12-23 12:38:58.097 28499 28499 D FragmentSettings: DatabaseUpdateManager.isUpdating() returned: true
+12-23 12:38:58.097 28499 28499 D FragmentSettings: updateDialog exists: false
+12-23 12:38:58.097 28499 28499 D FragmentSettings: Restoring dialog - isUpdating: true, dialogExists: false
+12-23 12:38:58.097 28499 28499 D FragmentSettings: Creating new DatabaseUpdateProgressDialog
+12-23 12:38:58.097 28499 28499 D DatabaseUpdateProgressDialog: isShowing() called, returning false (dialog=null, dialog.isShowing=N/A, internal isShowing=false)
+12-23 12:38:58.098 28499 28499 D FragmentSettings: Dialog is not showing, calling show()
+12-23 12:38:58.098 28499 28499 D DatabaseUpdateWorker: App foreground time updated
+12-23 12:38:58.401 28499 28578 D DatabaseUpdateWorker: Starting database update work with lock
+12-23 12:38:58.404 28499 28578 D DatabaseUpdateWorker: Resuming existing update with ID: 1766464692673
+12-23 12:38:58.404 28499 28578 D DatabaseUpdateWorker: Resuming existing update with ID: 1766464692673
+12-23 12:38:58.404 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (600/50223)
+12-23 12:38:58.404 28499 28578 D RadioStationRepository: 寮€濮嬪悓姝ョ數鍙版暟鎹?
+12-23 12:38:58.404 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪妫€鏌ョ綉缁滆繛鎺?(0/100)
+12-23 12:38:58.406 28499 28578 D RadioStationRepository: 浣跨敤24灏忔椂鍐呯殑缃戠粶妫€鏌ョ粨鏋?
+12-23 12:38:58.406 28499 28578 D RadioStationRepository: 鎵惧埌鏈€蹇殑鏈嶅姟鍣? fi1.api.radio-browser.info (HTTPS: false)
+12-23 12:38:58.406 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪鑾峰彇鐢靛彴鎬绘暟 (0/100)
+12-23 12:38:58.406 28499 28578 D RadioStationRepository: Attempting to download stats from: fi1.api.radio-browser.info/json/stats
+12-23 12:38:58.598 28499 28499 D DatabaseUpdateProgressDialog: isShowing() called, returning false (dialog=null, dialog.isShowing=N/A, internal isShowing=false)
+12-23 12:38:58.598 28499 28499 D FragmentSettings: In delayed runnable: updateDialog.isShowing=false
+12-23 12:38:58.598 28499 28499 D DatabaseUpdateProgressDialog: show() called, isShowing=false, dialog=null, dialog.isShowing=N/A
+12-23 12:38:58.620 28499 28499 D DatabaseUpdateProgressDialog: Dialog created and shown successfully, isShowing=true
+12-23 12:38:58.620 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=0, total=100, isShowing=true, dialog.isShowing=true
+12-23 12:38:58.620 28499 28499 D FragmentSettings: Dialog shown for active update
+12-23 12:38:58.654 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=0, total=100, isShowing=true, dialog.isShowing=true
+12-23 12:38:59.156 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=0, total=100, isShowing=true, dialog.isShowing=true
+12-23 12:38:59.313 28499 28578 D RadioStationRepository: Download completed, result is non-null
+12-23 12:38:59.313 28499 28578 D RadioStationRepository: 鏈嶅姟鍣ㄨ繑鍥炵殑鍘熷缁熻淇℃伅: {"supported_version":1,"software_version":"0.7.31","status":"OK","stations":50223,"stations_broken":344,"tags":10523,"clicks_last_hour":3301,"clicks_last_day":135444,"languages":596,"countries":238}
+12-23 12:38:59.314 28499 28578 D RadioStationRepository: 瑙ｆ瀽寰楀埌鐨勭數鍙版€绘暟: 50223
+12-23 12:38:59.314 28499 28578 D DatabaseUpdateWorker: Progress: 鏌ヨ鍒扮綉缁滄暟鎹簱鐜板瓨 50223 涓數鍙?(0/50223)
+12-23 12:38:59.314 28499 28578 D RadioStationRepository: 涓绘暟鎹簱涓殑鐢靛彴鏁伴噺: 50116
+12-23 12:38:59.314 28499 28578 D DatabaseUpdateWorker: Progress: 寮€濮嬫洿鏂颁复鏃舵暟鎹簱 (0/50223)
+12-23 12:38:59.320 28499 28578 D RadioStationRepository: 鎭㈠妯″紡锛氫复鏃舵暟鎹簱涓凡鏈?500 涓數鍙?
+12-23 12:38:59.320 28499 28578 D DatabaseUpdateWorker: Progress: 鎭㈠涓嬭浇杩涘害 (500/50223)
+12-23 12:38:59.321 28499 28578 D RadioStationRepository: 鎭㈠妯″紡锛氫粠绗?11 椤靛紑濮嬩笅杞斤紝宸叉湁 500 涓數鍙?
+12-23 12:38:59.656 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=500, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:38:59.712 28499 28578 D RadioStationRepository: 宸蹭笅杞?550/50223 涓數鍙?
+12-23 12:38:59.712 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (550/50223)
+12-23 12:39:00.162 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=550, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:00.666 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=550, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:01.169 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=550, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:01.361 28499 28578 D RadioStationRepository: 宸蹭笅杞?600/50223 涓數鍙?
+12-23 12:39:01.361 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (600/50223)
+12-23 12:39:01.670 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=600, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:02.174 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=600, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:02.677 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=600, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:03.178 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=600, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:03.683 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=600, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:03.726 28499 28578 D RadioStationRepository: 宸蹭笅杞?650/50223 涓數鍙?
+12-23 12:39:03.726 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (650/50223)
+12-23 12:39:04.189 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=650, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:04.652 28499 28578 D RadioStationRepository: 宸蹭笅杞?700/50223 涓數鍙?
+12-23 12:39:04.652 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (700/50223)
+12-23 12:39:04.691 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=700, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:05.193 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=700, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:05.598 28499 28578 D RadioStationRepository: 宸蹭笅杞?750/50223 涓數鍙?
+12-23 12:39:05.598 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (750/50223)
+12-23 12:39:05.698 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=750, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:06.207 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=750, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:06.511 28499 28578 D RadioStationRepository: 宸蹭笅杞?800/50223 涓數鍙?
+12-23 12:39:06.511 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (800/50223)
+12-23 12:39:06.715 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=800, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:07.222 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=800, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:07.728 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=800, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:08.240 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=800, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:08.751 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=800, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:09.255 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=800, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:09.644 28499 28578 D RadioStationRepository: 宸蹭笅杞?850/50223 涓數鍙?
+12-23 12:39:09.644 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (850/50223)
+12-23 12:39:09.759 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=850, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:10.265 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=850, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:10.776 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=850, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:11.280 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=850, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:11.793 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=850, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:12.304 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=850, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:12.814 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=850, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:13.057 28499 28578 D RadioStationRepository: 宸蹭笅杞?900/50223 涓數鍙?
+12-23 12:39:13.058 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (900/50223)
+12-23 12:39:13.322 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=900, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:13.828 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=900, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:14.338 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=900, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:14.847 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=900, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:15.360 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=900, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:15.871 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=900, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:16.147 28499 28578 D RadioStationRepository: 宸蹭笅杞?950/50223 涓數鍙?
+12-23 12:39:16.147 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (950/50223)
+12-23 12:39:16.383 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=950, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:16.895 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=950, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:17.406 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=950, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:17.474 28499 28578 D RadioStationRepository: 宸蹭笅杞?1000/50223 涓數鍙?
+12-23 12:39:17.563 28499 28578 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:39:17.563 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1000/50223)
+12-23 12:39:17.914 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1000, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:18.420 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1000, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:18.927 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1000, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:19.435 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1000, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:19.784 28499 28578 D RadioStationRepository: 宸蹭笅杞?1050/50223 涓數鍙?
+12-23 12:39:19.784 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1050/50223)
+12-23 12:39:19.944 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1050, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:20.457 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1050, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:20.969 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1050, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:21.168 28499 28578 D RadioStationRepository: 宸蹭笅杞?1100/50223 涓數鍙?
+12-23 12:39:21.168 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1100/50223)
+12-23 12:39:21.482 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1100, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:21.995 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1100, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:22.507 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1100, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:23.018 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1100, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:23.395 28499 28578 D RadioStationRepository: 宸蹭笅杞?1150/50223 涓數鍙?
+12-23 12:39:23.395 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1150/50223)
+12-23 12:39:23.525 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1150, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:24.036 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1150, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:24.548 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1150, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:25.059 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1150, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:25.571 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1150, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:26.063 28499 28578 D RadioStationRepository: 宸蹭笅杞?1200/50223 涓數鍙?
+12-23 12:39:26.063 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1200/50223)
+12-23 12:39:26.082 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1200, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:26.592 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1200, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:27.105 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1200, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:27.615 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1200, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:28.126 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1200, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:28.632 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1200, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:29.143 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1200, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:29.151 28499 28578 D RadioStationRepository: 宸蹭笅杞?1250/50223 涓數鍙?
+12-23 12:39:29.152 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1250/50223)
+12-23 12:39:29.650 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1250, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:30.160 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1250, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:30.669 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1250, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:31.004 28499 28578 D RadioStationRepository: 宸蹭笅杞?1300/50223 涓數鍙?
+12-23 12:39:31.004 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1300/50223)
+12-23 12:39:31.180 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1300, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:31.694 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1300, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:32.213 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1300, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:32.728 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1300, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:33.236 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1300, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:33.355 28499 28578 D RadioStationRepository: 宸蹭笅杞?1350/50223 涓數鍙?
+12-23 12:39:33.356 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1350/50223)
+12-23 12:39:33.747 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1350, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:34.260 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1350, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:34.765 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1350, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:35.272 28499 28499 D DatabaseUpdateProgressDialog: updateProgress called: isUpdating=true, current=1350, total=50223, isShowing=true, dialog.isShowing=true
+12-23 12:39:35.309 28499 28578 D RadioStationRepository: 宸蹭笅杞?1400/50223 涓數鍙?
+12-23 12:39:35.310 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1400/50223)
+12-23 12:39:35.794 28499 28539 D DatabaseUpdateWorker: Worker stopped
+12-23 12:39:40.010 28499 28578 D RadioStationRepository: 宸蹭笅杞?1450/50223 涓數鍙?
+12-23 12:39:40.010 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1450/50223)
+12-23 12:39:43.382 28499 28578 D RadioStationRepository: 宸蹭笅杞?1500/50223 涓數鍙?
+12-23 12:39:43.477 28499 28578 D RadioStationRepository: 鎵归噺鎻掑叆浜?500 涓數鍙板埌涓存椂鏁版嵁搴?
+12-23 12:39:43.477 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1500/50223)
+12-23 12:39:45.392 28499 28578 D RadioStationRepository: 宸蹭笅杞?1550/50223 涓數鍙?
+12-23 12:39:45.392 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1550/50223)
+12-23 12:39:46.728 28499 28578 D RadioStationRepository: 宸蹭笅杞?1600/50223 涓數鍙?
+12-23 12:39:46.728 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1600/50223)
+12-23 12:39:47.686 28499 28578 D RadioStationRepository: 宸蹭笅杞?1650/50223 涓數鍙?
+12-23 12:39:47.686 28499 28578 D DatabaseUpdateWorker: Progress: 姝ｅ湪涓嬭浇鐢靛彴鏁版嵁 (1650/50223)
+12-23 12:41:45.448  8640  8640 D FragmentSettings: onResume called
+12-23 12:41:45.457  8640  8640 D FragmentSettings: checkAndRestoreUpdateDialog called
+12-23 12:41:45.458  8640  8640 D DatabaseUpdateWorker: isUpdating called with lock
+12-23 12:41:45.460  8640  8640 D DatabaseUpdateWorker: SharedPreferences isUpdating: false
+12-23 12:41:45.467  8640  8640 D DatabaseUpdateWorker: WorkManager workInfos: 1 items
+12-23 12:41:45.467  8640  8640 D DatabaseUpdateWorker: WorkInfo state: CANCELLED, id: 1a0b79b3-caba-447d-8ccd-3ea60003c89b
+12-23 12:41:45.467  8640  8640 D DatabaseUpdateWorker: No update in progress, returning false
+12-23 12:41:45.467  8640  8640 D FragmentSettings: DatabaseUpdateManager.isUpdating() returned: false
+12-23 12:41:45.467  8640  8640 D FragmentSettings: updateDialog exists: false
+12-23 12:41:45.467  8640  8640 D FragmentSettings: No database update in progress
+12-23 12:41:45.469  8640  8640 D DatabaseUpdateWorker: App foreground time updated
+12-23 12:45:01.679  8640  8640 D FragmentSettings: onResume called
+12-23 12:45:01.682  8640  8640 D FragmentSettings: checkAndRestoreUpdateDialog called
+12-23 12:45:01.682  8640  8640 D DatabaseUpdateWorker: isUpdating called with lock
+12-23 12:45:01.683  8640  8640 D DatabaseUpdateWorker: SharedPreferences isUpdating: false
+12-23 12:45:01.683  8640  8640 D DatabaseUpdateWorker: WorkManager workInfos: 1 items
+12-23 12:45:01.683  8640  8640 D DatabaseUpdateWorker: WorkInfo state: CANCELLED, id: 1a0b79b3-caba-447d-8ccd-3ea60003c89b
+12-23 12:45:01.683  8640  8640 D DatabaseUpdateWorker: No update in progress, returning false
+12-23 12:45:01.683  8640  8640 D FragmentSettings: DatabaseUpdateManager.isUpdating() returned: false
+12-23 12:45:01.683  8640  8640 D FragmentSettings: updateDialog exists: false
+12-23 12:45:01.683  8640  8640 D FragmentSettings: No database update in progress
+12-23 12:45:01.684  8640  8640 D DatabaseUpdateWorker: App foreground time updated

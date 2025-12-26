@@ -178,6 +178,8 @@ public class DatabaseUpdateProgressDialog {
         String KEY_PROGRESS_TOTAL = "progress_total";
         String KEY_PROGRESS_MESSAGE = "progress_message";
         String KEY_IS_UPDATING = "is_updating";
+        String KEY_UPDATE_ID = "update_id";
+        String KEY_UPDATE_START_TIME = "update_start_time";
         
         // 使用更彻底的SharedPreferences刷新机制
         int currentProgress = 0;
@@ -292,25 +294,88 @@ public class DatabaseUpdateProgressDialog {
         // 检查是否是错误消息
         boolean isError = progressMessage.contains("更新失败") || progressMessage.contains("错误");
         
+        // 检查取消标志，如果设置了取消标志，不显示"更新被系统暂停"消息
+        SharedPreferences prefsCheck = context.getSharedPreferences("database_update_prefs", Context.MODE_PRIVATE);
+        boolean isCancelled = prefsCheck.getBoolean("update_cancelled", false);
+        long updateId = prefsCheck.getLong("update_id", 0);
+        long cancelTimestamp = prefsCheck.getLong("cancel_timestamp", 0);
+        long currentTime = System.currentTimeMillis();
+        
+        // 如果设置了取消标志，或者更新ID为0，或者取消时间戳在最近10分钟内，都认为是已取消状态
+        boolean recentlyCancelled = isCancelled && (cancelTimestamp > 0) && (currentTime - cancelTimestamp < 10 * 60 * 1000);
+        
+        // 获取WorkManager状态，但在有取消标志时不使用它
         boolean workManagerUpdating = DatabaseUpdateManager.isUpdating(context);
         
-        // 检查WorkManager实际状态，如果WorkManager显示正在更新但SharedPreferences显示未更新，说明任务被系统暂停
-        if (workManagerUpdating && !isUpdating) {
-            Log.w(TAG, "检测到系统暂停：WorkManager显示更新中，但SharedPreferences显示未更新");
-            // 这种情况下，任务可能被系统暂停，但WorkManager仍认为在运行
-            isUpdating = true;
-            progressMessage = "更新被系统暂停，等待恢复...";
+        // 获取当前更新ID和开始时间，用于验证是否是新的更新
+        long currentUpdateId = prefsCheck.getLong(KEY_UPDATE_ID, 0);
+        long currentUpdateTime = prefsCheck.getLong(KEY_UPDATE_START_TIME, 0);
+        
+        // 检查是否是刚刚开始的新更新（开始时间在5秒内）
+        boolean isNewUpdate = (currentUpdateTime > 0) && (currentTime - currentUpdateTime < 5000);
+        
+        if (isCancelled || updateId == 0 || recentlyCancelled) {
+            Log.d(TAG, "Update was cancelled or no update ID, not showing system paused message. isCancelled=" + isCancelled + 
+                      ", updateId=" + updateId + ", recentlyCancelled=" + recentlyCancelled);
+            isUpdating = false;
+            progressMessage = "更新已取消";
             
-            // 强制更新SharedPreferences状态，确保下次检测一致
-            SharedPreferences prefs = context.getSharedPreferences("database_update_prefs", Context.MODE_PRIVATE);
-            prefs.edit()
-                .putBoolean(KEY_IS_UPDATING, true)
-                .putString(KEY_PROGRESS_MESSAGE, progressMessage)
-                .commit();
+            // 不清除取消标志，让DatabaseUpdateWorker在真正开始新更新时清除
+            // 这样可以确保UI能够正确显示取消状态
+            Log.d(TAG, "Detected cancelled update, showing cancelled status");
+        } else if (isNewUpdate) {
+            // 如果是刚刚开始的新更新，不显示系统暂停消息
+            Log.d(TAG, "Detected new update started recently, not showing system paused message. updateId=" + currentUpdateId + 
+                      ", timeSinceStart=" + (currentTime - currentUpdateTime) + "ms");
+            // 保持当前状态，不修改消息
+        } else {
+            // 检查WorkManager实际状态，如果WorkManager显示正在更新但SharedPreferences显示未更新，说明任务被系统暂停
+            if (workManagerUpdating && !isUpdating) {
+                // 额外检查：如果进度为0/0且消息不是初始消息，可能是取消后的残留状态
+                if (currentProgress == 0 && totalProgress == 0 && 
+                    !progressMessage.contains("准备开始") && !progressMessage.contains("更新已取消")) {
+                    Log.w(TAG, "检测到可能的残留状态，进度为0/0，重置状态");
+                    isUpdating = false;
+                    progressMessage = "更新已取消";
+                    prefsCheck.edit()
+                        .putBoolean(KEY_IS_UPDATING, false)
+                        .putString(KEY_PROGRESS_MESSAGE, progressMessage)
+                        .putBoolean("update_cancelled", true)  // 设置取消标志，防止恢复
+                        .putLong("cancel_timestamp", System.currentTimeMillis())  // 设置取消时间戳
+                        .commit();
+                } else {
+                    // 再次检查取消标志，确保不会覆盖取消状态
+                    if (isCancelled || recentlyCancelled) {
+                        Log.w(TAG, "检测到取消标志，不显示系统暂停消息");
+                        isUpdating = false;
+                        progressMessage = "更新已取消";
+                        
+                        // 确保SharedPreferences中的取消状态被正确设置
+                        SharedPreferences prefsUpdate = context.getSharedPreferences("database_update_prefs", Context.MODE_PRIVATE);
+                        prefsUpdate.edit()
+                            .putBoolean(KEY_IS_UPDATING, false)
+                            .putString(KEY_PROGRESS_MESSAGE, progressMessage)
+                            .putBoolean("update_cancelled", true)
+                            .putLong("cancel_timestamp", System.currentTimeMillis())
+                            .commit();
+                    } else {
+                        Log.w(TAG, "检测到系统暂停：WorkManager显示更新中，但SharedPreferences显示未更新");
+                        // 这种情况下，任务可能被系统暂停，但WorkManager仍认为在运行
+                        isUpdating = true;
+                        progressMessage = "更新被系统暂停，等待恢复...";
+                        
+                        // 强制更新SharedPreferences状态，确保下次检测一致
+                        SharedPreferences prefsUpdate = context.getSharedPreferences("database_update_prefs", Context.MODE_PRIVATE);
+                        prefsUpdate.edit()
+                            .putBoolean(KEY_IS_UPDATING, true)
+                            .putString(KEY_PROGRESS_MESSAGE, progressMessage)
+                            .commit();
+                    }
+                }
+            }
         }
         
         // 检查进度是否长时间没有变化（超过10秒），可能是卡死
-        long currentTime = System.currentTimeMillis();
         if (isUpdating && currentProgress > 0 && totalProgress > 0) {
             // 如果进度长时间没有变化，可能是网络问题或系统暂停
             if (currentProgress == lastProgressValue && currentTime - lastProgressTime > 10000) {
@@ -474,9 +539,17 @@ public class DatabaseUpdateProgressDialog {
             .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    // 取消更新
-                    DatabaseUpdateManager.cancelUpdate(context);
-                    hide();
+                    // 立即关闭进度对话框，不等待取消操作完成
+                    dismiss();
+                    
+                    // 在后台线程执行取消操作，避免阻塞UI
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 取消更新
+                            DatabaseUpdateManager.cancelUpdate(context);
+                        }
+                    }).start();
                 }
             })
             .setNegativeButton("取消", null)

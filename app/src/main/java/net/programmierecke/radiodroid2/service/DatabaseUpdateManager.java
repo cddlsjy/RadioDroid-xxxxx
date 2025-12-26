@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 
@@ -37,6 +38,33 @@ public class DatabaseUpdateManager {
             return;
         }
         
+        // 彻底清除所有状态，确保新更新可以正常进行
+        SharedPreferences prefs = context.getSharedPreferences("database_update_prefs", Context.MODE_PRIVATE);
+        
+        // 检查是否有取消标志或取消时间戳
+        boolean isCancelled = prefs.getBoolean("update_cancelled", false);
+        long cancelTimestamp = prefs.getLong("cancel_timestamp", 0);
+        long currentTime = System.currentTimeMillis();
+        
+        // 如果是最近取消的更新（10分钟内），清除所有取消标志
+        if (isCancelled || (cancelTimestamp > 0 && (currentTime - cancelTimestamp) < 10 * 60 * 1000)) {
+            Log.d(TAG, "Clearing recent cancel state before starting new update");
+            prefs.edit()
+                .putBoolean("update_cancelled", false)
+                .putLong("cancel_timestamp", 0)
+                .commit();
+        }
+        
+        // 设置新的更新状态
+        prefs.edit()
+            .putBoolean("is_updating", false)  // 先设为false，让Worker来设置为true
+            .putLong("update_id", System.currentTimeMillis())  // 设置新的更新ID
+            .putLong("update_start_time", System.currentTimeMillis())
+            .putString("progress_message", "准备开始更新...")
+            .putInt("progress_current", 0)
+            .putInt("progress_total", 0)
+            .commit();
+        
         // 创建WorkManager任务
         Constraints constraints = new Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -59,6 +87,7 @@ public class DatabaseUpdateManager {
             updateRequest
         );
         
+        Log.d(TAG, "Started new database update work");
         // 不再显示初始通知，让应用内进度对话框处理用户界面
     }
     
@@ -66,8 +95,14 @@ public class DatabaseUpdateManager {
      * 取消数据库更新
      */
     public static void cancelUpdate(Context context) {
-        // 取消WorkManager任务
-        WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME);
+        // 取消WorkManager任务 - 使用多种方式确保彻底取消
+        WorkManager workManager = WorkManager.getInstance(context);
+        
+        // 方法1：取消唯一工作
+        workManager.cancelUniqueWork(WORK_NAME);
+        
+        // 方法2：通过标签取消所有相关工作
+        workManager.cancelAllWorkByTag("database_update");
         
         // 清除Worker中的状态
         DatabaseUpdateWorker.cancelUpdate(context);
