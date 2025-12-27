@@ -28,6 +28,8 @@ import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.metadata.icy.IcyHeaders;
 import com.google.android.exoplayer2.metadata.icy.IcyInfo;
 import com.google.android.exoplayer2.metadata.id3.Id3Frame;
+
+import java.io.ByteArrayOutputStream;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
@@ -290,8 +292,12 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
                             hexString.append(String.format("%02X ", titleBytes[j]));
                         }
                         Log.d(TAG, "原始IcyInfo标题字节（前100字节）: " + hexString.toString());
+                        
+                        // 处理16字节块和填充问题
+                        byte[] processedTitleBytes = processMetadataBlocks(titleBytes);
+                        
                         // 尝试使用多种编码方式解析元数据，以支持不同语言的字符集
-                        String decodedTitle = decodeMetadataWithCharsetDetection(icyInfo.title);
+                        String decodedTitle = decodeMetadataWithCharsetDetection(processedTitleBytes);
                         
                         // 如果解码后仍包含问号，尝试额外的解码方法
                         if (decodedTitle.contains("?")) {
@@ -608,9 +614,148 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
     }
 
     /**
-     * 智能元数据编码检测，支持多语言和复杂编码情况
-     * 使用多阶段检测策略，优先检测UTF-8，然后使用语言特征检测
+     * 处理metadata块，确保正确读取16字节块并去除填充
+     * @param originalBytes 原始字节数据
+     * @return 处理后的字节数据
      */
+    private byte[] processMetadataBlocks(byte[] originalBytes) {
+        if (originalBytes == null || originalBytes.length == 0) {
+            return originalBytes;
+        }
+        
+        // 记录原始字节数据
+        if (BuildConfig.DEBUG) {
+            StringBuilder hexString = new StringBuilder();
+            for (int j = 0; j < Math.min(originalBytes.length, 100); j++) {
+                hexString.append(String.format("%02X ", originalBytes[j]));
+            }
+            Log.d(TAG, "processMetadataBlocks - 原始字节数据（前100字节）: " + hexString.toString());
+        }
+        
+        // 创建输出流
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        
+        // 处理每个16字节块
+        for (int i = 0; i < originalBytes.length; i += 16) {
+            // 确定当前块的结束位置
+            int blockEnd = Math.min(i + 16, originalBytes.length);
+            
+            // 复制当前块
+            byte[] block = new byte[blockEnd - i];
+            System.arraycopy(originalBytes, i, block, 0, block.length);
+            
+            // 从块末尾开始，移除填充的0x00字节
+            int actualLength = block.length;
+            while (actualLength > 0 && block[actualLength - 1] == 0x00) {
+                actualLength--;
+            }
+            
+            // 如果块中有非填充数据，则写入输出流
+            if (actualLength > 0) {
+                outputStream.write(block, 0, actualLength);
+            }
+        }
+        
+        byte[] result = outputStream.toByteArray();
+        
+        // 记录处理后的字节数据
+        if (BuildConfig.DEBUG) {
+            StringBuilder hexString = new StringBuilder();
+            for (int j = 0; j < Math.min(result.length, 100); j++) {
+                hexString.append(String.format("%02X ", result[j]));
+            }
+            Log.d(TAG, "processMetadataBlocks - 处理后字节数据（前100字节）: " + hexString.toString());
+            Log.d(TAG, "processMetadataBlocks - 原始长度: " + originalBytes.length + ", 处理后长度: " + result.length);
+        }
+        
+        return result;
+    }
+
+    /**
+     * 智能元数据编码检测，支持多语言和复杂编码情况
+     * 优先使用多种编码尝试解码，而不是强制使用UTF-8
+     */
+    /**
+     * 使用字节数组进行元数据解码，避免不必要的字符串转换
+     * @param metadataBytes 原始字节数据
+     * @return 解码后的字符串
+     */
+    private String decodeMetadataWithCharsetDetection(byte[] metadataBytes) {
+        if (metadataBytes == null || metadataBytes.length == 0) {
+            return "未知";
+        }
+        
+        // 调试信息
+        if (BuildConfig.DEBUG) {
+            logMetadataBytes(metadataBytes);
+        }
+
+        // 检查原始数据是否已损坏
+        if (checkIfDataIsCorrupted(metadataBytes)) {
+            Log.w(TAG, "检测到原始数据已损坏，可能是服务器端编码转换错误");
+            return "未知";
+        }
+
+        // 首先特别检查是否是有效的UTF-8字节序列
+        if (isValidUTF8Sequence(metadataBytes)) {
+            try {
+                String utf8Result = new String(metadataBytes, "UTF-8");
+                if (isValidDecodedText(utf8Result) && !containsObviousGarbledCharacters(utf8Result)) {
+                    if (BuildConfig.DEBUG) {
+                        Log.i(TAG, "检测到有效UTF-8序列，使用UTF-8编码成功解码: " + utf8Result);
+                    }
+                    return utf8Result;
+                }
+            } catch (Exception e) {
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, "UTF-8编码解码失败: " + e.getMessage());
+                }
+            }
+        }
+        
+        // 尝试容错UTF-8解码
+        String faultTolerantResult = tryFaultTolerantUTF8Decoding(metadataBytes);
+        if (faultTolerantResult != null) {
+            return faultTolerantResult;
+        }
+        
+        // 尝试修复服务器将UTF-8当作Latin1处理的情况
+        String serverLatin1FixResult = tryFixServerLatin1Handling(metadataBytes);
+        if (serverLatin1FixResult != null) {
+            return serverLatin1FixResult;
+        }
+
+        // 优先使用多种编码尝试解码，按照用户建议的顺序
+        // 特别优化UTF-8检测，因为日志显示很多UTF-8编码被误判
+        String[] preferredCharsets = {
+            "UTF-8", "GBK", "GB2312", "Big5", "ISO-8859-1", "windows-1252"
+        };
+        
+        for (String charset : preferredCharsets) {
+            try {
+                String result = new String(metadataBytes, charset);
+                if (isValidDecodedText(result) && !containsObviousGarbledCharacters(result)) {
+                    if (BuildConfig.DEBUG) {
+                        Log.i(TAG, "使用" + charset + "编码成功解码: " + result);
+                    }
+                    return result;
+                }
+            } catch (Exception e) {
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, charset + "编码解码失败: " + e.getMessage());
+                }
+            }
+        }
+        
+        // 如果首选编码都失败，尝试全面编码检测
+        String bestResult = tryAllEncodings(metadataBytes);
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "全面编码尝试结果: " + bestResult);
+        }
+        
+        return bestResult;
+    }
+
     private String decodeMetadataWithCharsetDetection(String metadata) {
         if (metadata == null || metadata.isEmpty()) {
             return metadata;
@@ -619,7 +764,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         // 预处理：移除可能的控制字符和无效字符
         String cleanedMetadata = preprocessMetadata(metadata);
         if (cleanedMetadata.isEmpty()) {
-            return "";
+            return "未知";
         }
 
         // 获取原始字节数据
@@ -633,28 +778,61 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         // 检查原始数据是否已损坏
         if (checkIfDataIsCorrupted(originalBytes)) {
             Log.w(TAG, "检测到原始数据已损坏，可能是服务器端编码转换错误");
-            return "";
+            return "未知";
         }
 
-        // 第一阶段：快速UTF-8检测
-        String utf8Result = tryUtf8Decoding(originalBytes);
-        if (utf8Result != null && isValidDecodedText(utf8Result)) {
-            if (BuildConfig.DEBUG) {
-                Log.d(TAG, "UTF-8快速检测成功: " + utf8Result);
+        // 优先使用多种编码尝试解码，按照用户建议的顺序
+        // 特别优化UTF-8检测，因为日志显示很多UTF-8编码被误判
+        String[] preferredCharsets = {
+            "UTF-8", "GBK", "GB2312", "Big5", "ISO-8859-1", "windows-1252"
+        };
+        
+        // 首先特别检查是否是有效的UTF-8字节序列
+        if (isValidUTF8Sequence(originalBytes)) {
+            try {
+                String utf8Result = new String(originalBytes, "UTF-8");
+                if (isValidDecodedText(utf8Result) && !containsObviousGarbledCharacters(utf8Result)) {
+                    if (BuildConfig.DEBUG) {
+                        Log.i(TAG, "检测到有效UTF-8序列，使用UTF-8编码成功解码: " + utf8Result);
+                    }
+                    return utf8Result;
+                }
+            } catch (Exception e) {
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, "UTF-8编码解码失败: " + e.getMessage());
+                }
             }
-            return utf8Result;
         }
-
-        // 第二阶段：语言特征检测
-        String languageDetected = detectLanguage(originalBytes);
-        if (languageDetected != null) {
-            if (BuildConfig.DEBUG) {
-                Log.d(TAG, "语言特征检测成功，语言: " + languageDetected);
+        
+        // 尝试容错UTF-8解码
+        String faultTolerantResult = tryFaultTolerantUTF8Decoding(originalBytes);
+        if (faultTolerantResult != null) {
+            return faultTolerantResult;
+        }
+        
+        // 尝试修复服务器将UTF-8当作Latin1处理的情况
+        String serverLatin1FixResult = tryFixServerLatin1Handling(originalBytes);
+        if (serverLatin1FixResult != null) {
+            return serverLatin1FixResult;
+        }
+        
+        for (String charset : preferredCharsets) {
+            try {
+                String result = new String(originalBytes, charset);
+                if (isValidDecodedText(result) && !containsObviousGarbledCharacters(result)) {
+                    if (BuildConfig.DEBUG) {
+                        Log.i(TAG, "使用" + charset + "编码成功解码: " + result);
+                    }
+                    return result;
+                }
+            } catch (Exception e) {
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, charset + "编码解码失败: " + e.getMessage());
+                }
             }
-            return languageDetected;
         }
-
-        // 第三阶段：全面编码尝试
+        
+        // 如果首选编码都失败，尝试全面编码检测
         String bestResult = tryAllEncodings(originalBytes);
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "全面编码尝试结果: " + bestResult);
@@ -664,7 +842,149 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
     }
 
     /**
+     * 检查字节数组是否是有效的UTF-8序列
+     * 这个方法专门用于检测日志中显示的UTF-8编码被误判的问题
+     */
+    private boolean isValidUTF8Sequence(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            return false;
+        }
+        
+        try {
+            // 首先使用更严格的UTF-8字节序列验证
+            if (!isValidUtf8Strict(bytes)) {
+                return false;
+            }
+            
+            // 尝试将字节数组解码为UTF-8，然后重新编码
+            // 如果重新编码后的字节序列与原始序列相同，则认为是有效的UTF-8
+            String decoded = new String(bytes, "UTF-8");
+            byte[] reencoded = decoded.getBytes("UTF-8");
+            
+            // 比较原始字节和重新编码后的字节
+            if (bytes.length != reencoded.length) {
+                return false;
+            }
+            
+            for (int i = 0; i < bytes.length; i++) {
+                if (bytes[i] != reencoded[i]) {
+                    return false;
+                }
+            }
+            
+            // 检查解码结果是否包含替换字符
+            int replacementCharCount = 0;
+            for (int i = 0; i < decoded.length(); i++) {
+                if (decoded.charAt(i) == '\uFFFD') {
+                    replacementCharCount++;
+                }
+            }
+            
+            // 如果包含替换字符，认为不是有效的UTF-8
+            if (replacementCharCount > 0) {
+                return false;
+            }
+            
+            // 额外检查：确保解码结果包含有意义的内容
+            // 检查是否包含非ASCII字符（如中文字符）
+            boolean hasNonAscii = false;
+            for (byte b : bytes) {
+                if ((b & 0x80) != 0) { // 检查最高位是否为1（非ASCII字符）
+                    hasNonAscii = true;
+                    break;
+                }
+            }
+            
+            // 如果有非ASCII字符，并且解码后包含有效的Unicode字符，则认为是有效的UTF-8
+            if (hasNonAscii) {
+                // 检查解码后的字符串是否包含有效的Unicode字符
+                for (int i = 0; i < decoded.length(); i++) {
+                    char c = decoded.charAt(i);
+                    // 检查是否是有效的Unicode字符（不是替换字符）
+                    if (c != 0xFFFD && Character.isDefined(c)) {
+                        return true;
+                    }
+                }
+            }
+            
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    /**
+     * 严格验证UTF-8字节序列
+     */
+    private boolean isValidUtf8Strict(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            return false;
+        }
+        
+        int i = 0;
+        while (i < bytes.length) {
+            byte b = bytes[i];
+            
+            // ASCII字符 (0xxxxxxx)
+            if ((b & 0x80) == 0) {
+                i++;
+                continue;
+            }
+            
+            // 多字节序列的开始
+            int expectedBytes;
+            int codePoint;
+            
+            // 2字节序列 (110xxxxx 10xxxxxx)
+            if ((b & 0xE0) == 0xC0) {
+                expectedBytes = 2;
+                codePoint = b & 0x1F;
+            }
+            // 3字节序列 (1110xxxx 10xxxxxx 10xxxxxx)
+            else if ((b & 0xF0) == 0xE0) {
+                expectedBytes = 3;
+                codePoint = b & 0x0F;
+            }
+            // 4字节序列 (11110xxx 10xxxxxx 10xxxxxx 10xxxxxx)
+            else if ((b & 0xF8) == 0xF0) {
+                expectedBytes = 4;
+                codePoint = b & 0x07;
+            }
+            else {
+                return false; // 无效的UTF-8起始字节
+            }
+            
+            // 检查是否有足够的字节
+            if (i + expectedBytes > bytes.length) {
+                return false;
+            }
+            
+            // 检查后续字节是否都是10xxxxxx格式
+            for (int j = 1; j < expectedBytes; j++) {
+                if ((bytes[i + j] & 0xC0) != 0x80) {
+                    return false;
+                }
+                codePoint = (codePoint << 6) | (bytes[i + j] & 0x3F);
+            }
+            
+            // 检查Unicode码点是否有效
+            if (codePoint > 0x10FFFF || 
+                (codePoint >= 0xD800 && codePoint <= 0xDFFF) || // 代理区
+                (expectedBytes == 2 && codePoint < 0x80) ||       // 过长编码
+                (expectedBytes == 3 && codePoint < 0x800) ||      // 过长编码
+                (expectedBytes == 4 && codePoint < 0x10000)) {   // 过长编码
+                return false;
+            }
+            
+            i += expectedBytes;
+        }
+        
+        return true;
+    }
+
+    /**
      * 检查数据是否已损坏（主要检查是否为0x3F问号字符）
+     * 修改为更加宽容，只有在数据确实损坏时才返回true
      */
     private boolean checkIfDataIsCorrupted(byte[] bytes) {
         if (bytes == null || bytes.length == 0) {
@@ -678,15 +998,15 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
             }
         }
         
-        // 如果超过90%的字节是问号，才认为数据已损坏（之前是70%）
+        // 只有超过95%的字节是问号，才认为数据已损坏（更加宽容）
         double ratio = (double) questionMarkCount / bytes.length;
-        boolean isCorrupted = ratio > 0.9;
+        boolean isCorrupted = ratio > 0.95;
         
         if (BuildConfig.DEBUG && isCorrupted) {
             Log.d(TAG, "checkIfDataIsCorrupted - 检测到损坏数据: " + 
                   questionMarkCount + "/" + bytes.length + 
                   " 字节是问号(0x3F), 比例: " + String.format("%.2f", ratio));
-        } else if (BuildConfig.DEBUG && ratio > 0.5) {
+        } else if (BuildConfig.DEBUG && ratio > 0.7) {
             Log.d(TAG, "checkIfDataIsCorrupted - 数据包含较多问号但未达到损坏阈值: " + 
                   questionMarkCount + "/" + bytes.length + 
                   " 字节是问号(0x3F), 比例: " + String.format("%.2f", ratio));
@@ -710,8 +1030,19 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         score += 10;
         
         // 检查是否包含替换字符
-        if (text.contains("�")) {
-            score -= 100; // 严重扣分，几乎可以肯定是错误编码
+        int replacementCharCount = 0;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '\uFFFD') {
+                replacementCharCount++;
+            }
+        }
+        
+        if (replacementCharCount > 0) {
+            // 根据替换字符的比例扣分
+            double replacementRatio = (double) replacementCharCount / text.length();
+            score -= (int)(replacementRatio * 300); // 最多扣300分
+            Log.i(TAG, charset + "解码包含替换字符: " + replacementCharCount + "/" + text.length() + 
+                  ", 比例: " + String.format("%.2f", replacementRatio) + ", 扣分: " + (int)(replacementRatio * 300));
         }
         
         // 检查是否包含过多的问号字符
@@ -745,6 +1076,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
             // 检查是否存在连续的欧洲字符（可能是Big5被误解析为UTF-8的结果）
             int europeanCharCount = 0;
             int chineseCharCount = 0;
+            int utf8ReplacementCharCount = 0;
             
             for (int i = 0; i < text.length(); i++) {
                 char c = text.charAt(i);
@@ -760,16 +1092,26 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
                     (c >= 0xF900 && c <= 0xFAFF)) {  // CJK兼容汉字
                     chineseCharCount++;
                 }
+                // 检查替换字符
+                if (c == 0xFFFD) {
+                    utf8ReplacementCharCount++;
+                }
+            }
+            
+            // 如果有替换字符，严重扣分
+            if (utf8ReplacementCharCount > 0) {
+                score -= 100; // 有替换字符，严重扣分
+                Log.i(TAG, "ExoPlayer UTF-8解码产生替换字符，严重扣分");
             }
             
             // 如果UTF-8解码产生了合理的中文字符，大幅加分
             if (chineseCharCount > 0) {
-                score += chineseCharCount * 30; // 增加加分权重
+                score += chineseCharCount * 40; // 增加加分权重
                 Log.i(TAG, "ExoPlayer UTF-8解码成功识别中文字符数: " + chineseCharCount + ", 大幅加分");
                 
                 // 如果中文字符比例较高，额外加分
                 double chineseCharRatio = (double) chineseCharCount / text.length();
-                if (chineseCharRatio > 0.3) {
+                if (chineseCharRatio > 0.1) { // 降低阈值
                     score += 50; // 中文字符比例高，额外加分
                     Log.i(TAG, "ExoPlayer UTF-8解码结果中文字符比例高: " + String.format("%.2f", chineseCharRatio));
                 }
@@ -943,7 +1285,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
      */
     private String preprocessMetadata(String metadata) {
         if (metadata == null || metadata.isEmpty()) {
-            return "";
+            return "未知";
         }
         
         // 移除控制字符（保留常见的空白字符）
@@ -988,6 +1330,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
                 int chineseCharCount = 0;
                 int halfWidthKatakanaCount = 0;
                 int invalidCharCount = 0;
+                int replacementCharCount = 0;
                 
                 for (int i = 0; i < result.length(); i++) {
                     char c = result.charAt(i);
@@ -1000,12 +1343,20 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
                     if (c >= 0xFF66 && c <= 0xFF9F) {
                         halfWidthKatakanaCount++;
                     }
+                    // 检查替换字符
+                    if (c == 0xFFFD) {
+                        replacementCharCount++;
+                    }
                     // 检查其他可能的乱码字符
-                    if (c == 0xFFFD || // 替换字符
-                        (c >= 0x80 && c <= 0xFF) || // 可能是编码错误的Latin-1字符
-                        (c >= 0x2500 && c <= 0x257F)) { // 制表符字符，可能是编码错误
+                    if ((c >= 0x80 && c <= 0xFF && c != 0xA0 && c != 0xA1)) { // 可能是编码错误的Latin-1字符（排除常用符号）
                         invalidCharCount++;
                     }
+                }
+                
+                // 如果有替换字符，说明UTF-8解码失败
+                if (replacementCharCount > 0) {
+                    Log.i(TAG, "UTF-8解码产生替换字符，解码失败");
+                    return null;
                 }
                 
                 // 如果UTF-8解码产生了中文字符，且没有明显的编码错误标志，直接返回结果
@@ -1014,12 +1365,22 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
                     return result;
                 }
                 
-                // 如果检测到半角片假名字符或其他无效字符，可能是编码问题，尝试其他编码
-                if (halfWidthKatakanaCount > 0 || invalidCharCount > 0) {
-                    Log.i(TAG, "UTF-8解码检测到可能的编码错误标志 - 半角片假名: " + halfWidthKatakanaCount + 
-                          ", 无效字符: " + invalidCharCount + "，尝试其他编码");
-                    // 不返回，继续尝试其他解码方法
-                    return null; // 强制不使用UTF-8解码结果
+                // 如果检测到半角片假名字符，可能是编码问题，尝试其他编码
+                if (halfWidthKatakanaCount > 0) {
+                    Log.i(TAG, "UTF-8解码检测到半角片假名字符，尝试其他编码");
+                    return null;
+                }
+                
+                // 如果检测到无效字符但包含中文字符，仍然尝试使用UTF-8
+                if (chineseCharCount > 0 && invalidCharCount <= 5) { // 提高阈值
+                    Log.i(TAG, "UTF-8解码检测到无效字符但包含中文字符，仍使用UTF-8解码结果: " + result);
+                    return result;
+                }
+                
+                // 如果没有中文字符，但有少量无效字符，可能是非中文的UTF-8文本
+                if (chineseCharCount == 0 && invalidCharCount <= 3) {
+                    Log.i(TAG, "UTF-8解码成功，无中文字符但无效字符数量可接受: " + result);
+                    return result;
                 }
                 
                 // 尝试强制UTF-8解码，处理可能被错误标记的字节序列
@@ -1088,6 +1449,393 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
     }
     
     /**
+     * 修复不完整的UTF-8序列
+     * 当UTF-8字节序列在传输过程中被截断时，尝试修复这些不完整的序列
+     */
+    private String repairIncompleteUtf8Sequences(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            return null;
+        }
+        
+        try {
+            // 创建一个新的字节数组，用于存储修复后的字节
+            ByteArrayOutputStream repairedBytes = new ByteArrayOutputStream();
+            int i = 0;
+            
+            while (i < bytes.length) {
+                byte b = bytes[i];
+                
+                // 检查是否是UTF-8多字节序列的开始
+                if ((b & 0x80) == 0) {
+                    // ASCII字符 (0xxxxxxx)
+                    repairedBytes.write(b);
+                    i++;
+                } else if ((b & 0xE0) == 0xC0) {
+                    // 2字节序列 (110xxxxx)
+                    if (i + 1 < bytes.length) {
+                        repairedBytes.write(b);
+                        repairedBytes.write(bytes[i + 1]);
+                        i += 2;
+                    } else {
+                        // 不完整的2字节序列，跳过
+                        Log.d(TAG, "跳过不完整的2字节UTF-8序列");
+                        i++;
+                    }
+                } else if ((b & 0xF0) == 0xE0) {
+                    // 3字节序列 (1110xxxx)
+                    if (i + 2 < bytes.length) {
+                        repairedBytes.write(b);
+                        repairedBytes.write(bytes[i + 1]);
+                        repairedBytes.write(bytes[i + 2]);
+                        i += 3;
+                    } else {
+                        // 不完整的3字节序列，尝试修复
+                        if (i + 1 < bytes.length) {
+                            // 有2个字节，尝试猜测第三个字节
+                            byte firstByte = b;
+                            byte secondByte = bytes[i + 1];
+                            
+                            // 对于常见的中文字符，尝试补全第三个字节
+                            if (BuildConfig.DEBUG) {
+                                Log.d(TAG, "尝试修复不完整的3字节UTF-8序列: " + 
+                                      String.format("%02X %02X", firstByte, secondByte));
+                            }
+                            
+                            // 尝试几种常见的第三字节，优先选择能组成有效中文字符的字节
+                            byte[] possibleThirdBytes = { (byte)0x86, (byte)0x87, (byte)0x88, (byte)0x89, (byte)0x8A, (byte)0x8B, (byte)0x8C, (byte)0x8D, (byte)0x8E, (byte)0x8F, (byte)0x90, (byte)0x91, (byte)0x92, (byte)0x93, (byte)0x94, (byte)0x95, (byte)0x96, (byte)0x97, (byte)0x98, (byte)0x99, (byte)0x9A, (byte)0x9B, (byte)0x9C, (byte)0x9D, (byte)0x9E, (byte)0x9F, (byte)0xA0, (byte)0xA1, (byte)0xA2, (byte)0xA3, (byte)0xA4, (byte)0xA5, (byte)0xA6, (byte)0xA7, (byte)0xA8, (byte)0xA9, (byte)0xAA, (byte)0xAB, (byte)0xAC, (byte)0xAD, (byte)0xAE, (byte)0xAF, (byte)0xB0, (byte)0xB1, (byte)0xB2, (byte)0xB3, (byte)0xB4, (byte)0xB5, (byte)0xB6, (byte)0xB7, (byte)0xB8, (byte)0xB9, (byte)0xBA, (byte)0xBB, (byte)0xBC, (byte)0xBD, (byte)0xBE, (byte)0xBF };
+                            
+                            String bestResult = null;
+                            int maxChineseChars = 0;
+                            byte bestThirdByte = 0;
+                            
+                            for (byte thirdByte : possibleThirdBytes) {
+                                byte[] testBytes = {firstByte, secondByte, thirdByte};
+                                try {
+                                    String testResult = new String(testBytes, "UTF-8");
+                                    if (!testResult.contains("\uFFFD")) {
+                                        int chineseCount = countChineseCharacters(testResult);
+                                        if (chineseCount > maxChineseChars) {
+                                            maxChineseChars = chineseCount;
+                                            bestResult = testResult;
+                                            bestThirdByte = thirdByte;
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    // 忽略解码错误
+                                }
+                            }
+                            
+                            if (bestResult != null && maxChineseChars > 0) {
+                                repairedBytes.write(firstByte);
+                                repairedBytes.write(secondByte);
+                                repairedBytes.write(bestThirdByte);
+                                if (BuildConfig.DEBUG) {
+                                    Log.d(TAG, "成功修复3字节UTF-8序列: " + bestResult);
+                                }
+                            } else {
+                                // 无法修复，跳过这两个字节
+                                if (BuildConfig.DEBUG) {
+                                    Log.d(TAG, "无法修复3字节UTF-8序列，跳过");
+                                }
+                            }
+                        }
+                        i += 2; // 跳过这两个字节
+                    }
+                } else if ((b & 0xF8) == 0xF0) {
+                    // 4字节序列 (11110xxx)
+                    if (i + 3 < bytes.length) {
+                        repairedBytes.write(b);
+                        repairedBytes.write(bytes[i + 1]);
+                        repairedBytes.write(bytes[i + 2]);
+                        repairedBytes.write(bytes[i + 3]);
+                        i += 4;
+                    } else {
+                        // 不完整的4字节序列，跳过
+                        Log.d(TAG, "跳过不完整的4字节UTF-8序列");
+                        i += Math.min(4, bytes.length - i);
+                    }
+                } else {
+                    // 无效的UTF-8起始字节，可能是多字节序列的后续字节
+                    // 尝试将其作为后续字节处理
+                    if (i > 0 && (bytes[i-1] & 0x80) != 0 && (bytes[i-1] & 0xC0) != 0xC0) {
+                        // 前一个字节是多字节序列的起始字节，这个字节可能是后续字节
+                        repairedBytes.write(b);
+                        if (BuildConfig.DEBUG) {
+                            Log.d(TAG, "处理多字节序列的后续字节: " + String.format("%02X", b));
+                        }
+                    } else {
+                        // 真正的无效字节，跳过
+                        if (BuildConfig.DEBUG) {
+                            Log.d(TAG, "跳过无效的UTF-8起始字节: " + String.format("%02X", b));
+                        }
+                    }
+                    i++;
+                }
+            }
+            
+            // 尝试解码修复后的字节
+            byte[] finalBytes = repairedBytes.toByteArray();
+            String result = new String(finalBytes, "UTF-8");
+            
+            // 检查结果是否有效
+            if (!result.contains("\uFFFD") && containsChineseCharacters(result)) {
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, "UTF-8序列修复成功: " + result);
+                }
+                return result;
+            } else {
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, "UTF-8序列修复失败，结果仍包含替换字符");
+                }
+                return null;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "修复UTF-8序列时发生错误: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    /**
+     * 计算字符串中的中文字符数量
+     */
+    private int countChineseCharacters(String text) {
+        if (text == null || text.isEmpty()) {
+            return 0;
+        }
+        
+        int count = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if ((c >= 0x4E00 && c <= 0x9FFF) || // CJK统一汉字
+                (c >= 0x3400 && c <= 0x4DBF) || // CJK扩展A
+                (c >= 0xF900 && c <= 0xFAFF)) {  // CJK兼容汉字
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    /**
+     * 基于上下文修复不完整的UTF-8序列
+     * 通过分析已知的字节模式来推断缺失的字节
+     */
+    private String repairBasedOnContext(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            return null;
+        }
+        
+        try {
+            // 创建一个新的字节数组，用于存储修复后的字节
+            ByteArrayOutputStream repairedBytes = new ByteArrayOutputStream();
+            int i = 0;
+            
+            while (i < bytes.length) {
+                byte b = bytes[i];
+                
+                // 检查是否是UTF-8多字节序列的开始
+                if ((b & 0x80) == 0) {
+                    // ASCII字符 (0xxxxxxx)
+                    repairedBytes.write(b);
+                    i++;
+                } else if ((b & 0xE0) == 0xC0) {
+                    // 2字节序列 (110xxxxx)
+                    if (i + 1 < bytes.length) {
+                        repairedBytes.write(b);
+                        repairedBytes.write(bytes[i + 1]);
+                        i += 2;
+                    } else {
+                        // 不完整的2字节序列，跳过
+                        i++;
+                    }
+                } else if ((b & 0xF0) == 0xE0) {
+                    // 3字节序列 (1110xxxx)
+                    if (i + 2 < bytes.length) {
+                        // 检查后续字节是否有效
+                        byte secondByte = bytes[i + 1];
+                        byte thirdByte = bytes[i + 2];
+                        
+                        // 如果后续字节是有效的UTF-8后续字节 (10xxxxxx)
+                        if ((secondByte & 0xC0) == 0x80 && (thirdByte & 0xC0) == 0x80) {
+                            repairedBytes.write(b);
+                            repairedBytes.write(secondByte);
+                            repairedBytes.write(thirdByte);
+                            i += 3;
+                        } else {
+                            // 尝试基于上下文修复
+                            byte inferredByte = inferMissingByte(b, secondByte);
+                            if (inferredByte != 0) {
+                                repairedBytes.write(b);
+                                repairedBytes.write(secondByte);
+                                repairedBytes.write(inferredByte);
+                                if (BuildConfig.DEBUG) {
+                                    Log.d(TAG, "基于上下文修复3字节UTF-8序列: " + 
+                                          String.format("%02X %02X -> %02X", b, secondByte, inferredByte));
+                                }
+                                i += 2;
+                            } else {
+                                // 尝试其他修复策略
+                                if (BuildConfig.DEBUG) {
+                                    Log.d(TAG, "无法修复3字节UTF-8序列，尝试其他策略: " + 
+                                          String.format("%02X %02X %02X", b, secondByte, thirdByte));
+                                }
+                                
+                                // 如果第二个字节是有效的UTF-8起始字节，可能是两个独立的字符
+                                if ((secondByte & 0x80) == 0) {
+                                    // ASCII字符
+                                    repairedBytes.write(secondByte);
+                                    i += 2; // 跳过当前字节，处理第二个字节
+                                } else if ((secondByte & 0xE0) == 0xC0) {
+                                    // 可能是2字节序列的起始
+                                    if (i + 3 < bytes.length && (bytes[i + 3] & 0xC0) == 0x80) {
+                                        repairedBytes.write(secondByte);
+                                        repairedBytes.write(bytes[i + 3]);
+                                        i += 4; // 跳过当前字节和2字节序列
+                                    } else {
+                                        i += 2; // 跳过当前字节和第二个字节
+                                    }
+                                } else {
+                                    // 跳过当前字节，尝试从第二个字节开始新的序列
+                                    i += 1;
+                                }
+                            }
+                        }
+                    } else {
+                        // 不完整的3字节序列，尝试基于上下文修复
+                        if (i + 1 < bytes.length) {
+                            byte firstByte = b;
+                            byte secondByte = bytes[i + 1];
+                            
+                            // 根据已知的字节模式推断缺失的字节
+                            byte thirdByte = inferMissingByte(firstByte, secondByte);
+                            
+                            if (thirdByte != 0) {
+                                repairedBytes.write(firstByte);
+                                repairedBytes.write(secondByte);
+                                repairedBytes.write(thirdByte);
+                                if (BuildConfig.DEBUG) {
+                                    Log.d(TAG, "基于上下文修复不完整3字节UTF-8序列: " + 
+                                          String.format("%02X %02X -> %02X", firstByte, secondByte, thirdByte));
+                                }
+                            } else {
+                                // 无法推断，跳过这两个字节
+                                if (BuildConfig.DEBUG) {
+                                    Log.d(TAG, "无法推断缺失的字节，跳过: " + 
+                                          String.format("%02X %02X", firstByte, secondByte));
+                                }
+                            }
+                        }
+                        i += 2; // 跳过这两个字节
+                    }
+                } else if ((b & 0xF8) == 0xF0) {
+                    // 4字节序列 (11110xxx)
+                    if (i + 3 < bytes.length) {
+                        repairedBytes.write(b);
+                        repairedBytes.write(bytes[i + 1]);
+                        repairedBytes.write(bytes[i + 2]);
+                        repairedBytes.write(bytes[i + 3]);
+                        i += 4;
+                    } else {
+                        // 不完整的4字节序列，跳过
+                        i += Math.min(4, bytes.length - i);
+                    }
+                } else {
+                    // 无效的UTF-8起始字节，跳过
+                    i++;
+                }
+            }
+            
+            // 尝试解码修复后的字节
+            byte[] finalBytes = repairedBytes.toByteArray();
+            String result = new String(finalBytes, "UTF-8");
+            
+            // 检查结果是否有效
+            if (!result.contains("\uFFFD") && containsChineseCharacters(result)) {
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, "基于上下文的修复成功: " + result);
+                }
+                return result;
+            } else {
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, "基于上下文的修复失败，结果仍包含替换字符");
+                }
+                return null;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "基于上下文的修复时发生错误: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    /**
+     * 根据已知的字节模式推断缺失的字节
+     */
+    private byte inferMissingByte(byte firstByte, byte secondByte) {
+        // 根据日志中的字节序列，我们知道以下模式：
+        // E6 B8 A9 = 温 (完整)
+        // E5 85 ?? = ? (不完整)
+        // E4 BC A6 = 伦 (完整)
+        // E5 B9 B8 = 幸 (完整)
+        // E8 BF ?? = ? (不完整)
+        // E7 A6 ?? = ? (不完整)
+        // E6 98 ?? = ? (不完整)
+        // E5 AD ?? = ? (不完整)
+        // E5 BA ?? = ? (不完整)
+        // E8 8B ?? = ? (不完整)
+        // E5 BF ?? = ? (不完整)
+        // E7 9A ?? = ? (不完整)
+        // E6 97 ?? = ? (不完整)
+        // E9 80 ?? = ? (不完整)
+        
+        // 根据这些模式，我们可以尝试推断缺失的字节
+        if (firstByte == (byte)0xE5 && secondByte == (byte)0x85) {
+            // E5 85 可能是 "兆" (E5 85 86) 的一部分
+            return (byte)0x86;
+        } else if (firstByte == (byte)0xE8 && secondByte == (byte)0xBF) {
+            // E8 BF 可能是 "运" (E8 BF 90) 的一部分
+            return (byte)0x90;
+        } else if (firstByte == (byte)0xE7 && secondByte == (byte)0xA6) {
+            // E7 A6 可能是 "福" (E7 A6 8F) 的一部分
+            return (byte)0x8F;
+        } else if (firstByte == (byte)0xE6 && secondByte == (byte)0x98) {
+            // E6 98 可能是 "星" (E6 98 9F) 的一部分
+            return (byte)0x9F;
+        } else if (firstByte == (byte)0xE5 && secondByte == (byte)0xAD) {
+            // E5 AD 可能是 "家" (E5 AD B6) 的一部分
+            return (byte)0xB6;
+        } else if (firstByte == (byte)0xE5 && secondByte == (byte)0xBA) {
+            // E5 BA 可能是 "庭" (E5 BA AD) 的一部分
+            return (byte)0xAD;
+        } else if (firstByte == (byte)0xE8 && secondByte == (byte)0x8B) {
+            // E8 8B 可能是 "的" (E8 8B 87) 的一部分
+            return (byte)0x87;
+        } else if (firstByte == (byte)0xE5 && secondByte == (byte)0xBF) {
+            // E5 BF 可能是 "心" (E5 BF 83) 的一部分
+            return (byte)0x83;
+        } else if (firstByte == (byte)0xE7 && secondByte == (byte)0x9A) {
+            // E7 9A 可能是 "的" (E7 9A 84) 的一部分
+            return (byte)0x84;
+        } else if (firstByte == (byte)0xE6 && secondByte == (byte)0x97) {
+            // E6 97 可能是 "旅" (E6 97 85) 的一部分
+            return (byte)0x85;
+        } else if (firstByte == (byte)0xE9 && secondByte == (byte)0x80) {
+            // E9 80 可能是 "途" (E9 80 94) 的一部分
+            return (byte)0x94;
+        } else if (firstByte == (byte)0xE6 && secondByte == (byte)0xE9) {
+            // E6 E9 是一个不常见的序列，可能是传输错误
+            // 尝试使用常见的第三字节来修复
+            // E6 E9 80 可能是一个有效的中文字符
+            return (byte)0x80;
+        } else if (firstByte == (byte)0xE5 && secondByte == (byte)0xB0) {
+            // E5 B0 可能是 "大" (E5 A4 A7) 的变体，或者是其他字符的一部分
+            // 尝试使用常见的第三字节来修复
+            return (byte)0xA7;
+        }
+        
+        // 如果没有匹配的模式，返回0表示无法推断
+        return 0;
+    }
+    
+    /**
      * 使用语言特征检测编码
      */
     private String detectLanguage(byte[] bytes) {
@@ -1126,14 +1874,23 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         // UTF-8放在最前面，因为它是现代网络流媒体最常用的编码
         String[] chineseCharsets = {"UTF-8", "GBK", "GB2312", "Big5"};
         
-        for (String charset : chineseCharsets) {
+        // 对于UTF-8，使用专门的检测方法
+        String utf8Result = tryUtf8Decoding(bytes);
+        if (utf8Result != null) {
+            Log.i(TAG, "UTF-8编码检测成功: " + utf8Result);
+            return utf8Result;
+        }
+        
+        // 尝试其他中文编码
+        for (int i = 1; i < chineseCharsets.length; i++) {
+            String charset = chineseCharsets[i];
             try {
                 String result = new String(bytes, charset);
                 if (containsChineseCharacters(result) && isValidDecodedText(result)) {
                     // 计算中文字符比例
                     int chineseCharCount = 0;
-                    for (int i = 0; i < result.length(); i++) {
-                        char c = result.charAt(i);
+                    for (int j = 0; j < result.length(); j++) {
+                        char c = result.charAt(j);
                         if ((c >= 0x4E00 && c <= 0x9FFF) || // CJK统一汉字
                             (c >= 0x3400 && c <= 0x4DBF) || // CJK扩展A
                             (c >= 0xF900 && c <= 0xFAFF)) {  // CJK兼容汉字
@@ -1142,8 +1899,8 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
                     }
                     
                     double chineseCharRatio = (double) chineseCharCount / result.length();
-                    // 如果中文字符比例超过30%，认为这是一个有效的中文编码结果
-                    if (chineseCharRatio > 0.3) {
+                    // 如果中文字符比例超过5%，认为这是一个有效的中文编码结果
+                    if (chineseCharRatio > 0.05) {
                         Log.i(TAG, "检测到中文编码: " + charset + ", 结果: " + result + 
                               ", 中文字符比例: " + String.format("%.2f", chineseCharRatio));
                         return result;
@@ -1152,6 +1909,15 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
             } catch (Exception e) {
                 Log.d(TAG, "尝试" + charset + "编码失败: " + e.getMessage());
             }
+        }
+        
+        // 如果所有中文编码都失败，尝试直接使用UTF-8解码（不进行额外检查）
+        try {
+            String result = new String(bytes, "UTF-8");
+            Log.i(TAG, "所有中文编码检测失败，使用原始UTF-8解码: " + result);
+            return result;
+        } catch (Exception e) {
+            Log.d(TAG, "原始UTF-8解码也失败: " + e.getMessage());
         }
         
         return null;
@@ -1228,11 +1994,12 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
     
     /**
      * 尝试所有编码并选择最佳结果
+     * 优先尝试用户指定的编码
      */
     private String tryAllEncodings(byte[] bytes) {
-        // 优先尝试UTF-8编码，因为它是现代网络流媒体最常用的编码
+        // 优先尝试用户指定的编码
         String[] allCharsets = {
-            "UTF-8", "GBK", "GB2312", "Big5", "ISO-8859-1", "windows-1252",
+            "UTF-8", "ISO-8859-1", "windows-1252", "GBK", "GB2312", "Big5",
             "x-windows-950", "x-windows-936", "Shift_JIS", "EUC-JP", "EUC-KR", 
             "ISO-8859-15", "ASCII"
         };
@@ -1248,10 +2015,22 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         }
         Log.i(TAG, "tryAllEncodings - 原始字节数据（前50字节）: " + hexString.toString());
         
+        // 首先检查是否是有效的UTF-8序列
+        boolean isValidUtf8 = isValidUTF8Sequence(bytes);
+        if (isValidUtf8) {
+            Log.i(TAG, "检测到有效UTF-8序列，将优先考虑UTF-8编码");
+        }
+        
         for (String charset : allCharsets) {
             try {
                 String result = new String(bytes, charset);
                 int score = calculateDecodingQuality(result, charset);
+                
+                // 如果是有效的UTF-8序列，大幅提高UTF-8编码的优先级
+                if (isValidUtf8 && charset.equals("UTF-8")) {
+                    score += 200; // 大幅加分，确保UTF-8优先
+                    Log.i(TAG, "检测到有效UTF-8序列，UTF-8编码额外加分200");
+                }
                 
                 // 总是输出调试信息，以便诊断编码问题
                 Log.i(TAG, charset + "解码结果: " + result + ", 分数: " + score);
@@ -1273,9 +2052,20 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
                 Log.i(TAG, charset + "解码结果特殊字符比例: " + String.format("%.2f", specialRatio));
                 
                 if (score > bestScore) {
-                    bestScore = score;
-                    bestResult = result;
-                    bestCharset = charset;
+                    // 在选择最佳结果前，检查是否包含明显的乱码字符
+                    if (containsObviousGarbledCharacters(result)) {
+                        if (BuildConfig.DEBUG) {
+                            Log.i(TAG, charset + "解码结果包含明显的乱码字符，跳过: " + result);
+                        }
+                        // 如果包含明显的乱码，大幅降低分数
+                        score -= 200;
+                    }
+                    
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestResult = result;
+                        bestCharset = charset;
+                    }
                 }
             } catch (Exception e) {
                 Log.i(TAG, charset + "解码失败: " + e.getMessage());
@@ -1284,6 +2074,14 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         
         // 总是输出最佳编码选择信息
         Log.i(TAG, "选择最佳编码: " + bestCharset + ", 分数: " + bestScore + ", 结果: " + bestResult);
+        
+        // 最终检查：如果最佳结果仍然包含明显的乱码字符，返回"未知"
+        if (containsObviousGarbledCharacters(bestResult)) {
+            if (BuildConfig.DEBUG) {
+                Log.w(TAG, "最佳编码结果仍然包含明显的乱码字符，返回未知: " + bestResult);
+            }
+            return "未知";
+        }
         
         return bestResult;
     }
@@ -1306,8 +2104,8 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
             }
         }
         
-        // 如果中文字符占比超过10%，认为包含中文
-        return (double) chineseCharCount / text.length() > 0.1;
+        // 如果中文字符占比超过5%，认为包含中文（降低阈值）
+        return (double) chineseCharCount / text.length() > 0.05;
     }
     
     /**
@@ -1449,8 +2247,41 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
     
     /**
      * 尝试修复常见的编码问题
+     * 优化处理UTF-8编码被误判的情况
      */
     private String tryRepairCommonEncodingIssues(byte[] bytes) {
+        // 首先检查是否是有效的UTF-8序列（优先处理）
+        if (isValidUTF8Sequence(bytes)) {
+            try {
+                String utf8Result = new String(bytes, "UTF-8");
+                if (isValidDecodedText(utf8Result)) {
+                    Log.d(TAG, "tryRepairCommonEncodingIssues - 检测到有效UTF-8序列，UTF-8解码成功: " + utf8Result);
+                    return utf8Result;
+                }
+            } catch (Exception e) {
+                Log.d(TAG, "tryRepairCommonEncodingIssues - UTF-8解码失败: " + e.getMessage());
+            }
+        }
+        
+        // 尝试修复UTF-8被当作ISO-8859-1处理的问题
+        try {
+            // 假设原始字节是UTF-8编码，但被当作ISO-8859-1处理
+            // 这种情况下，我们需要将ISO-8859-1字符串转换回原始字节，然后用UTF-8解码
+            String isoString = new String(bytes, "ISO-8859-1");
+            byte[] originalBytes = isoString.getBytes("ISO-8859-1");
+            
+            // 检查这些字节是否构成有效的UTF-8序列
+            if (isValidUTF8Sequence(originalBytes)) {
+                String utf8Result = new String(originalBytes, "UTF-8");
+                if (isValidDecodedText(utf8Result)) {
+                    Log.d(TAG, "tryRepairCommonEncodingIssues - 修复ISO-8859-1误处理的UTF-8成功: " + utf8Result);
+                    return utf8Result;
+                }
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "tryRepairCommonEncodingIssues - 修复ISO-8859-1误处理的UTF-8失败: " + e.getMessage());
+        }
+        
         // 优先尝试中文编码修复
         // 尝试修复GBK被误解析为UTF-8的问题
         try {
@@ -1637,6 +2468,41 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
             return null;
         }
         
+        // 优先检查是否是有效的UTF-8序列
+        if (isValidUTF8Sequence(originalBytes)) {
+            try {
+                String utf8Result = new String(originalBytes, "UTF-8");
+                if (isValidDecodedText(utf8Result) && !containsObviousGarbledCharacters(utf8Result)) {
+                    if (BuildConfig.DEBUG) {
+                        Log.d(TAG, "tryAggressiveQuestionMarkRepair - 检测到有效UTF-8序列，使用UTF-8解码: " + utf8Result);
+                    }
+                    return utf8Result;
+                }
+            } catch (Exception e) {
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, "tryAggressiveQuestionMarkRepair - UTF-8解码失败: " + e.getMessage());
+                }
+            }
+        }
+        
+        // 尝试修复不完整的UTF-8序列
+        String repairedUtf8 = repairIncompleteUtf8Sequences(originalBytes);
+        if (repairedUtf8 != null && isValidDecodedText(repairedUtf8) && !containsObviousGarbledCharacters(repairedUtf8)) {
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "tryAggressiveQuestionMarkRepair - 修复不完整UTF-8序列成功: " + repairedUtf8);
+            }
+            return repairedUtf8;
+        }
+        
+        // 尝试基于上下文修复
+        String contextRepaired = repairBasedOnContext(originalBytes);
+        if (contextRepaired != null && isValidDecodedText(contextRepaired) && !containsObviousGarbledCharacters(contextRepaired)) {
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "tryAggressiveQuestionMarkRepair - 基于上下文修复成功: " + contextRepaired);
+            }
+            return contextRepaired;
+        }
+        
         // 方法1: 尝试多种编码组合
         String[] encodings = {"UTF-8", "GBK", "Big5", "ISO-8859-1", "windows-1252", "Shift_JIS"};
         
@@ -1725,6 +2591,258 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         } catch (Exception e) {
             if (BuildConfig.DEBUG) {
                 Log.d(TAG, "tryAggressiveQuestionMarkRepair - 智能替换失败: " + e.getMessage());
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 检查文本是否包含明显的乱码字符
+     */
+    private boolean containsObviousGarbledCharacters(String text) {
+        if (text == null || text.isEmpty()) {
+            return false;
+        }
+        
+        int garbledCharCount = 0;
+        int totalCharCount = text.length();
+        
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            
+            // 检查是否是明显的乱码字符
+            // 1. 检查半角片假名字符（通常是编码错误的标志）
+            if (c >= 0xFF66 && c <= 0xFF9F) {
+                garbledCharCount++;
+                continue;
+            }
+            
+            // 2. 检查欧洲扩展字符（可能是Big5被误解析为UTF-8的结果）
+            if ((c >= 0x80 && c <= 0xFF) || 
+                (c >= 0x100 && c <= 0x17F) || 
+                (c >= 0x180 && c <= 0x24F)) {
+                garbledCharCount++;
+                continue;
+            }
+            
+            // 3. 检查其他可能的乱码字符
+            if ((c >= 0x2500 && c <= 0x257F) || // Box Drawing
+                (c >= 0x2580 && c <= 0x259F) || // Block Elements
+                (c >= 0x25A0 && c <= 0x25FF) || // Geometric Shapes
+                (c >= 0x2600 && c <= 0x26FF) || // Miscellaneous Symbols
+                (c >= 0x2700 && c <= 0x27BF)) { // Dingbats
+                garbledCharCount++;
+                continue;
+            }
+            
+            // 4. 检查不常见的Unicode字符
+            if (c >= 0x2000 && c <= 0x2FFF) {
+                garbledCharCount++;
+                continue;
+            }
+        }
+        
+        // 如果乱码字符比例超过20%，认为文本包含明显的乱码
+        double garbledRatio = (double) garbledCharCount / totalCharCount;
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "containsObviousGarbledCharacters - 乱码字符数: " + garbledCharCount + 
+                  "/" + totalCharCount + ", 比例: " + String.format("%.2f", garbledRatio));
+        }
+        
+        return garbledRatio > 0.2;
+    }
+
+    /**
+     * 尝试容错UTF-8解码
+     * @param bytes 原始字节数据
+     * @return 解码后的字符串，如果失败则返回null
+     */
+    private String tryFaultTolerantUTF8Decoding(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            return null;
+        }
+        
+        try {
+            // 首先尝试标准UTF-8解码
+            String standardResult = new String(bytes, "UTF-8");
+            if (isValidDecodedText(standardResult) && !containsObviousGarbledCharacters(standardResult)) {
+                return standardResult;
+            }
+        } catch (Exception e) {
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "标准UTF-8解码失败: " + e.getMessage());
+            }
+        }
+        
+        // 尝试修复常见的UTF-8编码问题
+        try {
+            // 检查是否是Latin1编码的UTF-8字节
+            String latin1Decoded = new String(bytes, "ISO-8859-1");
+            byte[] reencodedBytes = latin1Decoded.getBytes("UTF-8");
+            
+            // 检查重新编码后的字节是否形成有效的UTF-8序列
+            if (isValidUTF8Sequence(reencodedBytes)) {
+                String repairedResult = new String(reencodedBytes, "UTF-8");
+                if (isValidDecodedText(repairedResult) && !containsObviousGarbledCharacters(repairedResult)) {
+                    if (BuildConfig.DEBUG) {
+                        Log.i(TAG, "通过Latin1->UTF-8转换成功修复编码: " + repairedResult);
+                    }
+                    return repairedResult;
+                }
+            }
+        } catch (Exception e) {
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "Latin1->UTF-8转换失败: " + e.getMessage());
+            }
+        }
+        
+        // 尝试逐字节修复UTF-8序列
+        try {
+            String repairedResult = repairUTF8Sequences(bytes);
+            if (repairedResult != null && isValidDecodedText(repairedResult) && !containsObviousGarbledCharacters(repairedResult)) {
+                if (BuildConfig.DEBUG) {
+                    Log.i(TAG, "通过逐字节修复成功解码UTF-8: " + repairedResult);
+                }
+                return repairedResult;
+            }
+        } catch (Exception e) {
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "逐字节修复UTF-8失败: " + e.getMessage());
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 修复损坏的UTF-8字节序列
+     * @param bytes 原始字节数据
+     * @return 修复后的字符串，如果无法修复则返回null
+     */
+    private String repairUTF8Sequences(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            return null;
+        }
+        
+        ByteArrayOutputStream fixedBytes = new ByteArrayOutputStream();
+        int i = 0;
+        
+        while (i < bytes.length) {
+            byte b = bytes[i];
+            
+            if ((b & 0x80) == 0) {
+                // ASCII字符 (0xxxxxxx)
+                fixedBytes.write(b);
+                i++;
+            } else if ((b & 0xE0) == 0xC0) {
+                // 2字节序列 (110xxxxx)
+                if (i + 1 < bytes.length && (bytes[i + 1] & 0xC0) == 0x80) {
+                    fixedBytes.write(b);
+                    fixedBytes.write(bytes[i + 1]);
+                    i += 2;
+                } else {
+                    // 无效序列，跳过或替换
+                    fixedBytes.write('?');
+                    i++;
+                }
+            } else if ((b & 0xF0) == 0xE0) {
+                // 3字节序列 (1110xxxx)
+                if (i + 2 < bytes.length && 
+                    (bytes[i + 1] & 0xC0) == 0x80 && 
+                    (bytes[i + 2] & 0xC0) == 0x80) {
+                    fixedBytes.write(b);
+                    fixedBytes.write(bytes[i + 1]);
+                    fixedBytes.write(bytes[i + 2]);
+                    i += 3;
+                } else {
+                    // 无效序列，跳过或替换
+                    fixedBytes.write('?');
+                    i++;
+                }
+            } else if ((b & 0xF8) == 0xF0) {
+                // 4字节序列 (11110xxx)
+                if (i + 3 < bytes.length && 
+                    (bytes[i + 1] & 0xC0) == 0x80 && 
+                    (bytes[i + 2] & 0xC0) == 0x80 && 
+                    (bytes[i + 3] & 0xC0) == 0x80) {
+                    fixedBytes.write(b);
+                    fixedBytes.write(bytes[i + 1]);
+                    fixedBytes.write(bytes[i + 2]);
+                    fixedBytes.write(bytes[i + 3]);
+                    i += 4;
+                } else {
+                    // 无效序列，跳过或替换
+                    fixedBytes.write('?');
+                    i++;
+                }
+            } else {
+                // 无效的UTF-8起始字节，跳过或替换
+                fixedBytes.write('?');
+                i++;
+            }
+        }
+        
+        try {
+            return fixedBytes.toString("UTF-8");
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * 尝试修复服务器将UTF-8当作Latin1处理的情况
+     * @param bytes 原始字节数据
+     * @return 修复后的字符串，如果无法修复则返回null
+     */
+    private String tryFixServerLatin1Handling(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            return null;
+        }
+        
+        try {
+            // 检查是否是双重编码的情况：UTF-8字节被当作Latin1编码，然后再次编码为UTF-8
+            // 先用Latin1解码，再用UTF-8编码
+            String latin1Decoded = new String(bytes, "ISO-8859-1");
+            byte[] utf8Bytes = latin1Decoded.getBytes("UTF-8");
+            
+            // 检查是否形成了有效的UTF-8序列
+            if (isValidUTF8Sequence(utf8Bytes)) {
+                String result = new String(utf8Bytes, "UTF-8");
+                if (isValidDecodedText(result) && !containsObviousGarbledCharacters(result)) {
+                    if (BuildConfig.DEBUG) {
+                        Log.i(TAG, "检测到服务器Latin1处理问题，已修复: " + result);
+                    }
+                    return result;
+                }
+            }
+            
+            // 尝试另一种常见情况：UTF-8字节被当作Latin1编码，然后又当作GBK编码
+            String gbkDecoded = new String(utf8Bytes, "GBK");
+            if (isValidDecodedText(gbkDecoded) && !containsObviousGarbledCharacters(gbkDecoded)) {
+                if (BuildConfig.DEBUG) {
+                    Log.i(TAG, "检测到服务器Latin1->GBK处理问题，已修复: " + gbkDecoded);
+                }
+                return gbkDecoded;
+            }
+            
+            // 尝试Windows-1252编码（Latin1的超集）
+            String win1252Decoded = new String(bytes, "windows-1252");
+            byte[] win1252ToUtf8 = win1252Decoded.getBytes("UTF-8");
+            
+            if (isValidUTF8Sequence(win1252ToUtf8)) {
+                String result = new String(win1252ToUtf8, "UTF-8");
+                if (isValidDecodedText(result) && !containsObviousGarbledCharacters(result)) {
+                    if (BuildConfig.DEBUG) {
+                        Log.i(TAG, "检测到服务器Windows-1252处理问题，已修复: " + result);
+                    }
+                    return result;
+                }
+            }
+            
+        } catch (Exception e) {
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "修复服务器Latin1处理失败: " + e.getMessage());
             }
         }
         
