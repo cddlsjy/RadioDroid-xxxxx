@@ -2,13 +2,21 @@ package net.programmierecke.radiodroid2.database;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.BatteryManager;
+import android.os.Environment;
+import android.os.StatFs;
 import android.util.Log;
+import java.io.File;
 
 import androidx.lifecycle.LiveData;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.paging.DataSource;
 import androidx.room.Room;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import net.programmierecke.radiodroid2.RadioBrowserServerManager;
 import net.programmierecke.radiodroid2.RadioDroidApp;
@@ -155,8 +163,7 @@ public class RadioStationRepository {
         if (statsResult == null) {
             Log.e(TAG, "获取服务器统计信息失败，服务器返回空结果");
             callback.onError("获取服务器统计信息失败");
-            // 重置更新状态
-            DatabaseUpdateWorker.resetUpdateState(context);
+            // 不重置更新状态，让错误处理流程自然进行
             throw new RuntimeException("获取服务器统计信息失败");
         }
             
@@ -171,8 +178,7 @@ public class RadioStationRepository {
             } catch (Exception e) {
                 Log.e(TAG, "解析统计信息失败", e);
                 callback.onError("解析统计信息失败: " + e.getMessage());
-                // 重置更新状态
-                DatabaseUpdateWorker.resetUpdateState(context);
+                // 不重置更新状态，让错误处理流程自然进行
                 throw new RuntimeException("解析统计信息失败: " + e.getMessage());
             }
             
@@ -321,7 +327,7 @@ public class RadioStationRepository {
                     Log.d(TAG, "已清空临时数据库");
                     
                     // 更新数据库时间戳
-                    updateDatabaseTimestamp();
+                    updateDatabaseTimestamp(context);
                     Log.d(TAG, "已更新数据库时间戳");
                     
                     String completionMessage = "更新完成，共同步 " + totalDownloaded + " 个电台，已切换到新数据";
@@ -356,7 +362,7 @@ public class RadioStationRepository {
                         }
                         
                         // 更新数据库时间戳
-                        updateDatabaseTimestamp();
+                        updateDatabaseTimestamp(context);
                         Log.d(TAG, "已更新数据库时间戳");
                         
                         String completionMessage = "更新完成，共同步 " + totalDownloaded + " 个电台，已切换到新数据";
@@ -388,8 +394,7 @@ public class RadioStationRepository {
             } else {
                 Log.e(TAG, "没有获取到任何电台数据");
                 callback.onError("没有获取到任何电台数据");
-                // 重置更新状态
-                DatabaseUpdateWorker.resetUpdateState(context);
+                // 不重置更新状态，让错误处理流程自然进行
                 throw new RuntimeException("没有获取到任何电台数据");
             }
         } catch (RuntimeException e) {
@@ -398,8 +403,7 @@ public class RadioStationRepository {
         } catch (Exception e) {
                 Log.e(TAG, "同步电台数据时出错", e);
                 callback.onError("同步出错: " + e.getMessage());
-                // 重置更新状态
-                DatabaseUpdateWorker.resetUpdateState(context);
+                // 不重置更新状态，让错误处理流程自然进行
                 throw new RuntimeException("同步出错: " + e.getMessage());
             }
         } // 结束synchronized块
@@ -408,6 +412,19 @@ public class RadioStationRepository {
     // 检查网络并获取最快的服务器
     private RadioBrowserServerManager.ServerInfo checkNetworkAndGetFastestServer(Context context, SyncCallback callback) {
         try {
+            // 检查网络连接状态
+            if (!isNetworkAvailable(context)) {
+                Log.e(TAG, "网络连接不可用");
+                callback.onError("网络连接不可用，请检查网络设置");
+                throw new RuntimeException("网络连接不可用，请检查网络设置");
+            }
+            
+            // 检查电量状态
+            checkBatteryLevel(context, callback);
+            
+            // 检查存储空间
+            checkStorageSpace(context, callback);
+            
             // 不再使用缓存结果，每次都执行新的网络检查
             Log.d(TAG, "执行新的网络检查");
             callback.onProgress("正在检查网络连接速度", 0, 100);
@@ -429,8 +446,7 @@ public class RadioStationRepository {
         } catch (Exception e) {
             Log.e(TAG, "检查网络连接时出错", e);
             callback.onError("检查网络连接出错: " + e.getMessage());
-            // 重置更新状态
-            DatabaseUpdateWorker.resetUpdateState(context);
+            // 不重置更新状态，让错误处理流程自然进行
             throw new RuntimeException("检查网络连接出错: " + e.getMessage());
         }
     }
@@ -741,6 +757,79 @@ public class RadioStationRepository {
         updateTimestampDao.updateTimestamp(System.currentTimeMillis());
     }
     
+    // 更新数据库时间戳（使用指定时间戳）
+    public void updateDatabaseTimestamp(long timestamp) {
+        updateTimestampDao.updateTimestamp(timestamp);
+    }
+    
+    // 更新数据库时间戳并保存到SharedPreferences
+    public void updateDatabaseTimestamp(Context context) {
+        long currentTime = System.currentTimeMillis();
+        updateTimestampDao.updateTimestamp(currentTime);
+        
+        // 获取电台数量
+        int stationCount = radioStationDao.getCount();
+        
+        // 同时更新SharedPreferences中的本地数据库最后更新时间和电台数量
+        java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+        String formattedTime = dateFormat.format(new java.util.Date(currentTime));
+        
+        SharedPreferences prefs = context.getSharedPreferences("net.programmierecke.radiodroid2_preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("local_database_last_update", formattedTime);
+        editor.putInt("local_database_station_count", stationCount);
+        editor.apply();
+        
+        Log.d(TAG, "Updated database timestamp and station count to SharedPreferences: " + formattedTime + ", " + stationCount);
+    }
+    
+    // 确保update_timestamp表存在并有有效数据
+    public void ensureUpdateTimestampTable() {
+        try {
+            SupportSQLiteDatabase db = RadioDroidDatabase.getDatabase(context).getOpenHelper().getWritableDatabase();
+            
+            // 检查update_timestamp表是否存在
+            boolean tableExists = false;
+            android.database.Cursor cursor = null;
+            try {
+                cursor = db.query("SELECT name FROM sqlite_master WHERE type='table' AND name='update_timestamp'");
+                tableExists = cursor != null && cursor.getCount() > 0;
+            } catch (Exception e) {
+                Log.w(TAG, "Error checking if update_timestamp table exists", e);
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+            
+            if (!tableExists) {
+                Log.d(TAG, "update_timestamp table does not exist, creating it");
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `update_timestamp` (`id` INTEGER NOT NULL, `last_update_timestamp` INTEGER NOT NULL, PRIMARY KEY(`id`))"
+                );
+                db.execSQL(
+                    "INSERT OR REPLACE INTO `update_timestamp` (`id`, `last_update_timestamp`) VALUES (1, 0)"
+                );
+                Log.d(TAG, "Created update_timestamp table with default timestamp 0");
+            } else {
+                Log.d(TAG, "update_timestamp table already exists");
+                
+                // 检查表中是否有数据
+                UpdateTimestamp timestamp = updateTimestampDao.getTimestamp();
+                if (timestamp == null) {
+                    Log.d(TAG, "update_timestamp table is empty, inserting default row");
+                    db.execSQL(
+                        "INSERT OR REPLACE INTO `update_timestamp` (`id`, `last_update_timestamp`) VALUES (1, 0)"
+                    );
+                } else {
+                    Log.d(TAG, "update_timestamp table has data, timestamp: " + timestamp.last_update_timestamp);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error ensuring update_timestamp table", e);
+        }
+    }
+    
     // 同步回调接口
     public interface SyncCallback {
         void onProgress(String message);
@@ -759,24 +848,154 @@ public class RadioStationRepository {
     
     // 关闭数据库连接
     public void closeDatabase() {
-        // 由于无法直接访问RadioDroidDatabase.INSTANCE，我们只能重置Repository实例
-        INSTANCE = null;
+        try {
+            // 直接关闭RadioDroidDatabase的静态实例，避免创建新实例
+            RadioDroidDatabase.closeInstance();
+            
+            // 重置Repository实例
+            INSTANCE = null;
+            Log.d(TAG, "Database connection closed successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "Error closing database connection", e);
+        }
     }
     
     // 重新初始化数据库
     public void reinitializeDatabase(Context context) {
-        // 重置Repository实例
-        INSTANCE = null;
-        
-        // 重新获取数据库实例
-        RadioDroidDatabase db = RadioDroidDatabase.getDatabase(context);
-        this.radioStationDao = db.radioStationDao();
-        
-        // 重新创建临时数据库
-        RadioDroidDatabase tempDatabase = Room.databaseBuilder(context.getApplicationContext(),
-                RadioDroidDatabase.class, "radio_droid_database_temp")
-                .addMigrations(RadioDroidDatabase.MIGRATION_3_4)
-                .build();
-        this.tempRadioStationDao = tempDatabase.radioStationDao();
+        try {
+            // 关闭现有数据库连接
+            closeDatabase();
+            
+            // 强制重新创建数据库实例
+            RadioDroidDatabase newDb = RadioDroidDatabase.forceRecreateDatabase(context);
+            
+            // 重新初始化DAO对象
+            this.radioStationDao = newDb.radioStationDao();
+            this.updateTimestampDao = newDb.updateTimestampDao();
+            
+            // 重新创建临时数据库
+            RadioDroidDatabase tempDatabase = Room.databaseBuilder(context.getApplicationContext(),
+                    RadioDroidDatabase.class, "radio_droid_database_temp")
+                    .addMigrations(RadioDroidDatabase.MIGRATION_3_4, RadioDroidDatabase.MIGRATION_4_5)
+                    .build();
+            this.tempRadioStationDao = tempDatabase.radioStationDao();
+            
+            Log.d(TAG, "Database reinitialized successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "Error reinitializing database", e);
+            throw new RuntimeException("Failed to reinitialize database: " + e.getMessage(), e);
+        }
+    }
+    
+    // 检查网络连接是否可用
+    private boolean isNetworkAvailable(Context context) {
+        try {
+            ConnectivityManager connectivityManager = 
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            
+            if (connectivityManager == null) {
+                Log.e(TAG, "ConnectivityManager is null");
+                return false;
+            }
+            
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            boolean isConnected = activeNetworkInfo != null && activeNetworkInfo.isConnected();
+            
+            Log.d(TAG, "网络连接状态: " + (isConnected ? "已连接" : "未连接"));
+            return isConnected;
+        } catch (Exception e) {
+            Log.e(TAG, "检查网络连接时出错", e);
+            return false;
+        }
+    }
+    
+    // 检查电池电量
+    private void checkBatteryLevel(Context context, SyncCallback callback) {
+        try {
+            BatteryManager batteryManager = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+            
+            if (batteryManager == null) {
+                Log.w(TAG, "BatteryManager is null, 无法检查电池电量");
+                return;
+            }
+            
+            int batteryLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+            
+            if (batteryLevel == Integer.MIN_VALUE) {
+                // 如果无法通过BatteryManager获取电量，尝试使用Intent方式
+                Intent batteryStatus = context.registerReceiver(null, 
+                    new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+                
+                if (batteryStatus != null) {
+                    int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+                    int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+                    
+                    if (level > 0 && scale > 0) {
+                        batteryLevel = (level * 100) / scale;
+                    }
+                }
+            }
+            
+            Log.d(TAG, "当前电池电量: " + batteryLevel + "%");
+            
+            // 如果电量低于20%，显示警告
+            if (batteryLevel < 20 && batteryLevel > 0) {
+                String warning = "电量较低 (" + batteryLevel + "%)，建议连接充电器后再更新数据库";
+                Log.w(TAG, warning);
+                callback.onProgress(warning);
+            }
+            
+            // 如果电量低于5%，阻止更新
+            if (batteryLevel < 5 && batteryLevel > 0) {
+                String error = "电量过低 (" + batteryLevel + "%)，请连接充电器后再更新数据库";
+                Log.e(TAG, error);
+                callback.onError(error);
+                throw new RuntimeException(error);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "检查电池电量时出错", e);
+            // 电池检查失败不应该阻止更新，只记录错误
+            callback.onProgress("无法检查电池电量，继续更新");
+        }
+    }
+    
+    // 检查存储空间
+    private void checkStorageSpace(Context context, SyncCallback callback) {
+        try {
+            // 检查内部存储空间
+            File internalDir = context.getFilesDir();
+            StatFs internalStat = new StatFs(internalDir.getPath());
+            long internalAvailable = internalStat.getAvailableBytes();
+            long internalRequired = 50 * 1024 * 1024; // 至少需要50MB内部存储空间
+            
+            Log.d(TAG, "内部存储可用空间: " + (internalAvailable / (1024 * 1024)) + "MB");
+            
+            if (internalAvailable < internalRequired) {
+                String error = "内部存储空间不足，至少需要50MB可用空间";
+                Log.e(TAG, error);
+                callback.onError(error);
+                throw new RuntimeException(error);
+            }
+            
+            // 检查外部存储空间（如果可用）
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                File externalDir = Environment.getExternalStorageDirectory();
+                StatFs externalStat = new StatFs(externalDir.getPath());
+                long externalAvailable = externalStat.getAvailableBytes();
+                long externalRequired = 100 * 1024 * 1024; // 至少需要100MB外部存储空间
+                
+                Log.d(TAG, "外部存储可用空间: " + (externalAvailable / (1024 * 1024)) + "MB");
+                
+                if (externalAvailable < externalRequired) {
+                    String warning = "外部存储空间较少，建议释放一些空间以确保更新顺利完成";
+                    Log.w(TAG, warning);
+                    callback.onProgress(warning);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "检查存储空间时出错", e);
+            // 存储检查失败不应该阻止更新，只记录错误
+            callback.onProgress("无法检查存储空间，继续更新");
+        }
     }
 }

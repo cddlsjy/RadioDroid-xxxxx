@@ -1,6 +1,7 @@
 package net.programmierecke.radiodroid2.database;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -31,7 +32,9 @@ public abstract class RadioDroidDatabase extends RoomDatabase {
 
     private static volatile RadioDroidDatabase INSTANCE;
 
-    private Executor queryExecutor = Executors.newSingleThreadExecutor(runnable -> new Thread(runnable, "RadioDroidDatabase Executor"));
+    private static Executor queryExecutor = Executors.newSingleThreadExecutor(runnable -> new Thread(runnable, "RadioDroidDatabase Executor"));
+
+    private static volatile boolean isClosing = false;
 
     // Migration from version 3 to version 4 - Add UpdateTimestamp table
     static final Migration MIGRATION_3_4 = new Migration(3, 4) {
@@ -83,6 +86,60 @@ public abstract class RadioDroidDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
+    // 关闭数据库实例
+    public static void closeInstance() {
+        synchronized (RadioDroidDatabase.class) {
+            // 设置关闭标志，阻止 onOpen 中的任务执行
+            isClosing = true;
+            
+            // 关闭现有实例
+            if (INSTANCE != null) {
+                INSTANCE.close();
+                INSTANCE = null;
+                
+                // 添加短暂延迟，确保数据库完全关闭并释放文件句柄
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+    }
+
+    // 强制重新创建数据库实例
+    public static RadioDroidDatabase forceRecreateDatabase(final Context context) {
+        synchronized (RadioDroidDatabase.class) {
+            // 设置关闭标志，阻止 onOpen 中的任务执行
+            isClosing = true;
+            
+            // 关闭现有实例
+            if (INSTANCE != null) {
+                INSTANCE.close();
+                INSTANCE = null;
+                
+                // 添加短暂延迟，确保数据库完全关闭并释放文件句柄
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            
+            // 创建新实例
+            INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                    RadioDroidDatabase.class, "radio_droid_database")
+                    .addCallback(CALLBACK)
+                    .addMigrations(MIGRATION_3_4, MIGRATION_4_5)
+                    .build();
+            
+            // 重置关闭标志
+            isClosing = false;
+            
+            return INSTANCE;
+        }
+    }
+
     public Executor getQueryExecutor() {
         return queryExecutor;
     }
@@ -97,10 +154,49 @@ public abstract class RadioDroidDatabase extends RoomDatabase {
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
 
-            INSTANCE.queryExecutor.execute(() -> {
+            queryExecutor.execute(() -> {
+                // 检查数据库是否正在关闭，如果是则跳过操作
+                if (isClosing) {
+                    return;
+                }
+                
                 // App may have been terminated without notice so we should set last track history entry's
                 // end time to something reasonable.
-                INSTANCE.songHistoryDao().setLastHistoryItemEndTimeRelative(MAX_UNKNOWN_TRACK_DURATION);
+                try {
+                    // 增加更多检查，确保数据库完全可用
+                    if (INSTANCE == null || !INSTANCE.isOpen() || isClosing) {
+                        return;
+                    }
+                    
+                    // 检查数据库连接是否可用
+                    SupportSQLiteDatabase database = INSTANCE.getOpenHelper().getWritableDatabase();
+                    if (database == null) {
+                        return;
+                    }
+                    
+                    // 检查表是否存在
+                    android.database.Cursor cursor = null;
+                    try {
+                        cursor = database.query("SELECT name FROM sqlite_master WHERE type='table' AND name='song_history'");
+                        if (cursor == null || cursor.getCount() == 0) {
+                            // 表不存在，跳过操作
+                            return;
+                        }
+                    } catch (Exception e) {
+                        // 查询失败，跳过操作
+                        return;
+                    } finally {
+                        if (cursor != null) {
+                            cursor.close();
+                        }
+                    }
+                    
+                    // 执行实际操作
+                    INSTANCE.songHistoryDao().setLastHistoryItemEndTimeRelative(MAX_UNKNOWN_TRACK_DURATION);
+                } catch (Exception e) {
+                    // 忽略所有异常，避免崩溃
+                    Log.w("RadioDroidDatabase", "Error setting last history item end time", e);
+                }
             });
         }
     };

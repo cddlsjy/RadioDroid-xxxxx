@@ -62,9 +62,10 @@ public class DatabaseEmptyHelper {
                             
                             EmptyDatabaseView emptyView = new EmptyDatabaseView(context);
                             emptyView.setOnUpdateClickListener(() -> {
-                                // 跳转到设置页面
+                                // 跳转到设置页面的本地数据库更新部分
                                 Intent intent = new Intent(context, ActivityMain.class);
                                 intent.putExtra("open_settings", true);
+                                intent.putExtra("open_database_update", true);
                                 context.startActivity(intent);
                             });
                             
@@ -188,9 +189,10 @@ public class DatabaseEmptyHelper {
                             
                             EmptyDatabaseView emptyView = new EmptyDatabaseView(context);
                             emptyView.setOnUpdateClickListener(() -> {
-                                // 跳转到设置页面
+                                // 跳转到设置页面的本地数据库更新部分
                                 Intent intent = new Intent(context, ActivityMain.class);
                                 intent.putExtra("open_settings", true);
+                                intent.putExtra("open_database_update", true);
                                 context.startActivity(intent);
                             });
                             

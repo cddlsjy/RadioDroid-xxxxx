@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.audiofx.AudioEffect;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -69,6 +70,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
     private DatabaseUpdateProgressDialog updateDialog;
     private ActivityResultLauncher<String> filePickerLauncher;
     private BroadcastReceiver timerFinishedReceiver;
+    private BroadcastReceiver databaseUpdatedReceiver;
 
     public static FragmentSettings openNewSettingsSubFragment(ActivityMain activity, String key) {
         FragmentSettings f = new FragmentSettings();
@@ -268,6 +270,9 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                 }
             });
         } else if (s.equals("pref_category_local_database_update")) {
+            // 不在这里调用updateDatabaseStatusOnLoad()，而是在onResume中调用
+            // updateDatabaseStatusOnLoad();
+            
             findPreference("update_local_database").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -677,6 +682,23 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
     */
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        
+        // 检查是否需要滚动到特定的偏好设置
+        Bundle args = getArguments();
+        if (args != null && args.containsKey("scroll_to_preference")) {
+            String preferenceKey = args.getString("scroll_to_preference");
+            if (preferenceKey != null) {
+                // 延迟滚动，确保UI已经完全加载
+                new Handler().postDelayed(() -> {
+                    scrollToPreference(preferenceKey);
+                }, 300);
+            }
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         Log.d("FragmentSettings", "onResume called");
@@ -698,6 +720,20 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
         };
         IntentFilter filter = new IntentFilter(PLAYER_SERVICE_TIMER_FINISHED);
         requireContext().registerReceiver(timerFinishedReceiver, filter);
+        
+        // 初始化并注册数据库更新广播接收器
+        databaseUpdatedReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if ("net.programmierecke.radiodroid2.DATABASE_UPDATED".equals(intent.getAction())) {
+                    Log.d("FragmentSettings", "Received database updated broadcast");
+                    // 数据库更新完成，更新状态显示
+                    updateDatabaseStatusOnLoad();
+                }
+            }
+        };
+        IntentFilter databaseUpdateFilter = new IntentFilter("net.programmierecke.radiodroid2.DATABASE_UPDATED");
+        requireContext().registerReceiver(databaseUpdatedReceiver, databaseUpdateFilter);
 
         refreshToolbar();
 
@@ -715,11 +751,8 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
             updateBatteryPrefDescription(batPref);
         }
         
-        // Update database status when settings screen is loaded
+        // 每次打开设置界面都更新数据库状态，确保状态信息是最新的
         updateDatabaseStatusOnLoad();
-        
-        // 检查是否有正在进行的数据库更新，如果有则恢复显示进度对话框
-        checkAndRestoreUpdateDialog();
         
         // 更新应用前台时间 - 移到checkAndRestoreUpdateDialog之后，避免取消正在进行的更新
         DatabaseUpdateWorker.updateAppForegroundTime(requireContext());
@@ -728,6 +761,15 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
     @Override
     public void onPause() {
         getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        
+        // 注销广播接收器
+        if (timerFinishedReceiver != null) {
+            requireContext().unregisterReceiver(timerFinishedReceiver);
+        }
+        
+        if (databaseUpdatedReceiver != null) {
+            requireContext().unregisterReceiver(databaseUpdatedReceiver);
+        }
         
         // 隐藏进度对话框但不取消更新
         if (updateDialog != null) {
@@ -762,149 +804,190 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
             SharedPreferences.Editor editor = prefs.edit();
             
             if (success) {
-                // 获取本地数据库中的电台数量
+                // 获取本地数据库中的电台数量和更新时间
                 RadioStationRepository repository = RadioStationRepository.getInstance(getContext());
                 
-                // 如果需要使用数据库时间戳，先获取数据库更新时间
-                if (useDatabaseTimestamp) {
-                    long dbUpdateTime = repository.getDatabaseUpdateTime();
-                    String timestamp;
-                    if (dbUpdateTime > 0) {
-                        timestamp = java.text.DateFormat.getDateTimeInstance().format(new java.util.Date(dbUpdateTime));
-                    } else {
-                        // 如果没有数据库时间戳，使用当前时间
-                        timestamp = java.text.DateFormat.getDateTimeInstance().format(new java.util.Date());
+                // 在后台线程获取数据库状态信息
+                new AsyncTask<Void, Void, DatabaseStatusInfo>() {
+                    @Override
+                    protected DatabaseStatusInfo doInBackground(Void... voids) {
+                        // 确保update_timestamp表存在
+                        repository.ensureUpdateTimestampTable();
+                        
+                        // 从数据库获取更新时间戳
+                        long timestamp;
+                        if (useDatabaseTimestamp) {
+                            timestamp = repository.getDatabaseUpdateTime();
+                        } else {
+                            // 使用当前时间更新数据库时间戳
+                            timestamp = System.currentTimeMillis();
+                            repository.updateDatabaseTimestamp(timestamp);
+                        }
+                        
+                        // 从数据库获取电台数量
+                        int stationCount = repository.getStationCountSync();
+                        
+                        return new DatabaseStatusInfo(timestamp, stationCount);
                     }
                     
-                    repository.getStationCount(new RadioStationRepository.StationCountCallback() {
-                        @Override
-                        public void onStationCountReceived(int count) {
-                            // 在UI线程更新状态显示
-                            if (getActivity() != null && isAdded()) {
-                                getActivity().runOnUiThread(() -> {
-                                    // 再次检查Fragment状态，防止在UI操作中Fragment已分离
-                                    if (isAdded() && getContext() != null) {
-                                        statusPref.setSummary(getString(R.string.settings_local_database_status_success, timestamp, count));
+                    @Override
+                    protected void onPostExecute(DatabaseStatusInfo statusInfo) {
+                        // 在UI线程更新状态显示
+                        if (getActivity() != null && isAdded()) {
+                            getActivity().runOnUiThread(() -> {
+                                // 再次检查Fragment状态，防止在UI操作中Fragment已分离
+                                if (isAdded() && getContext() != null) {
+                                    String updateTime;
+                                    if (statusInfo.timestamp > 0) {
+                                        java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+                                        updateTime = dateFormat.format(new java.util.Date(statusInfo.timestamp));
+                                    } else {
+                                        // 如果数据库中没有时间戳，显示"数据库尚未更新"
+                                        updateTime = "数据库尚未更新";
                                     }
-                                });
-                            }
+                                    
+                                    // 更新状态显示
+                                    statusPref.setSummary(getString(R.string.settings_local_database_status_success, updateTime, statusInfo.stationCount));
+                                    
+                                    // 更新数据库状态摘要信息
+                                    String statusSummary = "上次更新: " + updateTime + ", 电台数量: " + statusInfo.stationCount;
+                                    SharedPreferences.Editor editor = getPreferenceManager().getSharedPreferences().edit();
+                                    editor.putString("database_status_summary", statusSummary);
+                                    editor.apply();
+                                    
+                                    Log.d("FragmentSettings", "Database status updated from database fields: " + statusSummary);
+                                }
+                            });
                         }
-
-                        @Override
-                        public void onError(String error) {
-                            // 如果获取电台数量失败，只显示时间
-                            if (getActivity() != null && isAdded()) {
-                                getActivity().runOnUiThread(() -> {
-                                    // 再次检查Fragment状态，防止在UI操作中Fragment已分离
-                                    if (isAdded() && getContext() != null) {
-                                        statusPref.setSummary(getString(R.string.settings_local_database_status_success, timestamp, 0));
-                                    }
-                                });
-                            }
-                        }
-                    });
-                    
-                    // Save status to SharedPreferences
-                    editor.putString("local_database_last_status", "success");
-                    editor.putString("local_database_last_update", timestamp);
-                } else {
-                    // 使用当前时间戳（原有逻辑）
-                    String timestamp = java.text.DateFormat.getDateTimeInstance().format(new java.util.Date());
-                    
-                    repository.getStationCount(new RadioStationRepository.StationCountCallback() {
-                        @Override
-                        public void onStationCountReceived(int count) {
-                            // 在UI线程更新状态显示
-                            if (getActivity() != null && isAdded()) {
-                                getActivity().runOnUiThread(() -> {
-                                    // 再次检查Fragment状态，防止在UI操作中Fragment已分离
-                                    if (isAdded() && getContext() != null) {
-                                        statusPref.setSummary(getString(R.string.settings_local_database_status_success, timestamp, count));
-                                    }
-                                });
-                            }
-                        }
-
-                        @Override
-                        public void onError(String error) {
-                            // 如果获取电台数量失败，只显示时间
-                            if (getActivity() != null && isAdded()) {
-                                getActivity().runOnUiThread(() -> {
-                                    // 再次检查Fragment状态，防止在UI操作中Fragment已分离
-                                    if (isAdded() && getContext() != null) {
-                                        statusPref.setSummary(getString(R.string.settings_local_database_status_success, timestamp, 0));
-                                    }
-                                });
-                            }
-                        }
-                    });
-                    
-                    // Save status to SharedPreferences
-                    editor.putString("local_database_last_status", "success");
-                    editor.putString("local_database_last_update", timestamp);
-                }
-            } else {
-                statusPref.setSummary(getString(R.string.settings_local_database_status_failed, error));
+                    }
+                }.execute();
                 
                 // Save status to SharedPreferences
+                editor.putString("local_database_last_status", "success");
+                editor.apply();
+            } else {
+                // 显示错误状态
+                statusPref.setSummary(getString(R.string.settings_local_database_status_failed, error));
                 editor.putString("local_database_last_status", "failed");
-                editor.putString("local_database_last_update", error);
+                editor.putString("local_database_last_error", error);
+                editor.apply();
             }
-            
-            editor.apply();
         }
     }
     
     private void updateDatabaseStatusOnLoad() {
         Preference statusPref = findPreference("local_database_status");
         if (statusPref != null) {
-            // Check if we have a stored update status
-            SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
-            String lastUpdateStatus = prefs.getString("local_database_last_status", null);
-            String lastUpdateTime = prefs.getString("local_database_last_update", null);
+            // 每次打开本地数据库更新目录时，都重新从数据库获取最新的状态信息
+            RadioStationRepository repository = RadioStationRepository.getInstance(getContext());
             
-            if (lastUpdateStatus != null && lastUpdateTime != null) {
-                if ("success".equals(lastUpdateStatus)) {
-                    // 获取本地数据库中的电台数量
-                    RadioStationRepository repository = RadioStationRepository.getInstance(getContext());
-                    repository.getStationCount(new RadioStationRepository.StationCountCallback() {
-                        @Override
-                        public void onStationCountReceived(int count) {
-                            // 在UI线程更新状态显示
-                            if (getActivity() != null && isAdded()) {
-                                getActivity().runOnUiThread(() -> {
-                                    // 再次检查Fragment状态，防止在UI操作中Fragment已分离
-                                    if (isAdded() && getContext() != null) {
-                                        statusPref.setSummary(getString(R.string.settings_local_database_status_success, lastUpdateTime, count));
-                                    }
-                                });
+            // 使用AsyncTask在后台线程获取数据库更新时间和电台数量
+            new AsyncTask<Void, Void, DatabaseStatusInfo>() {
+                @Override
+                protected DatabaseStatusInfo doInBackground(Void... voids) {
+                    // 确保update_timestamp表存在
+                    repository.ensureUpdateTimestampTable();
+                    
+                    // 从数据库获取更新时间戳
+                    long timestamp = repository.getDatabaseUpdateTime();
+                    
+                    // 从数据库获取电台数量
+                    int stationCount = repository.getStationCountSync();
+                    
+                    return new DatabaseStatusInfo(timestamp, stationCount);
+                }
+                
+                @Override
+                protected void onPostExecute(DatabaseStatusInfo statusInfo) {
+                    // 在UI线程更新状态显示
+                    if (getActivity() != null && isAdded()) {
+                        getActivity().runOnUiThread(() -> {
+                            // 再次检查Fragment状态，防止在UI操作中Fragment已分离
+                            if (isAdded() && getContext() != null) {
+                                String updateTime;
+                                if (statusInfo.timestamp > 0) {
+                                    java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+                                    updateTime = dateFormat.format(new java.util.Date(statusInfo.timestamp));
+                                } else {
+                                    // 如果数据库中没有时间戳，显示"数据库尚未更新"
+                                    updateTime = "数据库尚未更新";
+                                }
+                                
+                                // 更新状态显示
+                                statusPref.setSummary(getString(R.string.settings_local_database_status_success, updateTime, statusInfo.stationCount));
+                                
+                                // 更新数据库状态摘要信息
+                                String statusSummary = "上次更新: " + updateTime + ", 电台数量: " + statusInfo.stationCount;
+                                SharedPreferences.Editor editor = getPreferenceManager().getSharedPreferences().edit();
+                                editor.putString("database_status_summary", statusSummary);
+                                editor.apply();
+                                
+                                Log.d("FragmentSettings", "Database status updated from database fields: " + statusSummary);
                             }
-                        }
-
-                        @Override
-                        public void onError(String error) {
-                            // 如果获取电台数量失败，只显示时间
-                            if (getActivity() != null && isAdded()) {
-                                getActivity().runOnUiThread(() -> {
-                                    // 再次检查Fragment状态，防止在UI操作中Fragment已分离
-                                    if (isAdded() && getContext() != null) {
-                                        statusPref.setSummary(getString(R.string.settings_local_database_status_success, lastUpdateTime, 0));
-                                    }
-                                });
-                            }
-                        }
-                    });
-                } else {
-                    if (isAdded() && getContext() != null) {
-                        statusPref.setSummary(getString(R.string.settings_local_database_status_failed, lastUpdateTime));
+                        });
                     }
                 }
-            } else {
-                if (isAdded() && getContext() != null) {
-                    statusPref.setSummary(getString(R.string.settings_local_database_status_default));
+            }.execute();
+        }
+    }
+    
+    // 用于存储数据库状态信息的内部类
+    private static class DatabaseStatusInfo {
+        public long timestamp;
+        public int stationCount;
+        
+        public DatabaseStatusInfo(long timestamp, int stationCount) {
+            this.timestamp = timestamp;
+            this.stationCount = stationCount;
+        }
+    }
+
+    private void getStationCountAndUpdateStatus(String lastUpdateTime, RadioStationRepository repository, Preference statusPref) {
+        // 获取电台数量
+        repository.getStationCount(new RadioStationRepository.StationCountCallback() {
+            @Override
+            public void onStationCountReceived(int count) {
+                // 在UI线程更新状态显示
+                if (getActivity() != null && isAdded()) {
+                    getActivity().runOnUiThread(() -> {
+                        // 再次检查Fragment状态，防止在UI操作中Fragment已分离
+                        if (isAdded() && getContext() != null) {
+                            // 更新状态显示
+                            statusPref.setSummary(getString(R.string.settings_local_database_status_success, lastUpdateTime, count));
+                            
+                            // 更新数据库状态摘要信息
+                            String statusSummary = "上次更新: " + lastUpdateTime + ", 电台数量: " + count;
+                            SharedPreferences.Editor editor = getPreferenceManager().getSharedPreferences().edit();
+                            editor.putString("database_status_summary", statusSummary);
+                            editor.apply();
+                            
+                            Log.d("FragmentSettings", "Database status updated: " + statusSummary);
+                        }
+                    });
                 }
             }
-        }
+
+            @Override
+            public void onError(String error) {
+                // 如果获取电台数量失败，只显示错误信息
+                if (getActivity() != null && isAdded()) {
+                    getActivity().runOnUiThread(() -> {
+                        // 再次检查Fragment状态，防止在UI操作中Fragment已分离
+                        if (isAdded() && getContext() != null) {
+                            statusPref.setSummary(getString(R.string.settings_local_database_status_failed, error));
+                            
+                            // 更新数据库状态摘要信息
+                            String statusSummary = "获取状态失败: " + error;
+                            SharedPreferences.Editor editor = getPreferenceManager().getSharedPreferences().edit();
+                            editor.putString("database_status_summary", statusSummary);
+                            editor.apply();
+                            
+                            Log.d("FragmentSettings", "Database status update failed: " + error);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
@@ -955,9 +1038,24 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                 // 获取主数据库文件路径
                 File mainDatabaseFile = requireContext().getDatabasePath("radio_droid_database");
                 
-                // 获取电台数量
+                // 获取电台数量和更新时间
                 RadioStationRepository repository = RadioStationRepository.getInstance(requireContext());
+                
+                // 确保update_timestamp表存在
+                repository.ensureUpdateTimestampTable();
+                
+                // 从数据库获取电台数量
                 int stationCount = repository.getStationCountSync();
+                
+                // 从数据库获取时间戳
+                long timestamp = repository.getDatabaseUpdateTime();
+                String updateTime;
+                if (timestamp > 0) {
+                    java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss", java.util.Locale.getDefault());
+                    updateTime = dateFormat.format(new java.util.Date(timestamp));
+                } else {
+                    updateTime = "unknown";
+                }
                 
                 // 创建导出目录
                 File exportDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "RadioDroid");
@@ -965,10 +1063,8 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                     exportDir.mkdirs();
                 }
                 
-                // 创建导出文件名（包含时间戳和电台数量）
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-                String timestamp = sdf.format(new Date());
-                File exportFile = new File(exportDir, "radio_droid_database_" + timestamp + "_" + stationCount + ".db");
+                // 创建导出文件名（包含更新时间和电台数量）
+                File exportFile = new File(exportDir, "radio_droid_database_" + updateTime + "_" + stationCount + ".db");
                 
                 // 复制数据库文件
                 FileChannel source = new FileInputStream(mainDatabaseFile).getChannel();
@@ -1016,57 +1112,213 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
             try {
                 // 获取主数据库文件路径
                 File mainDatabaseFile = requireContext().getDatabasePath("radio_droid_database");
-                
-                // 创建备份文件
-                File backupFile = new File(mainDatabaseFile.getParent(), "radio_droid_database_backup_" + 
-                    new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date()) + ".db");
-                
-                // 复制当前数据库到备份文件
-                if (mainDatabaseFile.exists()) {
-                    FileChannel source = new FileInputStream(mainDatabaseFile).getChannel();
-                    FileChannel backup = new FileOutputStream(backupFile).getChannel();
-                    backup.transferFrom(source, 0, source.size());
-                    source.close();
-                    backup.close();
-                }
+                Log.d("FragmentSettings", "主数据库文件路径: " + mainDatabaseFile.getAbsolutePath());
                 
                 // 关闭数据库连接
                 RadioStationRepository repository = RadioStationRepository.getInstance(requireContext());
                 repository.closeDatabase();
+                Log.d("FragmentSettings", "数据库连接已关闭");
                 
-                // 从Uri复制文件到主数据库
-                java.io.InputStream inputStream = requireContext().getContentResolver().openInputStream(uri);
-                FileChannel destination = new FileOutputStream(mainDatabaseFile).getChannel();
-                java.nio.channels.ReadableByteChannel sourceChannel = java.nio.channels.Channels.newChannel(inputStream);
-                long transferred = 0;
-                long size = 0;
-                
-                // 使用缓冲区复制文件
-                byte[] buffer = new byte[8192];
-                int bytesRead;
-                java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    baos.write(buffer, 0, bytesRead);
+                // 添加延迟，确保数据库完全关闭并释放文件句柄
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
-                inputStream.close();
                 
-                // 将数据写入目标文件
-                java.io.ByteArrayInputStream bais = new java.io.ByteArrayInputStream(baos.toByteArray());
-                java.nio.channels.ReadableByteChannel finalSourceChannel = java.nio.channels.Channels.newChannel(bais);
-                destination.transferFrom(finalSourceChannel, 0, baos.size());
-                finalSourceChannel.close();
-                bais.close();
-                destination.close();
+                // 确保目标目录存在
+                File databaseDir = mainDatabaseFile.getParentFile();
+                if (!databaseDir.exists()) {
+                    databaseDir.mkdirs();
+                    Log.d("FragmentSettings", "创建数据库目录: " + databaseDir.getAbsolutePath());
+                }
+                
+                // 如果目标文件已存在，先删除
+                if (mainDatabaseFile.exists()) {
+                    boolean deleted = mainDatabaseFile.delete();
+                    Log.d("FragmentSettings", "删除旧数据库文件: " + deleted);
+                    if (!deleted) {
+                        throw new Exception("无法删除旧数据库文件");
+                    }
+                    
+                    // 添加延迟，确保文件删除完成
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+                
+                // 获取源文件信息
+                long sourceFileSize = 0;
+                try (java.io.InputStream inputStream = requireContext().getContentResolver().openInputStream(uri)) {
+                    sourceFileSize = inputStream.available();
+                    Log.d("FragmentSettings", "源文件大小: " + sourceFileSize + " 字节");
+                    
+                    if (sourceFileSize == 0) {
+                        throw new Exception("源文件为空，请选择有效的数据库文件");
+                    }
+                    
+                    // 使用FileChannel进行更可靠的文件复制
+                    java.io.FileOutputStream outputStream = new java.io.FileOutputStream(mainDatabaseFile);
+                    java.nio.channels.ReadableByteChannel sourceChannel = null;
+                    java.nio.channels.FileChannel destChannel = null;
+                    
+                    try {
+                        sourceChannel = java.nio.channels.Channels.newChannel(inputStream);
+                        destChannel = outputStream.getChannel();
+                        
+                        long transferred = destChannel.transferFrom(sourceChannel, 0, sourceFileSize);
+                        Log.d("FragmentSettings", "已复制 " + transferred + " 字节到目标文件");
+                        
+                        if (transferred != sourceFileSize) {
+                            Log.w("FragmentSettings", "复制的字节数与源文件大小不一致: " + transferred + " vs " + sourceFileSize);
+                        }
+                    } finally {
+                        if (sourceChannel != null) {
+                            sourceChannel.close();
+                        }
+                        if (destChannel != null) {
+                            destChannel.close();
+                        }
+                        outputStream.close();
+                    }
+                }
+                
+                // 验证文件是否成功复制
+                if (!mainDatabaseFile.exists()) {
+                    throw new Exception("目标文件不存在，复制失败");
+                }
+                
+                long targetFileSize = mainDatabaseFile.length();
+                Log.d("FragmentSettings", "目标文件大小: " + targetFileSize + " 字节");
+                
+                if (targetFileSize == 0) {
+                    throw new Exception("导入的数据库文件为空或复制失败");
+                }
+                
+                if (targetFileSize != sourceFileSize) {
+                    Log.w("FragmentSettings", "源文件和目标文件大小不一致: " + sourceFileSize + " vs " + targetFileSize);
+                }
+                
+                // 添加延迟，确保文件写入完成
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
                 
                 // 重新初始化数据库
                 repository.reinitializeDatabase(requireContext());
                 
-                // 在UI线程显示结果
+                // 添加延迟，确保数据库初始化完成
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                
+                // 确保update_timestamp表存在并有有效数据
+                repository.ensureUpdateTimestampTable();
+                Log.d("FragmentSettings", "已确保update_timestamp表存在");
+                
+                // 添加延迟，确保表创建完成
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                
+                // 验证数据库是否可以正常访问
+                int stationCount = repository.getStationCountSync();
+                if (stationCount < 0) {
+                    throw new Exception("导入的数据库无法正常访问，可能文件已损坏");
+                }
+                
+                Log.d("FragmentSettings", "数据库导入成功，电台数量: " + stationCount);
+                
+                // 获取数据库中的更新时间戳
+                final long dbUpdateTime = repository.getDatabaseUpdateTime();
+                Log.d("FragmentSettings", "从数据库读取的更新时间戳: " + dbUpdateTime);
+                final int finalStationCount = stationCount;
+                
+                // 如果数据库中没有时间戳，尝试从文件名中提取
+                long finalUpdateTime = dbUpdateTime;
+                if (finalUpdateTime <= 0) {
+                    try {
+                        // 获取文件名
+                        String fileName = null;
+                        try (android.database.Cursor cursor = requireContext().getContentResolver().query(uri, null, null, null, null)) {
+                            if (cursor != null && cursor.moveToFirst()) {
+                                int nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME);
+                                if (nameIndex >= 0) {
+                                    fileName = cursor.getString(nameIndex);
+                                }
+                            }
+                        }
+                        
+                        Log.d("FragmentSettings", "导入的文件名: " + fileName);
+                        
+                        if (fileName != null) {
+                            // 尝试从文件名中提取时间戳 (格式: radio_droid_database_yyyyMMdd_HHmmss_count.db)
+                            java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("radio_droid_database_(\\d{8})_(\\d{6})_\\d+\\.db");
+                            java.util.regex.Matcher matcher = pattern.matcher(fileName);
+                            
+                            if (matcher.find()) {
+                                String dateStr = matcher.group(1); // yyyyMMdd
+                                String timeStr = matcher.group(2); // HHmmss
+                                String dateTimeStr = dateStr + timeStr; // yyyyMMddHHmmss
+                                
+                                java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyyMMddHHmmss", java.util.Locale.getDefault());
+                                java.util.Date date = format.parse(dateTimeStr);
+                                finalUpdateTime = date.getTime();
+                                
+                                Log.d("FragmentSettings", "从文件名提取的时间戳: " + finalUpdateTime);
+                                
+                                // 更新数据库中的时间戳
+                                repository.updateDatabaseTimestamp(finalUpdateTime);
+                                Log.d("FragmentSettings", "已更新数据库时间戳: " + finalUpdateTime);
+                            } else {
+                                Log.d("FragmentSettings", "无法从文件名提取时间戳");
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e("FragmentSettings", "从文件名提取时间戳失败", e);
+                    }
+                }
+                
+                // 将finalUpdateTime标记为final以便在lambda中使用
+                final long finalUpdateTimeForLambda = finalUpdateTime;
+                
+                // 在UI线程显示结果并更新SharedPreferences
                 requireActivity().runOnUiThread(() -> {
                     progressDialog.dismiss();
+                    
+                    // 计算更新时间
+                    String updateTime;
+                    if (finalUpdateTimeForLambda > 0) {
+                        java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+                        updateTime = dateFormat.format(new java.util.Date(finalUpdateTimeForLambda));
+                        Log.d("FragmentSettings", "格式化的更新时间: " + updateTime);
+                    } else {
+                        // 如果数据库中没有时间戳且无法从文件名提取，显示"数据库尚未更新"
+                        updateTime = "数据库尚未更新";
+                        Log.d("FragmentSettings", "数据库中没有时间戳且无法从文件名提取，显示数据库尚未更新");
+                    }
+                    
+                    // 保存更新时间和状态到SharedPreferences
+                    SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("local_database_last_status", "success");
+                    editor.putString("local_database_last_update", updateTime);
+                    editor.putString("database_status_summary", "上次更新: " + updateTime + ", 电台数量: " + finalStationCount);
+                    editor.apply();
+                    
+                    Log.d("FragmentSettings", "已保存数据库状态到SharedPreferences: " + updateTime);
+                    
                     androidx.appcompat.app.AlertDialog.Builder successBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
                     successBuilder.setTitle("导入成功");
-                    successBuilder.setMessage("主数据库已成功导入。\n原数据库已备份为：\n" + backupFile.getAbsolutePath() + "\n\n应用将自动重启以加载新数据库。");
+                    successBuilder.setMessage("主数据库已成功导入，包含 " + finalStationCount + " 个电台。\n\n应用将自动重启以加载新数据库。");
                     successBuilder.setPositiveButton("确定", (dialog, which) -> {
                         // 重启应用
                         Intent intent = new Intent(requireContext(), ActivityMain.class);
@@ -1080,7 +1332,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                 });
                 
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("FragmentSettings", "导入数据库失败", e);
                 // 在UI线程显示错误
                 requireActivity().runOnUiThread(() -> {
                     progressDialog.dismiss();

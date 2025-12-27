@@ -39,6 +39,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
 import com.bytehamster.lib.preferencesearch.SearchPreferenceResult;
@@ -69,6 +70,7 @@ import net.programmierecke.radiodroid2.station.DataRadioStation;
 import net.programmierecke.radiodroid2.station.StationsFilter;
 import net.programmierecke.radiodroid2.database.RadioStation;
 import net.programmierecke.radiodroid2.database.RadioStationRepository;
+import net.programmierecke.radiodroid2.database.RadioDroidDatabase;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -321,8 +323,17 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
 
         ((RadioDroidApp) getApplication()).getCastHandler().onCreate(this);
 
+        // 处理启动时的Intent
+        Intent intent = getIntent();
+        if (intent != null) {
+            handleIntent(intent);
+            // 不在这里setIntent(null)，让onResume也能处理
+        }
+
         setupStartUpFragment();
     }
+
+
 
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -515,6 +526,31 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
         invalidateOptionsMenu();
     }
 
+    /**
+     * 导航到设置页面的数据库更新部分
+     */
+    private void navigateToDatabaseUpdate() {
+        // 直接打开数据库更新子屏幕
+        FragmentSettings fragmentSettings = new FragmentSettings();
+        
+        // 创建Bundle并设置要打开的子屏幕
+        Bundle args = new Bundle();
+        args.putString(PreferenceFragmentCompat.ARG_PREFERENCE_ROOT, "pref_category_local_database_update");
+        fragmentSettings.setArguments(args);
+        
+        // 清除回退栈并添加设置片段
+        mFragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        if (Utils.bottomNavigationEnabled(this))
+            fragmentTransaction.replace(R.id.containerView, fragmentSettings).commit();
+        else
+            fragmentTransaction.replace(R.id.containerView, fragmentSettings).addToBackStack(null).commit();
+            
+        // 隐藏加载进度条
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(ActivityMain.ACTION_HIDE_LOADING));
+        invalidateOptionsMenu();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -560,7 +596,11 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
         
         // 检查是否需要打开设置页面
         if (extras.getBoolean("open_settings", false)) {
-            navigateToSettings();
+            if (extras.getBoolean("open_database_update", false)) {
+                navigateToDatabaseUpdate();
+            } else {
+                navigateToSettings();
+            }
             return;
         }
 

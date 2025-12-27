@@ -48,9 +48,10 @@ public class EmptyDatabaseView extends LinearLayout {
             if (onUpdateClickListener != null) {
                 onUpdateClickListener.onUpdateClick();
             } else {
-                // 默认行为：跳转到设置页面
+                // 默认行为：直接跳转到数据库更新设置页面
                 Intent intent = new Intent(context, ActivityMain.class);
                 intent.putExtra("open_settings", true);
+                intent.putExtra("open_database_update", true);
                 context.startActivity(intent);
             }
         });
