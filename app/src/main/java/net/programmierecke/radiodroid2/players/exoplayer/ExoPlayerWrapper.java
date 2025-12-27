@@ -256,9 +256,89 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
                     final IcyInfo icyInfo = ((IcyInfo) entry);
                     Log.d(TAG, "IcyInfo: " + icyInfo);
                     if (icyInfo.title != null) {
+                        // 总是输出调试信息，以便诊断乱码问题
+                        Log.d(TAG, "原始IcyInfo标题: " + icyInfo.title);
+                        Log.d(TAG, "原始IcyInfo标题长度: " + icyInfo.title.length());
+                        
+                        // 检查原始标题中是否包含问号
+                        if (icyInfo.title.contains("?")) {
+                            Log.w(TAG, "ExoPlayer原始IcyInfo标题中包含问号: " + icyInfo.title);
+                            
+                            // 打印问号字符的详细信息
+                            StringBuilder questionMarks = new StringBuilder();
+                            for (int k = 0; k < icyInfo.title.length(); k++) {
+                                char c = icyInfo.title.charAt(k);
+                                if (c == '?') {
+                                    questionMarks.append(String.format("位置%d ", k));
+                                }
+                            }
+                            Log.w(TAG, "ExoPlayer原始IcyInfo标题问号位置: " + questionMarks.toString());
+                        }
+                        
+                        // 打印原始标题中每个字符的Unicode值
+                        StringBuilder charCodes = new StringBuilder();
+                        for (int k = 0; k < Math.min(icyInfo.title.length(), 50); k++) {
+                            char c = icyInfo.title.charAt(k);
+                            charCodes.append(String.format("'%c'(%04X) ", c, (int) c));
+                        }
+                        Log.d(TAG, "ExoPlayer原始IcyInfo标题的前50个字符的Unicode值: " + charCodes.toString());
+                        
+                        // 打印原始字节数据（用于调试）
+                        byte[] titleBytes = icyInfo.title.getBytes(java.nio.charset.StandardCharsets.ISO_8859_1);
+                        StringBuilder hexString = new StringBuilder();
+                        for (int j = 0; j < titleBytes.length && j < 100; j++) { // 只打印前100个字节
+                            hexString.append(String.format("%02X ", titleBytes[j]));
+                        }
+                        Log.d(TAG, "原始IcyInfo标题字节（前100字节）: " + hexString.toString());
+                        // 尝试使用多种编码方式解析元数据，以支持不同语言的字符集
+                        String decodedTitle = decodeMetadataWithCharsetDetection(icyInfo.title);
+                        
+                        // 如果解码后仍包含问号，尝试额外的解码方法
+                        if (decodedTitle.contains("?")) {
+                            Log.w(TAG, "ExoPlayer解码后标题中包含问号，尝试额外解码: " + decodedTitle);
+                            String alternativeDecodedTitle = tryAlternativeDecoding(icyInfo.title);
+                            if (!alternativeDecodedTitle.equals(decodedTitle)) {
+                                decodedTitle = alternativeDecodedTitle;
+                                Log.d(TAG, "额外解码成功，结果: " + decodedTitle);
+                            } else {
+                                Log.d(TAG, "额外解码结果相同，使用原始解码结果");
+                            }
+                        }
+                        
+                        // 总是输出调试信息，以便诊断乱码问题
+                        Log.i(TAG, "解码后的标题: " + decodedTitle);
+                        Log.i(TAG, "解码后的标题长度: " + decodedTitle.length());
+                        
+                        // 检查解码后标题中是否包含问号
+                        if (decodedTitle.contains("?")) {
+                            Log.w(TAG, "ExoPlayer解码后标题中包含问号: " + decodedTitle);
+                            
+                            // 打印问号字符的详细信息
+                            StringBuilder questionMarksDecoded = new StringBuilder();
+                            for (int k = 0; k < decodedTitle.length(); k++) {
+                                char c = decodedTitle.charAt(k);
+                                if (c == '?') {
+                                    questionMarksDecoded.append(String.format("位置%d ", k));
+                                }
+                            }
+                            Log.w(TAG, "ExoPlayer解码后标题问号位置: " + questionMarksDecoded.toString());
+                        }
+                        
+                        // 打印解码后标题中每个字符的Unicode值
+                        if (!decodedTitle.isEmpty()) {
+                            StringBuilder charCodesDecoded = new StringBuilder();
+                            for (int k = 0; k < Math.min(decodedTitle.length(), 50); k++) {
+                                char c = decodedTitle.charAt(k);
+                                charCodesDecoded.append(String.format("'%c'(%04X) ", c, (int) c));
+                            }
+                            Log.i(TAG, "ExoPlayer解码后标题的前50个字符的Unicode值: " + charCodesDecoded.toString());
+                        }
                         Map<String, String> rawMetadata = new HashMap<String, String>();
-                        rawMetadata.put("StreamTitle", icyInfo.title);
+                        rawMetadata.put("StreamTitle", decodedTitle);
                         StreamLiveInfo streamLiveInfo = new StreamLiveInfo(rawMetadata);
+                        Log.i(TAG, "StreamLiveInfo标题: " + streamLiveInfo.getTitle());
+                        Log.i(TAG, "StreamLiveInfo艺术家: " + streamLiveInfo.getArtist());
+                        Log.i(TAG, "StreamLiveInfo完整信息: " + streamLiveInfo.toString());
                         onDataSourceStreamLiveInfo(streamLiveInfo);
                     }
                 } else if (entry instanceof IcyHeaders) {
@@ -525,5 +605,1129 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         public void onDrmSessionReleased(@NonNull EventTime eventTime) {
 
         }
+    }
+
+    /**
+     * 智能元数据编码检测，支持多语言和复杂编码情况
+     * 使用多阶段检测策略，优先检测UTF-8，然后使用语言特征检测
+     */
+    private String decodeMetadataWithCharsetDetection(String metadata) {
+        if (metadata == null || metadata.isEmpty()) {
+            return metadata;
+        }
+
+        // 预处理：移除可能的控制字符和无效字符
+        String cleanedMetadata = preprocessMetadata(metadata);
+        if (cleanedMetadata.isEmpty()) {
+            return "";
+        }
+
+        // 获取原始字节数据
+        byte[] originalBytes = cleanedMetadata.getBytes(java.nio.charset.StandardCharsets.ISO_8859_1);
+        
+        // 调试信息
+        if (BuildConfig.DEBUG) {
+            logMetadataBytes(originalBytes);
+        }
+
+        // 检查原始数据是否已损坏
+        if (checkIfDataIsCorrupted(originalBytes)) {
+            Log.w(TAG, "检测到原始数据已损坏，可能是服务器端编码转换错误");
+            return "";
+        }
+
+        // 第一阶段：快速UTF-8检测
+        String utf8Result = tryUtf8Decoding(originalBytes);
+        if (utf8Result != null && isValidDecodedText(utf8Result)) {
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "UTF-8快速检测成功: " + utf8Result);
+            }
+            return utf8Result;
+        }
+
+        // 第二阶段：语言特征检测
+        String languageDetected = detectLanguage(originalBytes);
+        if (languageDetected != null) {
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "语言特征检测成功，语言: " + languageDetected);
+            }
+            return languageDetected;
+        }
+
+        // 第三阶段：全面编码尝试
+        String bestResult = tryAllEncodings(originalBytes);
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "全面编码尝试结果: " + bestResult);
+        }
+        
+        return bestResult;
+    }
+
+    /**
+     * 检查数据是否已损坏（主要检查是否为0x3F问号字符）
+     */
+    private boolean checkIfDataIsCorrupted(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            return false;
+        }
+        
+        int questionMarkCount = 0;
+        for (byte b : bytes) {
+            if (b == 0x3F) { // 问号的ASCII值
+                questionMarkCount++;
+            }
+        }
+        
+        // 如果超过90%的字节是问号，才认为数据已损坏（之前是70%）
+        double ratio = (double) questionMarkCount / bytes.length;
+        boolean isCorrupted = ratio > 0.9;
+        
+        if (BuildConfig.DEBUG && isCorrupted) {
+            Log.d(TAG, "checkIfDataIsCorrupted - 检测到损坏数据: " + 
+                  questionMarkCount + "/" + bytes.length + 
+                  " 字节是问号(0x3F), 比例: " + String.format("%.2f", ratio));
+        } else if (BuildConfig.DEBUG && ratio > 0.5) {
+            Log.d(TAG, "checkIfDataIsCorrupted - 数据包含较多问号但未达到损坏阈值: " + 
+                  questionMarkCount + "/" + bytes.length + 
+                  " 字节是问号(0x3F), 比例: " + String.format("%.2f", ratio));
+        }
+        
+        return isCorrupted;
+    }
+
+    /**
+     * 计算解码质量分数
+     * 分数越高表示解码质量越好
+     */
+    private int calculateDecodingQuality(String text, String charset) {
+        if (text == null || text.isEmpty()) {
+            return -1;
+        }
+        
+        int score = 0;
+        
+        // 基础分数：非空文本
+        score += 10;
+        
+        // 检查是否包含替换字符
+        if (text.contains("�")) {
+            score -= 100; // 严重扣分，几乎可以肯定是错误编码
+        }
+        
+        // 检查是否包含过多的问号字符
+        int questionMarkCount = 0;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '?') {
+                questionMarkCount++;
+            }
+        }
+        double questionMarkRatio = (double) questionMarkCount / text.length();
+        if (questionMarkRatio > 0.2) {
+            score -= 80; // 问号过多，严重扣分
+            Log.i(TAG, "ExoPlayer " + charset + "解码结果包含过多问号: " + questionMarkCount + "/" + text.length());
+        }
+        
+        // 检查控制字符比例
+        int controlCharCount = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (Character.isISOControl(c) && c != '\t' && c != '\n' && c != '\r') {
+                controlCharCount++;
+            }
+        }
+        double controlCharRatio = (double) controlCharCount / text.length();
+        if (controlCharRatio > 0.1) {
+            score -= 50; // 控制字符过多，严重扣分
+        }
+        
+        // 特殊检查：对于UTF-8，检查是否存在无效的UTF-8序列产生的乱码
+        if (charset.equals("UTF-8")) {
+            // 检查是否存在连续的欧洲字符（可能是Big5被误解析为UTF-8的结果）
+            int europeanCharCount = 0;
+            int chineseCharCount = 0;
+            
+            for (int i = 0; i < text.length(); i++) {
+                char c = text.charAt(i);
+                // 检查是否是欧洲扩展字符（Latin-1补充等）
+                if ((c >= 0x80 && c <= 0xFF) || 
+                    (c >= 0x100 && c <= 0x17F) || 
+                    (c >= 0x180 && c <= 0x24F)) {
+                    europeanCharCount++;
+                }
+                // 检查是否包含中文字符
+                if ((c >= 0x4E00 && c <= 0x9FFF) || // CJK统一汉字
+                    (c >= 0x3400 && c <= 0x4DBF) || // CJK扩展A
+                    (c >= 0xF900 && c <= 0xFAFF)) {  // CJK兼容汉字
+                    chineseCharCount++;
+                }
+            }
+            
+            // 如果UTF-8解码产生了合理的中文字符，大幅加分
+            if (chineseCharCount > 0) {
+                score += chineseCharCount * 30; // 增加加分权重
+                Log.i(TAG, "ExoPlayer UTF-8解码成功识别中文字符数: " + chineseCharCount + ", 大幅加分");
+                
+                // 如果中文字符比例较高，额外加分
+                double chineseCharRatio = (double) chineseCharCount / text.length();
+                if (chineseCharRatio > 0.3) {
+                    score += 50; // 中文字符比例高，额外加分
+                    Log.i(TAG, "ExoPlayer UTF-8解码结果中文字符比例高: " + String.format("%.2f", chineseCharRatio));
+                }
+            }
+            
+            // 如果欧洲字符比例过高，可能是Big5被误解析为UTF-8
+            double europeanCharRatio = (double) europeanCharCount / text.length();
+            if (europeanCharRatio > 0.6 && chineseCharCount == 0) { // 提高阈值，只有当没有中文字符时才扣分
+                score -= 20; // 降低扣分，避免过度惩罚
+                Log.i(TAG, "ExoPlayer UTF-8解码结果包含大量欧洲字符但没有中文字符，可能是错误编码");
+            }
+            
+            // 对于UTF-8编码，如果包含任何非ASCII字符，给予额外加分
+            boolean hasNonAscii = false;
+            for (int i = 0; i < text.length(); i++) {
+                if (text.charAt(i) > 127) {
+                    hasNonAscii = true;
+                    break;
+                }
+            }
+            if (hasNonAscii) {
+                score += 30; // UTF-8能正确处理非ASCII字符，加分
+            }
+        }
+        
+        // 检查是否包含常见的中文字符（适用于中文编码）
+        if (charset.equals("Big5") || charset.equals("GBK") || charset.equals("GB2312")) {
+            int chineseCharCount = 0;
+            for (int i = 0; i < text.length(); i++) {
+                char c = text.charAt(i);
+                if ((c >= 0x4E00 && c <= 0x9FFF) || // CJK统一汉字
+                    (c >= 0x3400 && c <= 0x4DBF) || // CJK扩展A
+                    (c >= 0xF900 && c <= 0xFAFF)) {  // CJK兼容汉字
+                    chineseCharCount++;
+                }
+            }
+            if (chineseCharCount > 0) {
+                score += chineseCharCount * 20; // 中文字符大幅加分，提高权重
+                Log.i(TAG, "ExoPlayer " + charset + "解码成功识别中文字符数: " + chineseCharCount);
+                
+                // 如果中文字符比例较高，额外加分
+                double chineseCharRatio = (double) chineseCharCount / text.length();
+                if (chineseCharRatio > 0.3) {
+                    score += 100; // 中文字符比例高，大幅加分
+                    Log.i(TAG, "ExoPlayer " + charset + "解码结果中文字符比例高: " + String.format("%.2f", chineseCharRatio));
+                }
+            }
+            
+            // 对于Big5，特别检查是否包含常见的Big5字符
+            if (charset.equals("Big5")) {
+                // 检查是否包含常见的繁体中文字符
+                for (int i = 0; i < text.length(); i++) {
+                    char c = text.charAt(i);
+                    // 一些常见的繁体中文字符
+                    if ((c >= 0x4E00 && c <= 0x9FFF) || // 基本汉字
+                        (c >= 0xF900 && c <= 0xFAFF)) {  // 兼容汉字
+                        score += 10; // 额外加分
+                    }
+                }
+            }
+        }
+        
+        // 检查是否包含常见的日语字符（适用于日语编码）
+        if (charset.equals("Shift_JIS") || charset.equals("EUC-JP")) {
+            int japaneseCharCount = 0;
+            int fullWidthKatakanaCount = 0;
+            int halfWidthKatakanaCount = 0;
+            
+            for (int i = 0; i < text.length(); i++) {
+                char c = text.charAt(i);
+                // 检查是否包含日文字符
+                if ((c >= 0x3040 && c <= 0x309F) || // 平假名
+                    (c >= 0x30A0 && c <= 0x30FF) || // 片假名
+                    (c >= 0x4E00 && c <= 0x9FFF) || // CJK统一汉字（包含日文汉字）
+                    (c >= 0xFF66 && c <= 0xFF9F)) {  // 半角片假名
+                    japaneseCharCount++;
+                }
+                
+                // 特别检查全角片假名
+                if (c >= 0x30A0 && c <= 0x30FF) {
+                    fullWidthKatakanaCount++;
+                }
+                
+                // 特别检查半角片假名
+                if (c >= 0xFF66 && c <= 0xFF9F) {
+                    halfWidthKatakanaCount++;
+                }
+            }
+            
+            if (japaneseCharCount > 0) {
+                score += japaneseCharCount * 10; // 日文字符大幅加分
+                Log.i(TAG, "ExoPlayer " + charset + "解码成功识别日文字符数: " + japaneseCharCount);
+            }
+            
+            // 如果包含大量片假名，额外加分
+            if (fullWidthKatakanaCount > 0) {
+                score += fullWidthKatakanaCount * 5;
+                Log.i(TAG, "ExoPlayer " + charset + "解码成功识别全角片假名字符数: " + fullWidthKatakanaCount);
+            }
+            
+            // 如果包含半角片假名，可能是Shift_JIS编码的标志
+            if (halfWidthKatakanaCount > 0) {
+                score += halfWidthKatakanaCount * 15; // 半角片假名是Shift_JIS的强特征
+                Log.i(TAG, "ExoPlayer " + charset + "解码成功识别半角片假名字符数: " + halfWidthKatakanaCount + "，可能是Shift_JIS编码");
+            }
+        }
+        
+        // 检查是否包含常见的韩语字符（适用于韩语编码）
+        if (charset.equals("EUC-KR")) {
+            int koreanCharCount = 0;
+            for (int i = 0; i < text.length(); i++) {
+                char c = text.charAt(i);
+                // 检查是否包含韩文字符
+                if ((c >= 0xAC00 && c <= 0xD7AF) || // 韩文音节
+                    (c >= 0x1100 && c <= 0x11FF) || // 韩文字母
+                    (c >= 0x3130 && c <= 0x318F) || // 韩文兼容字母
+                    (c >= 0xA960 && c <= 0xA97F) || // 韩文字母扩展A
+                    (c >= 0xD7B0 && c <= 0xD7FF)) {  // 韩文字母扩展B
+                    koreanCharCount++;
+                }
+            }
+            if (koreanCharCount > 0) {
+                score += koreanCharCount * 10; // 韩文字符大幅加分
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, "ExoPlayer " + charset + "解码成功识别韩文字符数: " + koreanCharCount);
+                }
+            }
+        }
+        
+        // 检查是否包含常见的ASCII字符（英文、数字、标点）
+        int asciiCharCount = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (c >= 32 && c <= 126) { // 可打印ASCII字符
+                asciiCharCount++;
+            }
+        }
+        if (asciiCharCount > 0) {
+            score += asciiCharCount; // ASCII字符加分
+        }
+        
+        return score;
+    }
+
+    /**
+     * 检查解码后的文本是否合理
+     */
+    private boolean isValidDecodedText(String text) {
+        if (text == null || text.isEmpty()) {
+            return false;
+        }
+        
+        // 检查是否包含过多控制字符或替换字符
+        int controlCharCount = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (Character.isISOControl(c) && c != '\t' && c != '\n' && c != '\r') {
+                controlCharCount++;
+            }
+            if (c == '\uFFFD') { // 替换字符
+                return false;
+            }
+        }
+        
+        // 如果控制字符过多，认为解码失败
+        return controlCharCount <= text.length() * 0.1;
+    }
+    
+    /**
+     * 预处理元数据，移除控制字符和无效字符
+     */
+    private String preprocessMetadata(String metadata) {
+        if (metadata == null || metadata.isEmpty()) {
+            return "";
+        }
+        
+        // 移除控制字符（保留常见的空白字符）
+        StringBuilder cleaned = new StringBuilder();
+        for (int i = 0; i < metadata.length(); i++) {
+            char c = metadata.charAt(i);
+            if (c == '\t' || c == '\n' || c == '\r' || !Character.isISOControl(c)) {
+                cleaned.append(c);
+            }
+        }
+        
+        return cleaned.toString().trim();
+    }
+    
+    /**
+     * 记录元数据字节信息用于调试
+     */
+    private void logMetadataBytes(byte[] bytes) {
+        if (!BuildConfig.DEBUG || bytes == null) {
+            return;
+        }
+        
+        StringBuilder hexString = new StringBuilder();
+        int limit = Math.min(bytes.length, 100); // 只打印前100个字节
+        for (int i = 0; i < limit; i++) {
+            hexString.append(String.format("%02X ", bytes[i]));
+        }
+        Log.d(TAG, "原始元数据字节（前100字节）: " + hexString.toString());
+        Log.d(TAG, "元数据长度: " + bytes.length);
+    }
+    
+    /**
+     * 尝试UTF-8解码
+     */
+    private String tryUtf8Decoding(byte[] bytes) {
+        try {
+            // 首先检查字节序列是否为有效的UTF-8
+            if (isValidUtf8(bytes)) {
+                String result = new String(bytes, "UTF-8");
+                
+                // 检查UTF-8解码是否产生了合理的中文字符
+                int chineseCharCount = 0;
+                int halfWidthKatakanaCount = 0;
+                int invalidCharCount = 0;
+                
+                for (int i = 0; i < result.length(); i++) {
+                    char c = result.charAt(i);
+                    if ((c >= 0x4E00 && c <= 0x9FFF) || // CJK统一汉字
+                        (c >= 0x3400 && c <= 0x4DBF) || // CJK扩展A
+                        (c >= 0xF900 && c <= 0xFAFF)) {  // CJK兼容汉字
+                        chineseCharCount++;
+                    }
+                    // 检查半角片假名字符（这些通常是编码错误的标志）
+                    if (c >= 0xFF66 && c <= 0xFF9F) {
+                        halfWidthKatakanaCount++;
+                    }
+                    // 检查其他可能的乱码字符
+                    if (c == 0xFFFD || // 替换字符
+                        (c >= 0x80 && c <= 0xFF) || // 可能是编码错误的Latin-1字符
+                        (c >= 0x2500 && c <= 0x257F)) { // 制表符字符，可能是编码错误
+                        invalidCharCount++;
+                    }
+                }
+                
+                // 如果UTF-8解码产生了中文字符，且没有明显的编码错误标志，直接返回结果
+                if (chineseCharCount > 0 && halfWidthKatakanaCount == 0 && invalidCharCount == 0) {
+                    Log.i(TAG, "UTF-8解码成功，检测到中文字符数: " + chineseCharCount + ", 结果: " + result);
+                    return result;
+                }
+                
+                // 如果检测到半角片假名字符或其他无效字符，可能是编码问题，尝试其他编码
+                if (halfWidthKatakanaCount > 0 || invalidCharCount > 0) {
+                    Log.i(TAG, "UTF-8解码检测到可能的编码错误标志 - 半角片假名: " + halfWidthKatakanaCount + 
+                          ", 无效字符: " + invalidCharCount + "，尝试其他编码");
+                    // 不返回，继续尝试其他解码方法
+                    return null; // 强制不使用UTF-8解码结果
+                }
+                
+                // 尝试强制UTF-8解码，处理可能被错误标记的字节序列
+                if (!isValidDecodedText(result)) {
+                    // 尝试修复常见的编码问题
+                    String repaired = tryRepairCommonEncodingIssues(bytes);
+                    if (repaired != null && containsChineseCharacters(repaired)) {
+                        Log.i(TAG, "修复编码问题成功，检测到中文字符: " + repaired);
+                        return repaired;
+                    }
+                }
+                
+                if (isValidDecodedText(result)) {
+                    return result;
+                }
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "UTF-8解码失败: " + e.getMessage());
+        }
+        return null;
+    }
+    
+    /**
+     * 检查字节序列是否为有效的UTF-8
+     */
+    private boolean isValidUtf8(byte[] bytes) {
+        if (bytes == null) {
+            return false;
+        }
+        
+        int i = 0;
+        while (i < bytes.length) {
+            byte b = bytes[i++];
+            
+            // ASCII字符 (0xxxxxxx)
+            if ((b & 0x80) == 0) {
+                continue;
+            }
+            
+            // 多字节UTF-8字符
+            int expectedBytes;
+            if ((b & 0xE0) == 0xC0) {
+                // 2字节字符 (110xxxxx)
+                expectedBytes = 1;
+            } else if ((b & 0xF0) == 0xE0) {
+                // 3字节字符 (1110xxxx)
+                expectedBytes = 2;
+            } else if ((b & 0xF8) == 0xF0) {
+                // 4字节字符 (11110xxx)
+                expectedBytes = 3;
+            } else {
+                // 无效的UTF-8起始字节
+                return false;
+            }
+            
+            // 检查后续字节是否为10xxxxxx格式
+            for (int j = 0; j < expectedBytes; j++) {
+                if (i >= bytes.length || (bytes[i] & 0xC0) != 0x80) {
+                    return false;
+                }
+                i++;
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * 使用语言特征检测编码
+     */
+    private String detectLanguage(byte[] bytes) {
+        // 检测中文（简体/繁体）
+        String chineseResult = detectChinese(bytes);
+        if (chineseResult != null) {
+            return chineseResult;
+        }
+        
+        // 检测日语
+        String japaneseResult = detectJapanese(bytes);
+        if (japaneseResult != null) {
+            return japaneseResult;
+        }
+        
+        // 检测韩语
+        String koreanResult = detectKorean(bytes);
+        if (koreanResult != null) {
+            return koreanResult;
+        }
+        
+        // 检测西欧语言
+        String westernResult = detectWestern(bytes);
+        if (westernResult != null) {
+            return westernResult;
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 检测中文编码
+     */
+    private String detectChinese(byte[] bytes) {
+        // 优先尝试中文编码，调整顺序为UTF-8、GBK、GB2312、Big5
+        // UTF-8放在最前面，因为它是现代网络流媒体最常用的编码
+        String[] chineseCharsets = {"UTF-8", "GBK", "GB2312", "Big5"};
+        
+        for (String charset : chineseCharsets) {
+            try {
+                String result = new String(bytes, charset);
+                if (containsChineseCharacters(result) && isValidDecodedText(result)) {
+                    // 计算中文字符比例
+                    int chineseCharCount = 0;
+                    for (int i = 0; i < result.length(); i++) {
+                        char c = result.charAt(i);
+                        if ((c >= 0x4E00 && c <= 0x9FFF) || // CJK统一汉字
+                            (c >= 0x3400 && c <= 0x4DBF) || // CJK扩展A
+                            (c >= 0xF900 && c <= 0xFAFF)) {  // CJK兼容汉字
+                            chineseCharCount++;
+                        }
+                    }
+                    
+                    double chineseCharRatio = (double) chineseCharCount / result.length();
+                    // 如果中文字符比例超过30%，认为这是一个有效的中文编码结果
+                    if (chineseCharRatio > 0.3) {
+                        Log.i(TAG, "检测到中文编码: " + charset + ", 结果: " + result + 
+                              ", 中文字符比例: " + String.format("%.2f", chineseCharRatio));
+                        return result;
+                    }
+                }
+            } catch (Exception e) {
+                Log.d(TAG, "尝试" + charset + "编码失败: " + e.getMessage());
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 检测日语编码
+     */
+    private String detectJapanese(byte[] bytes) {
+        String[] japaneseCharsets = {"Shift_JIS", "EUC-JP", "UTF-8"};
+        
+        for (String charset : japaneseCharsets) {
+            try {
+                String result = new String(bytes, charset);
+                if (containsJapaneseCharacters(result) && isValidDecodedText(result)) {
+                    if (BuildConfig.DEBUG) {
+                        Log.d(TAG, "检测到日语编码: " + charset + ", 结果: " + result);
+                    }
+                    return result;
+                }
+            } catch (Exception e) {
+                // 继续尝试下一个编码
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 检测韩语编码
+     */
+    private String detectKorean(byte[] bytes) {
+        String[] koreanCharsets = {"EUC-KR", "UTF-8"};
+        
+        for (String charset : koreanCharsets) {
+            try {
+                String result = new String(bytes, charset);
+                if (containsKoreanCharacters(result) && isValidDecodedText(result)) {
+                    if (BuildConfig.DEBUG) {
+                        Log.d(TAG, "检测到韩语编码: " + charset + ", 结果: " + result);
+                    }
+                    return result;
+                }
+            } catch (Exception e) {
+                // 继续尝试下一个编码
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 检测西欧语言编码
+     */
+    private String detectWestern(byte[] bytes) {
+        String[] westernCharsets = {"ISO-8859-1", "windows-1252", "ISO-8859-15"};
+        
+        for (String charset : westernCharsets) {
+            try {
+                String result = new String(bytes, charset);
+                if (containsWesternCharacters(result) && isValidDecodedText(result)) {
+                    if (BuildConfig.DEBUG) {
+                        Log.d(TAG, "检测到西欧编码: " + charset + ", 结果: " + result);
+                    }
+                    return result;
+                }
+            } catch (Exception e) {
+                // 继续尝试下一个编码
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 尝试所有编码并选择最佳结果
+     */
+    private String tryAllEncodings(byte[] bytes) {
+        // 优先尝试UTF-8编码，因为它是现代网络流媒体最常用的编码
+        String[] allCharsets = {
+            "UTF-8", "GBK", "GB2312", "Big5", "ISO-8859-1", "windows-1252",
+            "x-windows-950", "x-windows-936", "Shift_JIS", "EUC-JP", "EUC-KR", 
+            "ISO-8859-15", "ASCII"
+        };
+        
+        String bestResult = "";
+        int bestScore = -1;
+        String bestCharset = "";
+        
+        // 打印原始字节数据，用于调试
+        StringBuilder hexString = new StringBuilder();
+        for (int j = 0; j < Math.min(bytes.length, 50); j++) {
+            hexString.append(String.format("%02X ", bytes[j]));
+        }
+        Log.i(TAG, "tryAllEncodings - 原始字节数据（前50字节）: " + hexString.toString());
+        
+        for (String charset : allCharsets) {
+            try {
+                String result = new String(bytes, charset);
+                int score = calculateDecodingQuality(result, charset);
+                
+                // 总是输出调试信息，以便诊断编码问题
+                Log.i(TAG, charset + "解码结果: " + result + ", 分数: " + score);
+                
+                // 检查是否包含中文字符
+                boolean hasChinese = containsChineseCharacters(result);
+                if (hasChinese) {
+                    Log.i(TAG, charset + "解码结果包含中文字符");
+                    // 对于中文编码，如果包含中文字符，额外加分
+                    if (charset.equals("GBK") || charset.equals("GB2312") || charset.equals("Big5")) {
+                        score += 50; // 中文编码成功解码中文字符，大幅加分
+                        Log.i(TAG, charset + "是中文编码且成功解码中文字符，额外加分50");
+                    }
+                }
+                
+                // 检查是否包含大量特殊字符（可能是错误编码的标志）
+                int specialCharCount = countSpecialCharacters(result);
+                double specialRatio = (double) specialCharCount / result.length();
+                Log.i(TAG, charset + "解码结果特殊字符比例: " + String.format("%.2f", specialRatio));
+                
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestResult = result;
+                    bestCharset = charset;
+                }
+            } catch (Exception e) {
+                Log.i(TAG, charset + "解码失败: " + e.getMessage());
+            }
+        }
+        
+        // 总是输出最佳编码选择信息
+        Log.i(TAG, "选择最佳编码: " + bestCharset + ", 分数: " + bestScore + ", 结果: " + bestResult);
+        
+        return bestResult;
+    }
+    
+    /**
+     * 检查文本是否包含中文字符
+     */
+    private boolean containsChineseCharacters(String text) {
+        if (text == null || text.isEmpty()) {
+            return false;
+        }
+        
+        int chineseCharCount = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if ((c >= 0x4E00 && c <= 0x9FFF) || // CJK统一汉字
+                (c >= 0x3400 && c <= 0x4DBF) || // CJK扩展A
+                (c >= 0xF900 && c <= 0xFAFF)) {  // CJK兼容汉字
+                chineseCharCount++;
+            }
+        }
+        
+        // 如果中文字符占比超过10%，认为包含中文
+        return (double) chineseCharCount / text.length() > 0.1;
+    }
+    
+    /**
+     * 计算文本中特殊字符的数量
+     * 特殊字符定义为：非字母数字、非空格、非常见标点符号的字符
+     */
+    private int countSpecialCharacters(String text) {
+        if (text == null || text.isEmpty()) {
+            return 0;
+        }
+        
+        int specialCharCount = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            // 如果不是字母数字、空格、常见标点符号，则认为是特殊字符
+            if (!Character.isLetterOrDigit(c) && 
+                !Character.isWhitespace(c) && 
+                c != '-' && c != '(' && c != ')' && c != '[' && c != ']' && 
+                c != '.' && c != ',' && c != '!' && c != '?' && c != '\'' && c != '\"') {
+                specialCharCount++;
+            }
+        }
+        
+        return specialCharCount;
+    }
+    
+    /**
+     * 检查文本是否包含日文字符
+     */
+    private boolean containsJapaneseCharacters(String text) {
+        if (text == null || text.isEmpty()) {
+            return false;
+        }
+        
+        int japaneseCharCount = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if ((c >= 0x3040 && c <= 0x309F) || // 平假名
+                (c >= 0x30A0 && c <= 0x30FF) || // 片假名
+                (c >= 0x4E00 && c <= 0x9FFF) || // CJK统一汉字（包含日文汉字）
+                (c >= 0xFF66 && c <= 0xFF9F)) {  // 半角片假名
+                japaneseCharCount++;
+            }
+        }
+        
+        // 如果日文字符占比超过10%，认为包含日文
+        return (double) japaneseCharCount / text.length() > 0.1;
+    }
+    
+    /**
+     * 检查文本是否包含韩文字符
+     */
+    private boolean containsKoreanCharacters(String text) {
+        if (text == null || text.isEmpty()) {
+            return false;
+        }
+        
+        int koreanCharCount = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if ((c >= 0xAC00 && c <= 0xD7AF) || // 韩文音节
+                (c >= 0x1100 && c <= 0x11FF) || // 韩文字母
+                (c >= 0x3130 && c <= 0x318F)) {  // 韩文兼容字母
+                koreanCharCount++;
+            }
+        }
+        
+        // 如果韩文字符占比超过10%，认为包含韩文
+        return (double) koreanCharCount / text.length() > 0.1;
+    }
+    
+    /**
+     * 检查文本是否包含西欧字符
+     */
+    private boolean containsWesternCharacters(String text) {
+        if (text == null || text.isEmpty()) {
+            return false;
+        }
+        
+        int westernCharCount = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            // 检查是否是西欧字符（包括扩展拉丁字母）
+            if ((c >= 0x0080 && c <= 0x00FF) || // Latin-1补充
+                (c >= 0x0100 && c <= 0x017F) || // Latin扩展A
+                (c >= 0x0180 && c <= 0x024F) || // Latin扩展B
+                (c >= 0x1E00 && c <= 0x1EFF)) { // Latin扩展附加
+                westernCharCount++;
+            }
+        }
+        
+        // 如果西欧字符占比超过10%，认为包含西欧字符
+        return (double) westernCharCount / text.length() > 0.1;
+    }
+    
+    /**
+     * 尝试额外的解码方法，专门处理包含问号的元数据
+     */
+    private String tryAlternativeDecoding(String metadata) {
+        if (metadata == null || metadata.isEmpty()) {
+            return metadata;
+        }
+        
+        // 获取原始字节数据
+        byte[] originalBytes = metadata.getBytes(java.nio.charset.StandardCharsets.ISO_8859_1);
+        
+        // 记录原始数据中的问号位置
+        StringBuilder questionMarkPositions = new StringBuilder();
+        for (int i = 0; i < originalBytes.length; i++) {
+            if (originalBytes[i] == 0x3F) { // 问号的ASCII值
+                questionMarkPositions.append(i).append(" ");
+            }
+        }
+        Log.d(TAG, "tryAlternativeDecoding - 原始数据中问号位置: " + questionMarkPositions.toString());
+        
+        // 尝试修复常见的编码问题
+        String repaired = tryRepairCommonEncodingIssues(originalBytes);
+        if (repaired != null && !repaired.contains("?")) {
+            Log.d(TAG, "tryAlternativeDecoding - 修复编码问题成功: " + repaired);
+            return repaired;
+        }
+        
+        // 尝试特殊字符替换
+        String withReplacements = replaceProblematicCharacters(metadata);
+        Log.d(TAG, "tryAlternativeDecoding - 特殊字符替换结果: " + withReplacements);
+        
+        // 如果仍然包含大量问号，尝试更激进的修复方法
+        if (containsTooManyQuestionMarks(withReplacements)) {
+            Log.d(TAG, "tryAlternativeDecoding - 检测到大量问号，尝试激进修复");
+            String aggressiveResult = tryAggressiveQuestionMarkRepair(originalBytes);
+            if (aggressiveResult != null && !aggressiveResult.equals(withReplacements)) {
+                Log.d(TAG, "tryAlternativeDecoding - 激进修复结果: " + aggressiveResult);
+                return aggressiveResult;
+            }
+        }
+        
+        return withReplacements;
+    }
+    
+    /**
+     * 尝试修复常见的编码问题
+     */
+    private String tryRepairCommonEncodingIssues(byte[] bytes) {
+        // 优先尝试中文编码修复
+        // 尝试修复GBK被误解析为UTF-8的问题
+        try {
+            // 将字节作为GBK解码
+            String gbkResult = new String(bytes, "GBK");
+            
+            // 检查结果是否有效
+            if (isValidDecodedText(gbkResult) && containsChineseCharacters(gbkResult)) {
+                Log.d(TAG, "tryRepairCommonEncodingIssues - GBK解码成功: " + gbkResult);
+                return gbkResult;
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "tryRepairCommonEncodingIssues - GBK解码失败: " + e.getMessage());
+        }
+        
+        // 尝试修复GB2312被误解析为UTF-8的问题
+        try {
+            // 将字节作为GB2312解码
+            String gb2312Result = new String(bytes, "GB2312");
+            
+            // 检查结果是否有效
+            if (isValidDecodedText(gb2312Result) && containsChineseCharacters(gb2312Result)) {
+                Log.d(TAG, "tryRepairCommonEncodingIssues - GB2312解码成功: " + gb2312Result);
+                return gb2312Result;
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "tryRepairCommonEncodingIssues - GB2312解码失败: " + e.getMessage());
+        }
+        
+        // 尝试修复Big5被误解析为UTF-8的问题
+        try {
+            // 将字节作为Big5解码
+            String big5Result = new String(bytes, "Big5");
+            
+            // 检查结果是否有效
+            if (isValidDecodedText(big5Result) && containsChineseCharacters(big5Result)) {
+                Log.d(TAG, "tryRepairCommonEncodingIssues - Big5解码成功: " + big5Result);
+                return big5Result;
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "tryRepairCommonEncodingIssues - Big5解码失败: " + e.getMessage());
+        }
+        
+        // 尝试修复双编码问题（例如UTF-8被错误地编码为ISO-8859-1，然后又作为UTF-8处理）
+        try {
+            // 第一次解码：假设字节是ISO-8859-1编码的UTF-8字节
+            String step1 = new String(bytes, "ISO-8859-1");
+            byte[] step2Bytes = step1.getBytes("ISO-8859-1");
+            
+            // 第二次解码：将字节作为UTF-8解码
+            String result = new String(step2Bytes, "UTF-8");
+            
+            // 检查结果是否有效
+            if (isValidDecodedText(result) && !result.contains("?")) {
+                Log.d(TAG, "tryRepairCommonEncodingIssues - 双UTF-8编码修复成功: " + result);
+                return result;
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "tryRepairCommonEncodingIssues - 双UTF-8编码修复失败: " + e.getMessage());
+        }
+        
+        // 尝试修复Shift_JIS编码问题（仅在检测到可能的日文字符时）
+        try {
+            // 将字节作为Shift_JIS解码
+            String shiftJisResult = new String(bytes, "Shift_JIS");
+            
+            // 检查结果是否有效且包含日文字符
+            if (isValidDecodedText(shiftJisResult) && containsJapaneseCharacters(shiftJisResult)) {
+                Log.d(TAG, "tryRepairCommonEncodingIssues - Shift_JIS解码成功: " + shiftJisResult);
+                return shiftJisResult;
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "tryRepairCommonEncodingIssues - Shift_JIS解码失败: " + e.getMessage());
+        }
+        
+        // 尝试修复EUC-JP编码问题（仅在检测到可能的日文字符时）
+        try {
+            // 将字节作为EUC-JP解码
+            String eucJpResult = new String(bytes, "EUC-JP");
+            
+            // 检查结果是否有效且包含日文字符
+            if (isValidDecodedText(eucJpResult) && containsJapaneseCharacters(eucJpResult)) {
+                Log.d(TAG, "tryRepairCommonEncodingIssues - EUC-JP解码成功: " + eucJpResult);
+                return eucJpResult;
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "tryRepairCommonEncodingIssues - EUC-JP解码失败: " + e.getMessage());
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 替换有问题的字符
+     */
+    private String replaceProblematicCharacters(String metadata) {
+        if (metadata == null || metadata.isEmpty()) {
+            return metadata;
+        }
+        
+        StringBuilder result = new StringBuilder();
+        
+        for (int i = 0; i < metadata.length(); i++) {
+            char c = metadata.charAt(i);
+            
+            // 替换问号为空格（如果问号不是原始字符的一部分）
+            if (c == '?') {
+                // 检查前后字符，如果看起来像是编码错误的结果，则替换为空格
+                boolean replaceWithSpace = false;
+                
+                if (i > 0 && i < metadata.length() - 1) {
+                    char prev = metadata.charAt(i - 1);
+                    char next = metadata.charAt(i + 1);
+                    
+                    // 如果前后都是拉丁字符或中文字符，中间的问号可能是编码错误
+                    if ((isLatinCharacter(prev) || isChineseCharacter(prev)) && 
+                        (isLatinCharacter(next) || isChineseCharacter(next))) {
+                        replaceWithSpace = true;
+                    }
+                }
+                
+                if (replaceWithSpace) {
+                    result.append(' ');
+                } else {
+                    result.append(c);
+                }
+            } else {
+                result.append(c);
+            }
+        }
+        
+        return result.toString();
+    }
+    
+    /**
+     * 检查字符是否是拉丁字符
+     */
+    private boolean isLatinCharacter(char c) {
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+    }
+    
+    /**
+     * 检查字符是否是中文字符
+     */
+    private boolean isChineseCharacter(char c) {
+        return (c >= 0x4E00 && c <= 0x9FFF) || // CJK统一汉字
+               (c >= 0x3400 && c <= 0x4DBF) || // CJK扩展A
+               (c >= 0xF900 && c <= 0xFAFF);   // CJK兼容汉字
+    }
+    
+    /**
+     * 检查文本是否包含过多问号
+     */
+    private boolean containsTooManyQuestionMarks(String text) {
+        if (text == null || text.isEmpty()) {
+            return false;
+        }
+        
+        int questionMarkCount = 0;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '?') {
+                questionMarkCount++;
+            }
+        }
+        
+        // 如果问号比例超过30%，认为包含过多问号
+        double ratio = (double) questionMarkCount / text.length();
+        
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "containsTooManyQuestionMarks - 问号数量: " + questionMarkCount + 
+                  ", 总长度: " + text.length() + 
+                  ", 比例: " + String.format("%.2f", ratio) + 
+                  ", 阈值: 0.30");
+        }
+        
+        return ratio > 0.3;
+    }
+    
+    /**
+     * 尝试激进修复问号问题
+     */
+    private String tryAggressiveQuestionMarkRepair(byte[] originalBytes) {
+        if (originalBytes == null || originalBytes.length == 0) {
+            return null;
+        }
+        
+        // 方法1: 尝试多种编码组合
+        String[] encodings = {"UTF-8", "GBK", "Big5", "ISO-8859-1", "windows-1252", "Shift_JIS"};
+        
+        for (String encoding1 : encodings) {
+            try {
+                String step1 = new String(originalBytes, encoding1);
+                byte[] step2Bytes = step1.getBytes("ISO-8859-1");
+                
+                for (String encoding2 : encodings) {
+                    try {
+                        String result = new String(step2Bytes, encoding2);
+                        
+                        // 检查结果是否有效
+                        if (isValidDecodedText(result)) {
+                            // 计算问号比例
+                            int questionMarkCount = 0;
+                            for (int i = 0; i < result.length(); i++) {
+                                if (result.charAt(i) == '?') {
+                                    questionMarkCount++;
+                                }
+                            }
+                            double ratio = (double) questionMarkCount / result.length();
+                            
+                            // 如果问号比例低于原始数据，认为修复有效
+                            if (ratio < 0.5) {
+                                if (BuildConfig.DEBUG) {
+                                    Log.d(TAG, "tryAggressiveQuestionMarkRepair - 编码组合成功: " + 
+                                          encoding1 + " -> " + encoding2 + 
+                                          ", 结果: " + result + 
+                                          ", 问号比例: " + String.format("%.2f", ratio));
+                                }
+                                return result;
+                            }
+                        }
+                    } catch (Exception e) {
+                        // 忽略异常，继续尝试下一个编码
+                    }
+                }
+            } catch (Exception e) {
+                // 忽略异常，继续尝试下一个编码
+            }
+        }
+        
+        // 方法2: 尝试智能字符替换
+        try {
+            String baseString = new String(originalBytes, "ISO-8859-1");
+            StringBuilder result = new StringBuilder();
+            
+            for (int i = 0; i < baseString.length(); i++) {
+                char c = baseString.charAt(i);
+                
+                if (c == '?') {
+                    // 检查上下文，尝试智能替换
+                    if (i > 0 && i < baseString.length() - 1) {
+                        char prev = baseString.charAt(i - 1);
+                        char next = baseString.charAt(i + 1);
+                        
+                        // 如果前后是拉丁字符，替换为空格
+                        if (isLatinCharacter(prev) && isLatinCharacter(next)) {
+                            result.append(' ');
+                            continue;
+                        }
+                        
+                        // 如果前后是中文字符，尝试猜测可能的字符
+                        if (isChineseCharacter(prev) || isChineseCharacter(next)) {
+                            // 可以根据上下文猜测可能的字符，这里简单替换为空格
+                            result.append(' ');
+                            continue;
+                        }
+                    }
+                    
+                    // 单独的问号或者无法确定上下文，保留
+                    result.append('?');
+                } else {
+                    result.append(c);
+                }
+            }
+            
+            String repaired = result.toString();
+            if (!repaired.equals(baseString)) {
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, "tryAggressiveQuestionMarkRepair - 智能替换结果: " + repaired);
+                }
+                return repaired;
+            }
+        } catch (Exception e) {
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "tryAggressiveQuestionMarkRepair - 智能替换失败: " + e.getMessage());
+            }
+        }
+        
+        return null;
     }
 }

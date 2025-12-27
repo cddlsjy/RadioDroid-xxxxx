@@ -104,6 +104,10 @@ public class StationSaveManager extends Observable {
     }
 
     public void addMultiple(List<DataRadioStation> stations) {
+        // 清空现有列表
+        listStations.clear();
+        
+        // 添加新导入的电台
         for (DataRadioStation station_new: stations){
             listStations.add(station_new);
         }

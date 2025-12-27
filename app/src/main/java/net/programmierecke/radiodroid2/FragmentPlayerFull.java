@@ -460,11 +460,37 @@ public class FragmentPlayerFull extends Fragment {
 
             final StreamLiveInfo liveInfo = PlayerServiceUtil.getMetadataLive();
             String streamTitle = liveInfo.getTitle();
+            
+            // 使用解析后的艺术家和歌曲信息，而不是原始标题
+            String displayText = "";
+            String displayTextForAccessibility = "";
+            
+            if (liveInfo.hasArtistAndTrack()) {
+                displayText = liveInfo.getArtist() + " - " + liveInfo.getTrack();
+                // 为无障碍服务提供更详细的信息
+                displayTextForAccessibility = "正在播放：" + liveInfo.getArtist() + "的歌曲" + liveInfo.getTrack();
+                
+                // 如果艺术家或歌曲名包含"未知"信息，提供更友好的提示
+                if (liveInfo.getArtist().equals("未知艺术家") && !liveInfo.getTrack().equals("未知歌曲")) {
+                    displayTextForAccessibility = "正在播放：" + liveInfo.getTrack() + "，艺术家信息未知";
+                } else if (!liveInfo.getArtist().equals("未知艺术家") && liveInfo.getTrack().equals("未知歌曲")) {
+                    displayTextForAccessibility = "正在播放" + liveInfo.getArtist() + "的歌曲，歌曲名信息未知";
+                } else if (liveInfo.getArtist().equals("未知艺术家") && liveInfo.getTrack().equals("未知歌曲")) {
+                    displayTextForAccessibility = "正在播放音乐，艺术家和歌曲信息未知";
+                }
+            } else if (!TextUtils.isEmpty(streamTitle)) {
+                displayText = streamTitle;
+                displayTextForAccessibility = "正在播放：" + streamTitle;
+            }
 
-            if (!TextUtils.isEmpty(streamTitle)) {
-                textViewGeneralInfo.setText(streamTitle);
+            if (!TextUtils.isEmpty(displayText)) {
+                textViewGeneralInfo.setText(displayText);
+                // 设置无障碍内容描述
+                textViewGeneralInfo.setContentDescription(displayTextForAccessibility);
             } else {
                 textViewGeneralInfo.setText(station.Name);
+                // 设置无障碍内容描述
+                textViewGeneralInfo.setContentDescription("正在收听" + station.Name + "电台");
             }
 
             Drawable flag = CountryFlagsLoader.getInstance().getFlag(requireContext(), station.CountryCode);

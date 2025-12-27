@@ -232,9 +232,25 @@ public class FragmentPlayerSmall extends Fragment {
         if (PlayerServiceUtil.isPlaying()) {
             buttonPlay.setImageResource(R.drawable.ic_pause_circle);
             buttonPlay.setContentDescription(getResources().getString(R.string.detail_pause));
+            
+            // 为无障碍服务提供更多上下文
+            DataRadioStation station = Utils.getCurrentOrLastStation(requireContext());
+            if (station != null) {
+                buttonPlay.setContentDescription("暂停播放" + station.Name + "电台");
+            } else {
+                buttonPlay.setContentDescription("暂停播放");
+            }
         } else {
             buttonPlay.setImageResource(R.drawable.ic_play_circle);
             buttonPlay.setContentDescription(getResources().getString(R.string.detail_play));
+            
+            // 为无障碍服务提供更多上下文
+            DataRadioStation station = Utils.getCurrentOrLastStation(requireContext());
+            if (station != null) {
+                buttonPlay.setContentDescription("播放" + station.Name + "电台");
+            } else {
+                buttonPlay.setContentDescription("播放电台");
+            }
         }
 
         DataRadioStation station = Utils.getCurrentOrLastStation(requireContext());
@@ -242,12 +258,54 @@ public class FragmentPlayerSmall extends Fragment {
         final String stationName = station != null ? station.Name : "";
 
         textViewStationName.setText(stationName);
+        
+        // 为无障碍服务提供更多上下文信息
+        if (station != null) {
+            String stationDescription = stationName + "电台";
+            if (!TextUtils.isEmpty(station.Country)) {
+                stationDescription += "，来自" + station.Country;
+            }
+            if (!TextUtils.isEmpty(station.TagsAll)) {
+                String[] tags = station.TagsAll.split(",");
+                if (tags.length > 0) {
+                    stationDescription += "，类型：" + tags[0];
+                }
+            }
+            textViewStationName.setContentDescription(stationDescription);
+        } else {
+            textViewStationName.setContentDescription("未选择电台");
+        }
 
         StreamLiveInfo liveInfo = PlayerServiceUtil.getMetadataLive();
         String streamTitle = liveInfo.getTitle();
-        if (!TextUtils.isEmpty(streamTitle)) {
+        
+        // 使用解析后的艺术家和歌曲信息，而不是原始标题
+        String displayText = "";
+        String displayTextForAccessibility = "";
+        
+        if (liveInfo.hasArtistAndTrack()) {
+            displayText = liveInfo.getArtist() + " - " + liveInfo.getTrack();
+            // 为无障碍服务提供更详细的信息
+            displayTextForAccessibility = "正在播放：" + liveInfo.getArtist() + "的歌曲" + liveInfo.getTrack();
+            
+            // 如果艺术家或歌曲名包含"未知"信息，提供更友好的提示
+            if (liveInfo.getArtist().equals("未知艺术家") && !liveInfo.getTrack().equals("未知歌曲")) {
+                displayTextForAccessibility = "正在播放：" + liveInfo.getTrack() + "，艺术家信息未知";
+            } else if (!liveInfo.getArtist().equals("未知艺术家") && liveInfo.getTrack().equals("未知歌曲")) {
+                displayTextForAccessibility = "正在播放" + liveInfo.getArtist() + "的歌曲，歌曲名信息未知";
+            } else if (liveInfo.getArtist().equals("未知艺术家") && liveInfo.getTrack().equals("未知歌曲")) {
+                displayTextForAccessibility = "正在播放音乐，艺术家和歌曲信息未知";
+            }
+        } else if (!TextUtils.isEmpty(streamTitle)) {
+            displayText = streamTitle;
+            displayTextForAccessibility = "正在播放：" + streamTitle;
+        }
+        
+        if (!TextUtils.isEmpty(displayText)) {
             textViewLiveInfo.setVisibility(View.VISIBLE);
-            textViewLiveInfo.setText(streamTitle);
+            textViewLiveInfo.setText(displayText);
+            // 设置无障碍内容描述
+            textViewLiveInfo.setContentDescription(displayTextForAccessibility);
             textViewStationName.setGravity(Gravity.BOTTOM);
         } else {
             textViewLiveInfo.setVisibility(View.GONE);
