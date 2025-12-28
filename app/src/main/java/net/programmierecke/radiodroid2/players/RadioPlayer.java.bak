@@ -70,6 +70,7 @@ public class RadioPlayer implements PlayerWrapper.PlayListener, Recordable {
 
             playerListener.onBufferedTimeUpdate(bufferTimeMs);
 
+            if (BuildConfig.DEBUG) Log.d(TAG, String.format("buffered %d ms.", bufferTimeMs));
 
             playerThreadHandler.postDelayed(this, 2000);
         }
@@ -258,6 +259,7 @@ public class RadioPlayer implements PlayerWrapper.PlayListener, Recordable {
     }
 
     private void setState(PlayState state, int audioSessionId) {
+        if (BuildConfig.DEBUG) Log.d(TAG, String.format("set state '%s'", state.name()));
 
         if (playState == state) {
             return;
@@ -273,7 +275,9 @@ public class RadioPlayer implements PlayerWrapper.PlayListener, Recordable {
         }
 
         playState = state;
+        Log.d("RadioPlayer", "Calling playerListener.onStateChanged with state: " + state);
         playerListener.onStateChanged(state, audioSessionId);
+        Log.d("RadioPlayer", "playerListener.onStateChanged completed");
     }
 
     public long getTotalTransferredBytes() {

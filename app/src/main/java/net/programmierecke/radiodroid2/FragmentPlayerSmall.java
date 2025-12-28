@@ -76,9 +76,11 @@ public class FragmentPlayerSmall extends Fragment {
 //                    }
                     case PlayerService.PLAYER_SERVICE_STATE_CHANGE: {
                         fullUpdate();
+                        break;
                     }
                     case PlayerService.PLAYER_SERVICE_META_UPDATE: {
                         fullUpdate();
+                        break;
                     }
                     case PlayerService.PLAYER_SERVICE_BOUND: {
                         tryPlayAtStart();

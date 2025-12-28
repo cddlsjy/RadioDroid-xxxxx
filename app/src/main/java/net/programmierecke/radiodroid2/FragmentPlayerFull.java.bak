@@ -167,9 +167,11 @@ public class FragmentPlayerFull extends Fragment {
 //                        break;
 //                    }
                     case PlayerService.PLAYER_SERVICE_STATE_CHANGE: {
-                        
+                        Log.d("FragmentPlayerFull", "Received PLAYER_SERVICE_STATE_CHANGE");
+                        Log.d("FragmentPlayerFull", "isPlaying: " + PlayerServiceUtil.isPlaying());
+                        Log.d("FragmentPlayerFull", "Calling fullUpdate()");
                         fullUpdate();
-                        
+                        Log.d("FragmentPlayerFull", "fullUpdate() completed");
                         break;
                     }
                     case PlayerService.PLAYER_SERVICE_META_UPDATE: {
@@ -312,19 +314,20 @@ public class FragmentPlayerFull extends Fragment {
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+                Log.d("FragmentPlayerFull", "Play button clicked");
+                Log.d("FragmentPlayerFull", "Before click - isPlaying: " + PlayerServiceUtil.isPlaying());
                 
                 if (PlayerServiceUtil.isPlaying()) {
-                    
+                    Log.d("FragmentPlayerFull", "Pausing playback");
                     if (PlayerServiceUtil.isRecording()) {
-                        
+                        Log.d("FragmentPlayerFull", "Stopping recording");
                         PlayerServiceUtil.stopRecording();
                         updateRunningRecording();
                     }
 
                     PlayerServiceUtil.pause(PauseReason.USER);
                 } else {
-                    
+                    Log.d("FragmentPlayerFull", "Starting playback");
                     playLastFromHistory();
                 }
                 
@@ -332,7 +335,7 @@ public class FragmentPlayerFull extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        
+                        Log.d("FragmentPlayerFull", "After click delay - isPlaying: " + PlayerServiceUtil.isPlaying());
                     }
                 }, 500);
             }
@@ -405,7 +408,8 @@ public class FragmentPlayerFull extends Fragment {
     }
 
     private void startUpdating() {
-        
+        Log.d("FragmentPlayerFull", "startUpdating called");
+        Log.d("FragmentPlayerFull", "isVisible: " + isVisible());
         // Temporarily remove visibility check to ensure broadcast receiver is registered
         // if (!isVisible()) {
         //     Log.d("FragmentPlayerFull", "Fragment not visible, returning early");
@@ -422,9 +426,9 @@ public class FragmentPlayerFull extends Fragment {
         filter.addAction(PlayerService.PLAYER_SERVICE_STATE_CHANGE);
         filter.addAction(PlayerService.PLAYER_SERVICE_META_UPDATE);
 
-        
+        Log.d("FragmentPlayerFull", "Registering updateUIReceiver");
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(updateUIReceiver, filter);
-        
+        Log.d("FragmentPlayerFull", "updateUIReceiver registered");
 
         recordingsManager.getSavedRecordingsObservable().addObserver(recordingsObserver);
 
@@ -541,13 +545,13 @@ public class FragmentPlayerFull extends Fragment {
         updateRecordings();
         
         // 直接更新播放按钮，类似于小播放器的实现
-        
+        Log.d("FragmentPlayerFull", "fullUpdate: updating play button, isPlaying: " + PlayerServiceUtil.isPlaying());
         if (PlayerServiceUtil.isPlaying()) {
-            
+            Log.d("FragmentPlayerFull", "fullUpdate: Setting pause icon");
             btnPlay.setImageResource(R.drawable.ic_pause_circle);
             btnPlay.setContentDescription(getResources().getString(R.string.detail_pause));
         } else {
-            
+            Log.d("FragmentPlayerFull", "fullUpdate: Setting play icon");
             btnPlay.setImageResource(R.drawable.ic_play_circle);
             btnPlay.setContentDescription(getResources().getString(R.string.detail_play));
         }
@@ -566,17 +570,18 @@ public class FragmentPlayerFull extends Fragment {
     }
 
     private void updatePlayButton(boolean playing) {
-        
+        Log.d("FragmentPlayerFull", "updatePlayButton called with playing: " + playing);
+        Log.d("FragmentPlayerFull", "updatePlayButton: btnPlay is null: " + (btnPlay == null));
         if (playing) {
-            
+            Log.d("FragmentPlayerFull", "Setting pause icon - button state before: " + btnPlay.getContentDescription());
             btnPlay.setImageResource(R.drawable.ic_pause_circle);
             btnPlay.setContentDescription(getResources().getString(R.string.detail_pause));
-            
+            Log.d("FragmentPlayerFull", "Setting pause icon - button state after: " + btnPlay.getContentDescription());
         } else {
-            
+            Log.d("FragmentPlayerFull", "Setting play icon - button state before: " + btnPlay.getContentDescription());
             btnPlay.setImageResource(R.drawable.ic_play_circle);
             btnPlay.setContentDescription(getResources().getString(R.string.detail_play));
-            
+            Log.d("FragmentPlayerFull", "Setting play icon - button state after: " + btnPlay.getContentDescription());
         }
     }
 
