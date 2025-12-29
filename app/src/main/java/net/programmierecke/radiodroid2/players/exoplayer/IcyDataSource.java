@@ -2,6 +2,7 @@ package net.programmierecke.radiodroid2.players.exoplayer;
 
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +12,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.TransferListener;
 
+import net.programmierecke.radiodroid2.BuildConfig;
 import net.programmierecke.radiodroid2.station.live.ShoutcastInfo;
 import net.programmierecke.radiodroid2.station.live.StreamLiveInfo;
 
@@ -207,7 +209,37 @@ public class IcyDataSource implements HttpDataSource {
                     offset += remainingUntilMetadata;
                     bytesAvailable -= remainingUntilMetadata;
                 }
-                metadataBytesToSkip = buffer[offset] * 16 + 1;
+                
+                // 读取metadata块的大小（第一个字节表示metadata块的大小，单位是16字节）
+                int metadataSizeByte = buffer[offset] & 0xFF;
+                metadataBytesToSkip = metadataSizeByte * 16 + 1; // +1 for the size byte itself
+                
+                // 如果metadata块大小大于0，则处理metadata块
+                if (metadataSizeByte > 0) {
+                    // 确保我们有足够的字节来读取完整的metadata块
+                    if (bytesAvailable >= metadataBytesToSkip) {
+                        // 提取metadata块（跳过大小字节）
+                        byte[] metadataBytes = new byte[metadataSizeByte * 16];
+                        System.arraycopy(buffer, offset + 1, metadataBytes, 0, metadataSizeByte * 16);
+                        
+                        // 处理metadata块
+                        processMetadataBlock(metadataBytes);
+                    } else {
+                        // 如果没有足够的字节，记录警告并跳过
+                        Log.w(TAG, "metadata块不完整，需要" + metadataBytesToSkip + "字节，但只有" + bytesAvailable + "字节可用");
+                        
+                        // 尝试读取可用的部分
+                        if (bytesAvailable > 1) { // 至少有大小字节+一些数据
+                            int availableDataSize = bytesAvailable - 1; // 减去大小字节
+                            byte[] partialMetadataBytes = new byte[availableDataSize];
+                            System.arraycopy(buffer, offset + 1, partialMetadataBytes, 0, availableDataSize);
+                            
+                            // 处理部分metadata块
+                            processMetadataBlock(partialMetadataBytes);
+                        }
+                    }
+                }
+                
                 remainingUntilMetadata = shoutcastInfo.metadataOffset + metadataBytesToSkip;
             }
 
@@ -222,6 +254,112 @@ public class IcyDataSource implements HttpDataSource {
             bytesAvailable -= bytesLeft;
             remainingUntilMetadata -= bytesLeft;
         }
+    }
+
+    /**
+     * 处理metadata块，提取并解析其中的信息
+     * @param metadataBytes metadata块的原始字节数据
+     */
+    private void processMetadataBlock(byte[] metadataBytes) {
+        if (metadataBytes == null || metadataBytes.length == 0) {
+            return;
+        }
+        
+        // 记录原始metadata字节数据
+        if (BuildConfig.DEBUG) {
+            StringBuilder hexString = new StringBuilder();
+            for (int i = 0; i < Math.min(metadataBytes.length, 100); i++) {
+                hexString.append(String.format("%02X ", metadataBytes[i]));
+            }
+            Log.d(TAG, "processMetadataBlock - 原始metadata字节数据（前100字节）: " + hexString.toString());
+            Log.d(TAG, "processMetadataBlock - metadata块长度: " + metadataBytes.length);
+        }
+        
+        // 处理metadata块，移除末尾的null字节
+        int actualLength = metadataBytes.length;
+        while (actualLength > 0 && metadataBytes[actualLength - 1] == 0) {
+            actualLength--;
+        }
+        
+        if (actualLength == 0) {
+            Log.d(TAG, "processMetadataBlock - metadata块为空或全是null字节");
+            return;
+        }
+        
+        // 将metadata块转换为字符串
+        String metadataString;
+        try {
+            // 尝试使用ISO-8859-1编码，这是ICY元数据的标准编码
+            metadataString = new String(metadataBytes, 0, actualLength, "ISO-8859-1");
+            
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "processMetadataBlock - metadata字符串: " + metadataString);
+                Log.d(TAG, "processMetadataBlock - metadata字符串长度: " + metadataString.length());
+            }
+            
+            // 解析metadata字符串，提取StreamTitle等字段
+            Map<String, String> metadataMap = parseMetadataString(metadataString);
+            
+            if (metadataMap.containsKey("StreamTitle")) {
+                String streamTitle = metadataMap.get("StreamTitle");
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, "processMetadataBlock - 提取的StreamTitle: " + streamTitle);
+                }
+                
+                // 创建StreamLiveInfo对象并发送给监听器
+                StreamLiveInfo streamLiveInfo = new StreamLiveInfo(metadataMap);
+                dataSourceListener.onDataSourceStreamLiveInfo(streamLiveInfo);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "processMetadataBlock - 处理metadata块时出错: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * 解析metadata字符串，提取键值对
+     * @param metadataString metadata字符串
+     * @return 包含所有字段的Map
+     */
+    private Map<String, String> parseMetadataString(String metadataString) {
+        Map<String, String> metadataMap = new java.util.HashMap<>();
+        
+        if (metadataString == null || metadataString.isEmpty()) {
+            return metadataMap;
+        }
+        
+        // metadata字符串通常包含多个键值对，用分号分隔
+        // 例如：StreamTitle='Artist - Song';StreamURL=''
+        String[] pairs = metadataString.split(";");
+        
+        for (String pair : pairs) {
+            if (pair.isEmpty()) {
+                continue;
+            }
+            
+            // 每个键值对的格式通常是 key='value'
+            int equalsIndex = pair.indexOf('=');
+            if (equalsIndex == -1) {
+                continue;
+            }
+            
+            String key = pair.substring(0, equalsIndex).trim();
+            String value = pair.substring(equalsIndex + 1).trim();
+            
+            // 移除值两端的引号（如果有）
+            if (value.length() >= 2 && 
+                ((value.charAt(0) == '\'' && value.charAt(value.length() - 1) == '\'') ||
+                 (value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"'))) {
+                value = value.substring(1, value.length() - 1);
+            }
+            
+            metadataMap.put(key, value);
+            
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "parseMetadataString - 解析键值对: " + key + " = " + value);
+            }
+        }
+        
+        return metadataMap;
     }
 
     private int readInternal(byte[] buffer, int offset, int readLength) throws HttpDataSourceException {
