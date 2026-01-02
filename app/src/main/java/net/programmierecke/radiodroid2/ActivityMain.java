@@ -1,5 +1,6 @@
 package net.programmierecke.radiodroid2;
 
+
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -28,13 +29,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.DialogFragment;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -42,12 +43,16 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
-import com.bytehamster.lib.preferencesearch.SearchPreferenceResult;
-import com.bytehamster.lib.preferencesearch.SearchPreferenceResultListener;
+
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.navigation.NavigationView;
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.DialogFragment;
+
+import com.bytehamster.lib.preferencesearch.SearchPreferenceResult;
+import com.bytehamster.lib.preferencesearch.SearchPreferenceResultListener;
 import com.google.android.material.tabs.TabLayout;
 import com.mikepenz.iconics.Iconics;
 import com.rustamg.filedialogs.FileDialog;
@@ -57,6 +62,8 @@ import com.rustamg.filedialogs.SaveFileDialog;
 import net.programmierecke.radiodroid2.alarm.FragmentAlarm;
 import net.programmierecke.radiodroid2.alarm.TimePickerFragment;
 import net.programmierecke.radiodroid2.cast.CastAwareActivity;
+import net.programmierecke.radiodroid2.database.RadioStation;
+import net.programmierecke.radiodroid2.database.RadioStationRepository;
 import net.programmierecke.radiodroid2.interfaces.IFragmentSearchable;
 import net.programmierecke.radiodroid2.players.PlayState;
 import net.programmierecke.radiodroid2.players.PlayStationTask;
@@ -68,9 +75,7 @@ import net.programmierecke.radiodroid2.service.PlayerService;
 import net.programmierecke.radiodroid2.service.PlayerServiceUtil;
 import net.programmierecke.radiodroid2.station.DataRadioStation;
 import net.programmierecke.radiodroid2.station.StationsFilter;
-import net.programmierecke.radiodroid2.database.RadioStation;
-import net.programmierecke.radiodroid2.database.RadioStationRepository;
-import net.programmierecke.radiodroid2.database.RadioDroidDatabase;
+
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -356,6 +361,19 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
         switch (selectedMenuItem) {
             case R.id.nav_item_stations:
                 f = new FragmentTabs();
+                // 如果是从搜索按钮点击进入的，需要自动切换到搜索标签页
+                if (menuItem == null && selectedMenuItem == R.id.nav_item_stations) {
+                    // 延迟执行，确保FragmentTabs已经完全初始化
+                    new android.os.Handler().postDelayed(() -> {
+                        Fragment currentFragment = mFragmentManager.findFragmentById(R.id.containerView);
+                        if (currentFragment instanceof FragmentTabs) {
+                            ((FragmentTabs) currentFragment).search(StationsFilter.SearchStyle.ByName, "");
+                        }
+                    }, 100);
+                }
+                break;
+            case R.id.nav_item_multi_search:
+                f = new net.programmierecke.radiodroid2.station.FragmentMultiSearch();
                 break;
             case R.id.nav_item_starred:
                 f = new FragmentStarred();
@@ -687,26 +705,8 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
         menuItemIconsView = menu.findItem(R.id.action_icons_view);
         menuItemAddAlarm = menu.findItem(R.id.action_add_alarm);
         menuItemMpd = menu.findItem(R.id.action_mpd);
-        mSearchView = (SearchView) MenuItemCompat.getActionView(menuItemSearch);
-        mSearchView.setOnQueryTextListener(this);
-        mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            private int prevTabsVisibility = View.GONE;
-
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (Utils.bottomNavigationEnabled(ActivityMain.this)) {
-                    mBottomNavigationView.setVisibility(hasFocus ? View.GONE : View.VISIBLE);
-                }
-
-                if (hasFocus) {
-                    prevTabsVisibility = tabsView.getVisibility();
-                    tabsView.setVisibility(View.GONE);
-                } else {
-                    tabsView.setVisibility(prevTabsVisibility);
-                }
-
-            }
-        });
+        // 移除SearchView，直接使用onOptionsItemSelected处理点击事件跳转到多条件搜索界面
+        MenuItemCompat.setActionView(menuItemSearch, null);
 
         menuItemSleepTimer.setVisible(false);
         menuItemSearch.setVisible(false);
@@ -1037,6 +1037,11 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);  // OPEN DRAWER
                 return true;
+            case R.id.action_search:
+                // 点击搜索按钮，导航到电台界面的搜索标签页
+                selectedMenuItem = R.id.nav_item_stations;
+                onNavigationItemSelected(null);
+                return true;
             case R.id.action_save:
                 try {
                     if (Utils.verifyStoragePermissions(this, PERM_REQ_STORAGE_FAV_SAVE)) {
@@ -1135,6 +1140,24 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
             DataRadioStation station = historyManager.getList().get(0);
             ((FragmentAlarm) currentFragment).getRam().add(station, hourOfDay, minute);
         }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return true;
+    }
+
+    @Override
+    public void onSearchResultClicked(SearchPreferenceResult result) {
+        result.closeSearchPage(this);
+        getSupportFragmentManager().popBackStack();
+        FragmentSettings f = FragmentSettings.openNewSettingsSubFragment(this, result.getScreen());
+        result.highlight(f);
     }
 
     private void setupStartUpFragment() {
@@ -1247,40 +1270,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
-//    public void togglePlayer() {
-//        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-//        if (smallPlayerFragment.isDetached()) {
-//            fragmentTransaction.attach(smallPlayerFragment);
-//            fragmentTransaction.detach(fullPlayerFragment);
-//        } else {
-//            fragmentTransaction.attach(fullPlayerFragment);
-//            fragmentTransaction.detach(smallPlayerFragment);
-//        }
-//
-//        fragmentTransaction.commit();
-//    }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-//        String queryEncoded;
-//        try {
-//            mSearchView.setQuery("", false);
-//            mSearchView.clearFocus();
-//            mSearchView.setIconified(true);
-//            queryEncoded = URLEncoder.encode(query, "utf-8");
-//            queryEncoded = queryEncoded.replace("+", "%20");
-//            SearchStations(query);
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        SearchStations(newText);
-        return true;
-    }
 
     private void showMeteredConnectionDialog(@NonNull Runnable playFunc) {
         Resources res = this.getResources();
@@ -1464,14 +1454,6 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
 
     public final Toolbar getToolbar() {
         return (Toolbar) findViewById(R.id.my_awesome_toolbar);
-    }
-
-    @Override
-    public void onSearchResultClicked(SearchPreferenceResult result) {
-        result.closeSearchPage(this);
-        getSupportFragmentManager().popBackStack();
-        FragmentSettings f = FragmentSettings.openNewSettingsSubFragment(this, result.getScreen());
-        result.highlight(f);
     }
 
     @Override

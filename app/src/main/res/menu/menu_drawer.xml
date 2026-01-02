@@ -7,6 +7,11 @@
             android:title="@string/nav_item_stations" />
 
         <item
+            android:id="@+id/nav_item_multi_search"
+            android:icon="@drawable/ic_search_24dp"
+            android:title="@string/nav_item_multi_search" />
+
+        <item
             android:id="@+id/nav_item_starred"
             android:icon="@drawable/ic_star_black_24dp"
             android:title="@string/nav_item_starred" />

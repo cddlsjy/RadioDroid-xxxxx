@@ -203,4 +203,15 @@ public interface RadioStationDao {
 
     @Query("DELETE FROM radio_stations WHERE station_uuid IN (:stationIds)")
     void deleteStationsByIds(List<String> stationIds);
+    
+    /**
+     * 多条件搜索电台
+     * @param country 国家筛选条件，为空表示不筛选
+     * @param language 语言筛选条件，为空表示不筛选
+     * @param tag 标签筛选条件，为空表示不筛选
+     * @param keyword 关键词搜索，为空表示不搜索
+     * @return 符合条件的电台列表
+     */
+    @Query("SELECT * FROM radio_stations WHERE (:country = '' OR country = :country) AND (:language = '' OR language = :language) AND (:tag = '' OR tags LIKE ',' || :tag || ',' OR tags LIKE :tag || ',%' OR tags LIKE '%,' || :tag OR tags = :tag) AND (:keyword = '' OR name LIKE '%' || :keyword || '%' OR country LIKE '%' || :keyword || '%' OR language LIKE '%' || :keyword || '%' OR tags LIKE '%' || :keyword || '%') ORDER BY clickcount DESC LIMIT 1000")
+    LiveData<List<RadioStation>> searchStationsByMultiCriteria(String country, String language, String tag, String keyword);
 }

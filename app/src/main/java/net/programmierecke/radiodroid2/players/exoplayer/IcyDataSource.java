@@ -286,32 +286,68 @@ public class IcyDataSource implements HttpDataSource {
             return;
         }
         
-        // 将metadata块转换为字符串
-        String metadataString;
-        try {
-            // 尝试使用ISO-8859-1编码，这是ICY元数据的标准编码
-            metadataString = new String(metadataBytes, 0, actualLength, "ISO-8859-1");
-            
+        // 检查metadata块是否完整（至少包含StreamTitle字段的基本结构）
+        boolean isMetadataValid = false;
+        for (int i = 0; i < actualLength - 10; i++) {
+            if (metadataBytes[i] == 'S' && metadataBytes[i+1] == 't' && metadataBytes[i+2] == 'r' && 
+                metadataBytes[i+3] == 'e' && metadataBytes[i+4] == 'a' && metadataBytes[i+5] == 'm' && 
+                metadataBytes[i+6] == 'T' && metadataBytes[i+7] == 'i' && metadataBytes[i+8] == 't' && 
+                metadataBytes[i+9] == 'l' && metadataBytes[i+10] == 'e') {
+                isMetadataValid = true;
+                break;
+            }
+        }
+        
+        if (!isMetadataValid) {
+            Log.w(TAG, "processMetadataBlock - 无效的metadata块，不包含StreamTitle字段");
+            return;
+        }
+        
+        // 将metadata块转换为字符串，尝试多种编码
+        String metadataString = null;
+        String[] encodings = {"ISO-8859-1", "UTF-8", "GBK", "GB2312", "Big5"};
+        
+        for (String encoding : encodings) {
+            try {
+                metadataString = new String(metadataBytes, 0, actualLength, encoding);
+                
+                // 检查解析结果是否合理
+                if (metadataString.contains("StreamTitle") && metadataString.length() > 10) {
+                    break;
+                }
+            } catch (Exception e) {
+                // 忽略编码异常，尝试下一种编码
+                Log.d(TAG, "processMetadataBlock - 尝试编码 " + encoding + " 失败: " + e.getMessage());
+            }
+        }
+        
+        if (metadataString == null) {
+            Log.e(TAG, "processMetadataBlock - 所有编码尝试都失败");
+            return;
+        }
+        
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "processMetadataBlock - metadata字符串: " + metadataString);
+            Log.d(TAG, "processMetadataBlock - metadata字符串长度: " + metadataString.length());
+        }
+        
+        // 解析metadata字符串，提取StreamTitle等字段
+        Map<String, String> metadataMap = parseMetadataString(metadataString);
+        
+        if (metadataMap.containsKey("StreamTitle")) {
+            String streamTitle = metadataMap.get("StreamTitle");
             if (BuildConfig.DEBUG) {
-                Log.d(TAG, "processMetadataBlock - metadata字符串: " + metadataString);
-                Log.d(TAG, "processMetadataBlock - metadata字符串长度: " + metadataString.length());
+                Log.d(TAG, "processMetadataBlock - 提取的StreamTitle: " + streamTitle);
             }
             
-            // 解析metadata字符串，提取StreamTitle等字段
-            Map<String, String> metadataMap = parseMetadataString(metadataString);
-            
-            if (metadataMap.containsKey("StreamTitle")) {
-                String streamTitle = metadataMap.get("StreamTitle");
-                if (BuildConfig.DEBUG) {
-                    Log.d(TAG, "processMetadataBlock - 提取的StreamTitle: " + streamTitle);
-                }
-                
+            // 检查StreamTitle是否有效
+            if (streamTitle != null && !streamTitle.trim().isEmpty()) {
                 // 创建StreamLiveInfo对象并发送给监听器
                 StreamLiveInfo streamLiveInfo = new StreamLiveInfo(metadataMap);
                 dataSourceListener.onDataSourceStreamLiveInfo(streamLiveInfo);
+            } else {
+                Log.d(TAG, "processMetadataBlock - StreamTitle为空或无效");
             }
-        } catch (Exception e) {
-            Log.e(TAG, "processMetadataBlock - 处理metadata块时出错: " + e.getMessage(), e);
         }
     }
     

@@ -39,17 +39,14 @@ public class FragmentTabs extends Fragment implements IFragmentRefreshable, IFra
     private static final int IDX_TOP_CLICK = 1;
     private static final int IDX_TOP_VOTE = 2;
     private static final int IDX_CHANGED_LATELY = 3;
-    private static final int IDX_TAGS = 4;
-    private static final int IDX_COUNTRIES = 5;
-    private static final int IDX_LANGUAGES = 6;
-    private static final int IDX_SEARCH = 7;
+    private static final int IDX_MULTI_SEARCH = 4;
 
     public static ViewPager viewPager;
 
     private String queuedSearchQuery; // Search may be requested before onCreateView so we should wait
     private StationsFilter.SearchStyle queuedSearchStyle;
 
-    private Fragment[] fragments = new Fragment[8];
+    private Fragment[] fragments = new Fragment[5];
 
     @Nullable
     @Override
@@ -131,25 +128,12 @@ public class FragmentTabs extends Fragment implements IFragmentRefreshable, IFra
         fragments[IDX_TOP_CLICK] = new FragmentTopClick();
         fragments[IDX_TOP_VOTE] = new FragmentTopVote();
         fragments[IDX_CHANGED_LATELY] = new FragmentRecentlyChanged();
-        fragments[IDX_TAGS] = new FragmentCategoriesLocal();
-        fragments[IDX_COUNTRIES] = new FragmentCategoriesLocal();
-        fragments[IDX_LANGUAGES] = new FragmentCategoriesLocal();
-        fragments[IDX_SEARCH] = new FragmentSearchLocal();
+        fragments[IDX_MULTI_SEARCH] = new net.programmierecke.radiodroid2.station.FragmentMultiSearch();
 
         for (int i=0;i<fragments.length;i++) {
             Bundle bundle = new Bundle();
-
-            if (i == IDX_SEARCH) {
-                bundle.putBoolean(FragmentStations.KEY_SEARCH_ENABLED, true);
-            }
-
             fragments[i].setArguments(bundle);
         }
-
-        ((FragmentCategoriesLocal) fragments[IDX_TAGS]).EnableSingleUseFilter(true);
-        ((FragmentCategoriesLocal) fragments[IDX_TAGS]).SetBaseSearchLink(StationsFilter.SearchStyle.ByTagExact);
-        ((FragmentCategoriesLocal) fragments[IDX_COUNTRIES]).SetBaseSearchLink(StationsFilter.SearchStyle.ByCountryCodeExact);
-        ((FragmentCategoriesLocal) fragments[IDX_LANGUAGES]).SetBaseSearchLink(StationsFilter.SearchStyle.ByLanguageExact);
 
         FragmentManager m = getChildFragmentManager();
         ViewPagerAdapter adapter = new ViewPagerAdapter(m);
@@ -159,10 +143,7 @@ public class FragmentTabs extends Fragment implements IFragmentRefreshable, IFra
         adapter.addFragment(fragments[IDX_TOP_CLICK], R.string.action_top_click);
         adapter.addFragment(fragments[IDX_TOP_VOTE], R.string.action_top_vote);
         adapter.addFragment(fragments[IDX_CHANGED_LATELY], R.string.action_changed_lately);
-        adapter.addFragment(fragments[IDX_TAGS], R.string.action_tags);
-        adapter.addFragment(fragments[IDX_COUNTRIES], R.string.action_countries);
-        adapter.addFragment(fragments[IDX_LANGUAGES], R.string.action_languages);
-        adapter.addFragment(fragments[IDX_SEARCH], R.string.action_search);
+        adapter.addFragment(fragments[IDX_MULTI_SEARCH], R.string.action_search);
         viewPager.setAdapter(adapter);
     }
 
@@ -170,8 +151,8 @@ public class FragmentTabs extends Fragment implements IFragmentRefreshable, IFra
         Log.d("TABS","Search = "+ query + " searchStyle="+searchStyle);
         if (viewPager != null) {
             Log.d("TABS","a Search = "+ query);
-            viewPager.setCurrentItem(IDX_SEARCH, false);
-            ((IFragmentSearchable)fragments[IDX_SEARCH]).search(searchStyle, query);
+            // 设置当前标签为多条件搜索
+            viewPager.setCurrentItem(IDX_MULTI_SEARCH, false);
         } else {
             Log.d("TABS","b Search = "+ query);
             queuedSearchQuery = query;

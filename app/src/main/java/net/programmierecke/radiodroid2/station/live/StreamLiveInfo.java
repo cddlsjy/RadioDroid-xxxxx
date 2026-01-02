@@ -103,7 +103,7 @@ public class StreamLiveInfo implements Parcelable {
     }
 
     /**
-     * 尝试修复编码问题，特别是UTF-8被错误地用GBK解码的情况
+     * 尝试修复编码问题，使用多种编码组合检测和修复
      * @param input 可能存在编码问题的字符串
      * @return 修复后的字符串
      */
@@ -112,48 +112,55 @@ public class StreamLiveInfo implements Parcelable {
             return input;
         }
         
+        // 如果字符串看起来已经是合理的，直接返回
+        if (isReasonableString(input)) {
+            return input;
+        }
+        
         try {
-            // 检测是否包含可能的乱码字符
-            // 乱码通常包含一些特定的Unicode字符范围
-            boolean hasGarbledChars = false;
-            for (int i = 0; i < input.length(); i++) {
-                char c = input.charAt(i);
-                // 检查是否在常见的乱码字符范围内
-                if ((c >= 0x8080 && c <= 0x8FFF) || 
-                    (c >= 0x9000 && c <= 0x9FFF) ||
-                    (c >= 0xE000 && c <= 0xF8FF) ||
-                    (c >= 0xF900 && c <= 0xFAFF)) {
-                    hasGarbledChars = true;
-                    break;
+            // 编码修复尝试列表，按优先级排序
+            String[][] encodingPairs = {
+                {"ISO-8859-1", "UTF-8"},   // 最常见的情况：UTF-8被错误地用ISO-8859-1解码
+                {"GBK", "UTF-8"},          // 中文常见情况：UTF-8被错误地用GBK解码
+                {"ISO-8859-1", "GBK"},     // 中文情况：GBK被错误地用ISO-8859-1解码
+                {"ISO-8859-1", "GB2312"},   // 中文旧编码情况
+                {"ISO-8859-1", "Big5"},     // 繁体中文情况
+                {"UTF-8", "ISO-8859-1"},   // 反向情况：ISO-8859-1被错误地用UTF-8解码
+                {"GB2312", "UTF-8"},       // 中文情况：UTF-8被错误地用GB2312解码
+                {"Big5", "UTF-8"}          // 繁体中文情况：UTF-8被错误地用Big5解码
+            };
+            
+            for (String[] pair : encodingPairs) {
+                try {
+                    // 尝试将字符串按源编码转换为字节，然后按目标编码解码
+                    byte[] bytes = input.getBytes(pair[0]);
+                    String fixedString = new String(bytes, pair[1]);
+                    
+                    // 检查修复后的字符串是否合理
+                    if (isReasonableString(fixedString) && !fixedString.equals(input)) {
+                        Log.i(TAG, "fixEncodingIssues - 成功修复编码问题，使用组合: " + pair[0] + " -> " + pair[1]);
+                        Log.i(TAG, "fixEncodingIssues - 原始字符串: " + input);
+                        Log.i(TAG, "fixEncodingIssues - 修复后字符串: " + fixedString);
+                        return fixedString;
+                    }
+                } catch (Exception e) {
+                    // 忽略单个编码组合的异常，继续尝试下一个
+                    Log.d(TAG, "fixEncodingIssues - 尝试编码组合 " + pair[0] + " -> " + pair[1] + " 失败: " + e.getMessage());
                 }
             }
             
-            if (!hasGarbledChars) {
-                // 如果没有明显的乱码字符，直接返回原字符串
-                return input;
-            }
-            
-            // 尝试修复：将字符串按GBK编码为字节，然后按UTF-8解码
-            byte[] gbkBytes = input.getBytes("GBK");
-            String fixedString = new String(gbkBytes, "UTF-8");
-            
-            // 检查修复后的字符串是否合理
-            if (isReasonableString(fixedString)) {
-                Log.i(TAG, "fixEncodingIssues - 成功修复编码问题");
-                Log.i(TAG, "fixEncodingIssues - 原始字符串: " + input);
-                Log.i(TAG, "fixEncodingIssues - 修复后字符串: " + fixedString);
-                return fixedString;
-            }
-            
-            // 如果上述方法不成功，尝试其他编码组合
-            byte[] isoBytes = input.getBytes("ISO-8859-1");
-            String fixedString2 = new String(isoBytes, "UTF-8");
-            
-            if (isReasonableString(fixedString2)) {
-                Log.i(TAG, "fixEncodingIssues - 使用ISO-8859-1到UTF-8成功修复编码问题");
-                Log.i(TAG, "fixEncodingIssues - 原始字符串: " + input);
-                Log.i(TAG, "fixEncodingIssues - 修复后字符串: " + fixedString2);
-                return fixedString2;
+            // 尝试直接检测UTF-8编码
+            if (isUtf8Encoded(input)) {
+                try {
+                    byte[] bytes = input.getBytes("ISO-8859-1");
+                    String fixedString = new String(bytes, "UTF-8");
+                    if (isReasonableString(fixedString)) {
+                        Log.i(TAG, "fixEncodingIssues - 直接检测到UTF-8编码并修复");
+                        return fixedString;
+                    }
+                } catch (Exception e) {
+                    Log.d(TAG, "fixEncodingIssues - UTF-8直接检测失败: " + e.getMessage());
+                }
             }
             
             Log.i(TAG, "fixEncodingIssues - 无法自动修复编码问题，返回原始字符串");
@@ -163,6 +170,59 @@ public class StreamLiveInfo implements Parcelable {
             Log.e(TAG, "fixEncodingIssues - 修复编码时出错: " + e.getMessage());
             return input;
         }
+    }
+    
+    /**
+     * 检测字符串是否可能是UTF-8编码被错误解码
+     * @param input 要检测的字符串
+     * @return 如果可能是UTF-8编码返回true，否则返回false
+     */
+    private boolean isUtf8Encoded(String input) {
+        if (input == null || input.isEmpty()) {
+            return false;
+        }
+        
+        int consecutiveInvalidChars = 0;
+        int potentialUtf8Sequences = 0;
+        
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            
+            // 检测常见的UTF-8编码错误模式
+            // 例如：Ã¥Â¦Â -> 如 (UTF-8: E5 A6 82)
+            if ((c >= 0xC0 && c <= 0xDF) || // UTF-8 2字节前缀
+                (c >= 0xE0 && c <= 0xEF) || // UTF-8 3字节前缀
+                (c >= 0xF0 && c <= 0xF7)) { // UTF-8 4字节前缀
+                potentialUtf8Sequences++;
+                consecutiveInvalidChars = 0;
+            } else if (c >= 0x80 && c <= 0xBF) { // UTF-8 后续字节
+                if (i > 0) {
+                    char prevChar = input.charAt(i - 1);
+                    if ((prevChar >= 0xC0 && prevChar <= 0xF7)) {
+                        // 这是一个有效的UTF-8后续字节
+                        consecutiveInvalidChars = 0;
+                    } else {
+                        consecutiveInvalidChars++;
+                    }
+                } else {
+                    consecutiveInvalidChars++;
+                }
+            } else if (c < 0x20 || c == 0x7F) {
+                // 控制字符，可能表示编码问题
+                consecutiveInvalidChars++;
+            } else {
+                // 普通ASCII字符
+                consecutiveInvalidChars = 0;
+            }
+            
+            // 如果连续出现太多无效字符，可能不是UTF-8
+            if (consecutiveInvalidChars > 3) {
+                return false;
+            }
+        }
+        
+        // 如果有足够多的潜在UTF-8序列，认为可能是UTF-8编码
+        return potentialUtf8Sequences > input.length() * 0.1; // 至少10%的字符是潜在的UTF-8序列
     }
     
     /**
@@ -280,7 +340,7 @@ public class StreamLiveInfo implements Parcelable {
      */
     /**
      * 智能元信息解析，支持多种格式和极端情况
-     * 使用多阶段解析策略，优先处理常见格式，然后处理特殊格式
+     * 使用简化的解析策略，优先处理常见格式，然后处理特殊格式
      */
     private void parseMetadataIntelligently(String title) {
         Log.i(TAG, "=== parseMetadataIntelligently开始 ===");
@@ -306,40 +366,33 @@ public class StreamLiveInfo implements Parcelable {
             return;
         }
         
-        // 第一阶段：处理字段格式（如title=, artist=, text=等）
-        Log.i(TAG, "parseMetadataIntelligently - 尝试字段格式解析");
-        if (parseFieldFormats(title)) {
-            Log.i(TAG, "parseMetadataIntelligently - 字段格式解析成功 - 艺术家: '" + artist + "', 歌曲: '" + track + "'");
-            // 清理解析结果
-            cleanParsingResults();
-            Log.i(TAG, "=== parseMetadataIntelligently结束 ===");
-            return;
-        }
+        boolean parseSuccess = false;
         
-        // 第二阶段：处理标准格式和常见变体
-        Log.i(TAG, "parseMetadataIntelligently - 尝试标准格式解析");
-        if (parseStandardFormats(title)) {
-            Log.i(TAG, "parseMetadataIntelligently - 标准格式解析成功 - 艺术家: '" + artist + "', 歌曲: '" + track + "'");
-            // 清理解析结果
-            cleanParsingResults();
-            Log.i(TAG, "=== parseMetadataIntelligently结束 ===");
-            return;
+        // 简化的解析流程：一次遍历尝试所有格式
+        try {
+            // 1. 首先尝试字段格式解析（如title=, artist=, text=等）
+            if (title.contains("=") && (title.contains("text=") || title.contains("title=") || title.contains("artist="))) {
+                parseSuccess = parseFieldFormats(title);
+            } 
+            // 2. 如果不是字段格式，尝试标准格式解析
+            if (!parseSuccess) {
+                parseSuccess = parseStandardFormats(title);
+            }
+            // 3. 如果标准格式解析失败，尝试特殊格式解析
+            if (!parseSuccess) {
+                parseSuccess = parseSpecialFormats(title);
+            }
+            // 4. 作为最后手段，尝试智能分割
+            if (!parseSuccess) {
+                parseAsLastResort(title);
+                parseSuccess = true; // 最后手段总是会产生结果
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "parseMetadataIntelligently - 解析过程中出错: " + e.getMessage(), e);
+            // 出错时使用安全的默认值
+            artist = "未知艺术家";
+            track = "未知歌曲";
         }
-        
-        // 第三阶段：处理特殊格式和极端情况
-        Log.i(TAG, "parseMetadataIntelligently - 尝试特殊格式解析");
-        if (parseSpecialFormats(title)) {
-            Log.i(TAG, "parseMetadataIntelligently - 特殊格式解析成功 - 艺术家: '" + artist + "', 歌曲: '" + track + "'");
-            // 清理解析结果
-            cleanParsingResults();
-            Log.i(TAG, "=== parseMetadataIntelligently结束 ===");
-            return;
-        }
-        
-        // 第四阶段：作为最后手段，尝试智能分割
-        Log.i(TAG, "parseMetadataIntelligently - 尝试最后手段解析");
-        parseAsLastResort(title);
-        Log.i(TAG, "parseMetadataIntelligently - 最后手段解析完成 - 艺术家: '" + artist + "', 歌曲: '" + track + "'");
         
         // 清理结果
         cleanParsingResults();
@@ -682,45 +735,119 @@ public class StreamLiveInfo implements Parcelable {
         Log.i(TAG, "parseFieldFormats - 输入标题: " + title);
         Log.i(TAG, "parseFieldFormats - 标题长度: " + title.length());
         
-        // 记录标题的字节表示
         try {
-            byte[] titleBytes = title.getBytes("UTF-8");
-            Log.i(TAG, "parseFieldFormats - 标题UTF-8字节长度: " + titleBytes.length);
-            Log.i(TAG, "parseFieldFormats - 标题UTF-8字节前20: " + bytesToHex(titleBytes, 20));
-        } catch (Exception e) {
-            Log.e(TAG, "parseFieldFormats - 字节转换错误: " + e.getMessage());
-        }
-        
-        // 包含text字段的格式
-        if (title.contains("text=")) {
-            Log.i(TAG, "parseFieldFormats - 检测到text字段，调用parseTextFieldFormat");
-            return parseTextFieldFormat(title);
-        }
-        
-        // 包含title和artist字段的格式
-        if (title.contains("title=") && title.contains("artist=")) {
-            Log.i(TAG, "parseFieldFormats - 检测到title和artist字段");
-            
-            String extractedArtist = extractFieldValue(title, "artist");
-            String extractedTrack = extractFieldValue(title, "title");
-            
-            Log.i(TAG, "parseFieldFormats - 提取的artist原始值: '" + extractedArtist + "'");
-            Log.i(TAG, "parseFieldFormats - 提取的track原始值: '" + extractedTrack + "'");
-            
-            artist = extractedArtist;
-            track = extractedTrack;
-            
-            Log.i(TAG, "parseFieldFormats - 最终artist: '" + artist + "'");
-            Log.i(TAG, "parseFieldFormats - 最终track: '" + track + "'");
-            
-            if (BuildConfig.DEBUG) {
-                Log.d(TAG, "parseFieldFormats - 使用title/artist字段格式解析");
+            // 包含text字段的格式
+            if (title.contains("text=")) {
+                Log.i(TAG, "parseFieldFormats - 检测到text字段，调用parseTextFieldFormat");
+                return parseTextFieldFormat(title);
             }
-            return true;
+            
+            // 包含title和artist字段的格式
+            if (title.contains("title=") && title.contains("artist=")) {
+                Log.i(TAG, "parseFieldFormats - 检测到title和artist字段");
+                
+                String extractedArtist = extractFieldValue(title, "artist");
+                String extractedTrack = extractFieldValue(title, "title");
+                
+                Log.i(TAG, "parseFieldFormats - 提取的artist原始值: '" + extractedArtist + "'");
+                Log.i(TAG, "parseFieldFormats - 提取的track原始值: '" + extractedTrack + "'");
+                
+                artist = extractedArtist;
+                track = extractedTrack;
+                
+                Log.i(TAG, "parseFieldFormats - 最终artist: '" + artist + "'");
+                Log.i(TAG, "parseFieldFormats - 最终track: '" + track + "'");
+                
+                return true;
+            }
+            
+            // 只包含title字段的格式
+            if (title.contains("title=") && !title.contains("artist=")) {
+                Log.i(TAG, "parseFieldFormats - 检测到只有title字段");
+                track = extractFieldValue(title, "title");
+                artist = "未知艺术家";
+                return true;
+            }
+            
+            // 只包含artist字段的格式
+            if (title.contains("artist=") && !title.contains("title=")) {
+                Log.i(TAG, "parseFieldFormats - 检测到只有artist字段");
+                artist = extractFieldValue(title, "artist");
+                track = "未知歌曲";
+                return true;
+            }
+            
+            // 支持以冒号分隔的字段格式（如title:value）
+            if (title.matches(".*\\w+:[^=].*")) {
+                Log.i(TAG, "parseFieldFormats - 检测到冒号分隔的字段格式");
+                return parseColonSeparatedFields(title);
+            }
+            
+            Log.i(TAG, "parseFieldFormats - 未检测到已知的字段格式");
+            return false;
+        } catch (Exception e) {
+            Log.e(TAG, "parseFieldFormats - 解析字段格式时出错: " + e.getMessage(), e);
+            return false;
         }
-        
-        Log.i(TAG, "parseFieldFormats - 未检测到已知的字段格式");
-        return false;
+    }
+    
+    /**
+     * 解析冒号分隔的字段格式（如title:value）
+     */
+    private boolean parseColonSeparatedFields(String title) {
+        try {
+            // 尝试匹配title:value格式
+            if (title.contains("title:") && title.contains("artist:")) {
+                // 提取artist和title
+                String extractedArtist = extractColonFieldValue(title, "artist");
+                String extractedTrack = extractColonFieldValue(title, "title");
+                
+                artist = extractedArtist;
+                track = extractedTrack;
+                return true;
+            } else if (title.contains("title:")) {
+                // 只提取title
+                track = extractColonFieldValue(title, "title");
+                artist = "未知艺术家";
+                return true;
+            } else if (title.contains("artist:")) {
+                // 只提取artist
+                artist = extractColonFieldValue(title, "artist");
+                track = "未知歌曲";
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            Log.e(TAG, "parseColonSeparatedFields - 解析冒号分隔字段时出错: " + e.getMessage(), e);
+            return false;
+        }
+    }
+    
+    /**
+     * 从冒号分隔的字符串中提取字段值
+     */
+    private String extractColonFieldValue(String input, String fieldName) {
+        try {
+            String pattern = fieldName + ":";
+            int fieldIndex = input.indexOf(pattern);
+            if (fieldIndex == -1) {
+                return "";
+            }
+            
+            int valueStart = fieldIndex + pattern.length();
+            int valueEnd = input.indexOf(" ", valueStart);
+            if (valueEnd == -1) {
+                valueEnd = input.indexOf(";", valueStart);
+            }
+            if (valueEnd == -1) {
+                valueEnd = input.length();
+            }
+            
+            return input.substring(valueStart, valueEnd).trim();
+        } catch (Exception e) {
+            Log.e(TAG, "extractColonFieldValue - 提取冒号字段值时出错: " + e.getMessage(), e);
+            return "";
+        }
     }
     
     /**
@@ -730,79 +857,94 @@ public class StreamLiveInfo implements Parcelable {
         Log.i(TAG, "=== parseTextFieldFormat开始 ===");
         Log.i(TAG, "parseTextFieldFormat - 输入标题: " + title);
         
-        // 尝试从text字段前提取艺术家
-        int textIndex = title.indexOf("text=");
-        Log.i(TAG, "parseTextFieldFormat - text=位置: " + textIndex);
-        
-        if (textIndex > 0) {
-            // 查找text字段前的艺术家名称
-            String beforeText = title.substring(0, textIndex).trim();
-            Log.i(TAG, "parseTextFieldFormat - text字段前内容: '" + beforeText + "'");
+        try {
+            // 尝试从text字段前提取艺术家
+            int textIndex = title.indexOf("text=");
+            Log.i(TAG, "parseTextFieldFormat - text=位置: " + textIndex);
             
-            if (beforeText.endsWith(" - ")) {
-                artist = beforeText.substring(0, beforeText.length() - 3).trim();
-                Log.i(TAG, "parseTextFieldFormat - 从'text - '格式提取艺术家: '" + artist + "'");
-            } else {
-                artist = beforeText;
-                Log.i(TAG, "parseTextFieldFormat - 直接使用text前内容作为艺术家: '" + artist + "'");
-            }
-        } else {
-            Log.i(TAG, "parseTextFieldFormat - text字段位于开头，无法从前缀提取艺术家");
-            artist = "";
-        }
-        
-        // 使用改进的text值提取方法
-        Log.i(TAG, "parseTextFieldFormat - 调用extractTextValueImproved提取track");
-        track = extractTextValueImproved(title);
-        Log.i(TAG, "parseTextFieldFormat - extractTextValueImproved结果: '" + track + "'");
-        
-        // 如果提取的track为空，则尝试使用原始方法
-        if (track.isEmpty()) {
-            Log.i(TAG, "parseTextFieldFormat - extractTextValueImproved结果为空，尝试原始方法");
-            track = extractTextValue(title);
-            Log.i(TAG, "parseTextFieldFormat - extractTextValue结果: '" + track + "'");
-        }
-        
-        // 处理特殊情况：如果艺术家为空且track不为空，可能是类似text="WEGR BASIC ID_6"的情况
-        if ((artist == null || artist.trim().isEmpty()) && !track.isEmpty()) {
-            // 检查是否是特殊标识模式（如电台ID、法律ID、广告块等）
-            if (track.matches(".*\\b(ID|LEGAL|SPOT|PROMO|COMMERCIAL|ADVERTISEMENT|BLOCK)\\b.*") || 
-                track.matches(".*\\b\\d{2}_.*") || // 匹配类似"04_"的模式
-                track.matches(".*[A-Z]{3,4}\\s*-\\s*[A-Z]+.*") || // 匹配类似"WEGR - LEGAL"的模式
-                track.matches(".*\\bSPOT\\s+BLOCK\\s+END\\b.*") || // 匹配"Spot Block End"
-                track.matches(".*\\bSPOT\\s+BLOCK\\b.*")) { // 匹配"Spot Block"
-                // 如果是特殊标识模式，不进行分割，整个内容作为曲目
-                Log.i(TAG, "parseTextFieldFormat - 检测到特殊标识模式，不进行分割");
-                artist = "未知艺术家";
-                Log.i(TAG, "parseTextFieldFormat - 设置艺术家为: '" + artist + "', 曲目保持为: '" + track + "'");
-            }
-            // 检查track是否包含多个单词，如果是，则可能需要分割
-            else if (track.split("\\s+").length > 2) {
-                // 如果track包含多个单词（超过2个），可能是电台名称+节目ID
-                // 尝试分割：前两个单词作为艺术家，其余作为曲目
-                String[] words = track.split("\\s+", 3);
-                if (words.length >= 3) {
-                    artist = words[0] + " " + words[1];
-                    track = words[2];
-                    Log.i(TAG, "parseTextFieldFormat - 检测到多词track，分割为艺术家: '" + artist + "', 曲目: '" + track + "'");
-                } else if (words.length == 2) {
-                    artist = words[0];
-                    track = words[1];
-                    Log.i(TAG, "parseTextFieldFormat - 检测到两词track，分割为艺术家: '" + artist + "', 曲目: '" + track + "'");
+            if (textIndex > 0) {
+                // 查找text字段前的艺术家名称
+                String beforeText = title.substring(0, textIndex).trim();
+                Log.i(TAG, "parseTextFieldFormat - text字段前内容: '" + beforeText + "'");
+                
+                // 处理多种分隔符情况
+                String[] separators = {" - ", "-", " | ", "|", ": ", ":"};
+                boolean foundSeparator = false;
+                
+                for (String separator : separators) {
+                    if (beforeText.contains(separator)) {
+                        int separatorIndex = beforeText.lastIndexOf(separator);
+                        artist = beforeText.substring(0, separatorIndex).trim();
+                        Log.i(TAG, "parseTextFieldFormat - 使用分隔符 '" + separator + "' 提取艺术家: '" + artist + "'");
+                        foundSeparator = true;
+                        break;
+                    }
+                }
+                
+                if (!foundSeparator) {
+                    // 如果没有找到分隔符，直接使用整个前缀作为艺术家
+                    artist = beforeText;
+                    Log.i(TAG, "parseTextFieldFormat - 直接使用text前内容作为艺术家: '" + artist + "'");
                 }
             } else {
-                Log.i(TAG, "parseTextFieldFormat - 艺术家为空但track不为空，设置为'未知艺术家'");
-                artist = "未知艺术家";
+                Log.i(TAG, "parseTextFieldFormat - text字段位于开头，无法从前缀提取艺术家");
+                artist = "";
             }
+            
+            // 提取text字段值
+            String textValue = extractTextValueImproved(title);
+            Log.i(TAG, "parseTextFieldFormat - 提取的text值: '" + textValue + "'");
+            
+            if (textValue.isEmpty()) {
+                // 如果提取失败，尝试使用原始方法
+                textValue = extractTextValue(title);
+                Log.i(TAG, "parseTextFieldFormat - 原始方法提取的text值: '" + textValue + "'");
+            }
+            
+            track = textValue;
+            
+            // 处理特殊情况：如果艺术家为空且track不为空
+            if ((artist == null || artist.trim().isEmpty()) && !track.isEmpty()) {
+                // 检查是否是特殊标识模式
+                if (track.matches(".*\\b(ID|LEGAL|SPOT|PROMO|COMMERCIAL|ADVERTISEMENT|BLOCK|INTRO|OUTRO)\\b.*") || 
+                    track.matches(".*\\b\\d{2,3}_.*") || // 匹配类似"04_"或"123_"的模式
+                    track.matches(".*[A-Z]{3,4}\\s*-\\s*[A-Z]+.*") || // 匹配类似"WEGR - LEGAL"的模式
+                    track.matches(".*\\bSPOT\\s+BLOCK\\b.*") || // 匹配"Spot Block"相关模式
+                    track.matches(".*\\bBREAK\\b.*") || // 匹配广告插播
+                    track.matches(".*\\bSTATION\\b.*") || // 匹配电台标识
+                    track.matches(".*\\bBUMPER\\b.*")) { // 匹配过渡片段
+                    // 如果是特殊标识模式，不进行分割
+                    Log.i(TAG, "parseTextFieldFormat - 检测到特殊标识模式，不进行分割");
+                    artist = "未知艺术家";
+                } 
+                // 检查track是否包含多个单词
+                else if (track.split("\\s+").length > 2) {
+                    // 尝试智能分割
+                    String[] words = track.split("\\s+", 3);
+                    if (words.length >= 3) {
+                        artist = words[0] + " " + words[1];
+                        track = words[2];
+                        Log.i(TAG, "parseTextFieldFormat - 检测到多词track，分割为艺术家: '" + artist + "', 曲目: '" + track + "'");
+                    } else if (words.length == 2) {
+                        artist = words[0];
+                        track = words[1];
+                        Log.i(TAG, "parseTextFieldFormat - 检测到两词track，分割为艺术家: '" + artist + "', 曲目: '" + track + "'");
+                    }
+                } else {
+                    // 设置默认艺术家
+                    Log.i(TAG, "parseTextFieldFormat - 艺术家为空但track不为空，设置为'未知艺术家'");
+                    artist = "未知艺术家";
+                }
+            }
+            
+            Log.i(TAG, "parseTextFieldFormat - 最终artist: '" + artist + "'");
+            Log.i(TAG, "parseTextFieldFormat - 最终track: '" + track + "'");
+            
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "parseTextFieldFormat - 解析text字段格式时出错: " + e.getMessage(), e);
+            return false;
         }
-        
-        Log.i(TAG, "parseTextFieldFormat - 最终artist: '" + artist + "'");
-        Log.i(TAG, "parseTextFieldFormat - 最终track: '" + track + "'");
-        
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "parseTextFieldFormat - 使用text字段格式解析");
-        }
-        return true;
     }
     
     /**
@@ -892,96 +1034,218 @@ public class StreamLiveInfo implements Parcelable {
      * 清理解析结果
      */
     private void cleanParsingResults() {
+        // 清理艺术家名
         if (artist != null) {
             artist = artist.trim();
-            // 移除可能的引号
-            if (artist.startsWith("\"") && artist.endsWith("\"")) {
-                artist = artist.substring(1, artist.length() - 1);
-            }
-            // 移除可能的括号内容（如[Live], [Remix]等），但保留可能的歌名部分
-            // 只移除方括号内容，因为圆括号内容可能是歌名的一部分
-            artist = artist.replaceAll("\\s*\\[.*?\\]\\s*$", "");
-            // 对于圆括号，只移除常见的元数据标记，保留其他内容
-            artist = artist.replaceAll("\\s*\\((Live|Remix|Edit|Version|Cover|Acoustic|Demo|Instrumental|Explicit)\\)\\s*$", "");
-            artist = artist.replaceAll("\\s*\\(\\d{4}\\)\\s*$", ""); // 移除年份
-            // 移除多余的空白
+            
+            // 移除各种引号和特殊字符
+            artist = removeQuotes(artist);
+            
+            // 移除括号内容和元数据标记
+            artist = artist.replaceAll("\\s*\\[.*?\\]\\s*", " "); // 移除方括号内容
+            artist = artist.replaceAll("\\s*\\((Live|Remix|Edit|Version|Cover|Acoustic|Demo|Instrumental|Explicit|Official|Audio|Extended|Radio|Single|Album|Original|Remastered|Unplugged|Live Session|Studio Version|Alternate Version|Clean|Dirty)\\)\\s*", " "); // 移除常见元数据标记
+            artist = artist.replaceAll("\\s*\\(\\d{4}\\)\\s*", " "); // 移除年份
+            
+            // 移除多余的空白和特殊字符
             artist = artist.replaceAll("\\s+", " ");
+            artist = artist.replaceAll("[\\p{Cntrl}]", ""); // 移除控制字符
             
             // 移除常见的无用前缀和后缀
-            artist = artist.replaceAll("^(Artist:|artist:|Artist |artist )", "");
+            artist = artist.replaceAll("^(Artist:|artist:|Artist |artist |Performer:|performer:|Performer |performer )", "");
             artist = artist.replaceAll("\\s*[-:–—]\\s*(Live|Remix|Edit|Version|Cover)\\s*$", "");
-            // 移除末尾的连字符、冒号等分隔符（包括多行情况）
-            artist = artist.replaceAll("[\\s\\r\\n]*[-:–—][\\s\\r\\n]*$", "");
+            artist = artist.replaceAll("[\\s\\r\\n]*[-:–—=+~][\\s\\r\\n]*$", ""); // 移除末尾的分隔符
             
             // 处理全大写或全小写的情况
             if (artist.equals(artist.toUpperCase()) && artist.length() > 3) {
-                // 如果全大写且长度大于3，可能是标题格式，转换为标题格式
-                artist = artist.substring(0, 1).toUpperCase() + artist.substring(1).toLowerCase();
+                // 如果全大写且长度大于3，转换为标题格式
+                artist = toTitleCase(artist);
             }
+            
+            // 处理feat.格式（多种变体）
+            artist = handleFeatInArtist(artist);
         }
         
+        // 清理歌曲名
         if (track != null) {
             track = track.trim();
-            // 移除可能的引号
-            if (track.startsWith("\"") && track.endsWith("\"")) {
-                track = track.substring(1, track.length() - 1);
-            }
-            // 移除可能的括号内容（如[Live], [Remix]等），但保留可能的歌名部分
-            // 只移除方括号内容，因为圆括号内容可能是歌名的一部分
-            track = track.replaceAll("\\s*\\[.*?\\]\\s*$", "");
-            // 对于圆括号，只移除常见的元数据标记，保留其他内容
-            track = track.replaceAll("\\s*\\((Live|Remix|Edit|Version|Cover|Acoustic|Demo|Instrumental|Explicit|Official|Audio)\\)\\s*$", "");
-            track = track.replaceAll("\\s*\\(\\d{4}\\)\\s*$", ""); // 移除年份
-            // 移除多余的空白
+            
+            // 移除各种引号和特殊字符
+            track = removeQuotes(track);
+            
+            // 移除括号内容和元数据标记
+            track = track.replaceAll("\\s*\\[.*?\\]\\s*", " "); // 移除方括号内容
+            track = track.replaceAll("\\s*\\((Live|Remix|Edit|Version|Cover|Acoustic|Demo|Instrumental|Explicit|Official|Audio|Extended|Radio|Single|Album|Original|Remastered|Unplugged|Live Session|Studio Version|Alternate Version|Clean|Dirty)\\)\\s*", " "); // 移除常见元数据标记
+            track = track.replaceAll("\\s*\\(\\d{4}\\)\\s*", " "); // 移除年份
+            
+            // 移除多余的空白和特殊字符
             track = track.replaceAll("\\s+", " ");
+            track = track.replaceAll("[\\p{Cntrl}]", ""); // 移除控制字符
             
             // 移除常见的无用前缀和后缀
-            track = track.replaceAll("^(Title:|title:|Track:|track:|Song:|song:|Title |title |Track |track |Song |song )", "");
+            track = track.replaceAll("^(Title:|title:|Track:|track:|Song:|song:|Title |title |Track |track |Song |song |Music:|music:|Music |music )", "");
             track = track.replaceAll("\\s*[-:–—]\\s*(Live|Remix|Edit|Version|Cover|Official|Audio)\\s*$", "");
-            
-            // 处理包含年份的情况（如"Song Title (2023)"）
-            track = track.replaceAll("\\s*\\(\\d{4}\\)\\s*$", "");
+            track = track.replaceAll("[\\s\\r\\n]*[-:–—=+~][\\s\\r\\n]*$", ""); // 移除末尾的分隔符
             
             // 处理全大写或全小写的情况
             if (track.equals(track.toUpperCase()) && track.length() > 3) {
-                // 如果全大写且长度大于3，可能是标题格式，转换为标题格式
-                track = track.substring(0, 1).toUpperCase() + track.substring(1).toLowerCase();
+                // 如果全大写且长度大于3，转换为标题格式
+                track = toTitleCase(track);
             }
         }
         
+        // 最终修剪
+        if (artist != null) {
+            artist = artist.trim();
+        }
+        if (track != null) {
+            track = track.trim();
+        }
+        
         // 处理空值情况
-        if (artist != null && artist.isEmpty()) {
+        if (artist == null || artist.isEmpty()) {
             artist = "未知艺术家";
         }
         
-        if (track != null && track.isEmpty()) {
+        if (track == null || track.isEmpty()) {
             track = "未知歌曲";
         }
         
         // 处理解析结果过于相似的情况（可能是分割错误）
-        if (artist != null && track != null && !artist.isEmpty() && !track.isEmpty() && 
-            artist.equals(track)) {
-            // 如果艺术家和歌曲名相同，可能是分割错误，将整个内容作为歌曲名
-            track = artist;
-            artist = "未知艺术家";
-            
-            if (BuildConfig.DEBUG) {
-                Log.d(TAG, "cleanParsingResults - 检测到艺术家和歌曲名相同，调整为未知艺术家");
+        if (artist != null && track != null && !artist.isEmpty() && !track.isEmpty()) {
+            // 检查艺术家和歌曲名是否过于相似
+            double similarity = calculateSimilarity(artist, track);
+            if (similarity > 0.8 || artist.equals(track)) {
+                // 如果相似度超过80%或完全相同，可能是分割错误
+                track = artist;
+                artist = "未知艺术家";
+                
+                Log.d(TAG, "cleanParsingResults - 检测到艺术家和歌曲名过于相似，调整为未知艺术家");
             }
         }
         
-        // 处理艺术家名包含"feat."的情况
-        if (artist != null && artist.contains("feat.")) {
-            String[] parts = artist.split("feat\\.", 2);
-            artist = parts[0].trim();
-            if (track != null && !track.isEmpty()) {
-                track += " (feat. " + parts[1].trim() + ")";
+        // 处理歌曲名包含完整艺术家信息的情况
+        if (artist != null && track != null && !artist.isEmpty() && !track.isEmpty() && 
+            track.startsWith(artist) && track.length() > artist.length() + 5) {
+            // 如果歌曲名以艺术家名开头且长度明显更长，可能是分割错误
+            String remaining = track.substring(artist.length()).trim();
+            if (remaining.startsWith("-") || remaining.startsWith(":")) {
+                remaining = remaining.substring(1).trim();
             }
-            
-            if (BuildConfig.DEBUG) {
-                Log.d(TAG, "cleanParsingResults - 处理艺术家名包含feat.的情况");
+            if (!remaining.isEmpty()) {
+                track = remaining;
+                Log.d(TAG, "cleanParsingResults - 检测到歌曲名包含完整艺术家信息，调整歌曲名为: " + track);
             }
         }
+    }
+    
+    /**
+     * 移除字符串中的各种引号
+     */
+    private String removeQuotes(String input) {
+        if (input == null) return input;
+        
+        // 移除双引号、单引号、反引号等
+        input = input.replaceAll("^[\"'`]+|[\"'`]+$", "");
+        input = input.replaceAll("^[\"'`]+|[\"'`]+$", ""); // 再次执行以处理嵌套引号
+        
+        return input;
+    }
+    
+    /**
+     * 将字符串转换为标题格式（首字母大写，其余小写）
+     */
+    private String toTitleCase(String input) {
+        if (input == null || input.isEmpty()) return input;
+        
+        StringBuilder result = new StringBuilder();
+        boolean nextTitleCase = true;
+        
+        for (char c : input.toCharArray()) {
+            if (Character.isSpaceChar(c)) {
+                nextTitleCase = true;
+                result.append(c);
+            } else if (nextTitleCase) {
+                result.append(Character.toTitleCase(c));
+                nextTitleCase = false;
+            } else {
+                result.append(Character.toLowerCase(c));
+            }
+        }
+        
+        return result.toString();
+    }
+    
+    /**
+     * 处理艺术家名中的feat.格式（多种变体）
+     */
+    private String handleFeatInArtist(String artist) {
+        if (artist == null || artist.isEmpty()) return artist;
+        
+        // 支持多种feat.格式：feat., ft., featuring, with
+        String[] featPatterns = {"feat\\.", "ft\\.", "featuring", "with"};
+        
+        for (String pattern : featPatterns) {
+            if (artist.contains(pattern)) {
+                String[] parts = artist.split(pattern, 2);
+                String mainArtist = parts[0].trim();
+                
+                if (parts.length > 1) {
+                    String featArtists = parts[1].trim();
+                    // 将feat.信息添加到歌曲名中
+                    if (track != null && !track.isEmpty()) {
+                        track += " (feat. " + featArtists + ")";
+                    }
+                }
+                
+                Log.d(TAG, "cleanParsingResults - 处理艺术家名包含'" + pattern + "'的情况");
+                return mainArtist;
+            }
+        }
+        
+        return artist;
+    }
+    
+    /**
+     * 计算两个字符串的相似度（基于编辑距离）
+     */
+    private double calculateSimilarity(String s1, String s2) {
+        if (s1 == null || s2 == null) return 0.0;
+        if (s1.equals(s2)) return 1.0;
+        
+        int maxLength = Math.max(s1.length(), s2.length());
+        if (maxLength == 0) return 1.0;
+        
+        // 使用简化的编辑距离计算
+        int distance = levenshteinDistance(s1, s2);
+        return 1.0 - ((double) distance / maxLength);
+    }
+    
+    /**
+     * 计算Levenshtein编辑距离
+     */
+    private int levenshteinDistance(String s1, String s2) {
+        int[] costs = new int[s2.length() + 1];
+        
+        for (int i = 0; i <= s1.length(); i++) {
+            int lastValue = i;
+            for (int j = 0; j <= s2.length(); j++) {
+                if (i == 0) {
+                    costs[j] = j;
+                } else if (j > 0) {
+                    int newValue = costs[j - 1];
+                    if (s1.charAt(i - 1) != s2.charAt(j - 1)) {
+                        newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                    }
+                    costs[j - 1] = lastValue;
+                    lastValue = newValue;
+                }
+            }
+            if (i > 0) {
+                costs[s2.length()] = lastValue;
+            }
+        }
+        
+        return costs[s2.length()];
     }
     
     /**

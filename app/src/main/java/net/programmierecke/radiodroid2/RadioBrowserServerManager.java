@@ -136,13 +136,13 @@ public class RadioBrowserServerManager {
     }
     
     /**
-     * Test connection speeds for both servers and both protocols
+     * Test connection speeds for all servers and both protocols
      */
     public static Map<String, Long> testAllConnectionSpeeds(Context context) {
         Map<String, Long> results = new HashMap<>();
         
-        // Test the two specified servers
-        String[] servers = {"fi1.api.radio-browser.info", "de2.api.radio-browser.info"};
+        // Get all available servers from DNS
+        String[] servers = getServerList(true);
         
         for (String server : servers) {
             // Test HTTP

@@ -30,6 +30,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.Preference.OnPreferenceClickListener;
@@ -733,7 +734,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
             }
         };
         IntentFilter databaseUpdateFilter = new IntentFilter("net.programmierecke.radiodroid2.DATABASE_UPDATED");
-        requireContext().registerReceiver(databaseUpdatedReceiver, databaseUpdateFilter);
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(databaseUpdatedReceiver, databaseUpdateFilter);
 
         refreshToolbar();
 
@@ -768,7 +769,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
         }
         
         if (databaseUpdatedReceiver != null) {
-            requireContext().unregisterReceiver(databaseUpdatedReceiver);
+            LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(databaseUpdatedReceiver);
         }
         
         // 隐藏进度对话框但不取消更新
