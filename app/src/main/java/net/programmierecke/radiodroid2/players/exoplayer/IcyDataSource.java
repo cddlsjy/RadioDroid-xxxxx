@@ -240,7 +240,7 @@ public class IcyDataSource implements HttpDataSource {
                     }
                 }
                 
-                remainingUntilMetadata = shoutcastInfo.metadataOffset + metadataBytesToSkip;
+                remainingUntilMetadata = shoutcastInfo.metadataOffset;
             }
 
             int bytesLeft = Math.min(bytesAvailable, remainingUntilMetadata);
