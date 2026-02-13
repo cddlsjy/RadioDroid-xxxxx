@@ -61,4 +61,15 @@
         <item>@string/settings_record_name_formatting_3_display</item>
     </string-array>
 
+    <string-array name="language_entries">
+        <item>@string/language_system</item>
+        <item>@string/language_english</item>
+        <item>@string/language_chinese</item>
+    </string-array>
+    <string-array name="language_values">
+        <item>system</item>
+        <item>en</item>
+        <item>zh</item>
+    </string-array>
+
 </resources>

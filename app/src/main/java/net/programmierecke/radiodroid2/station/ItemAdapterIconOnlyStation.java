@@ -84,11 +84,11 @@ public class ItemAdapterIconOnlyStation extends ItemAdapaterContextMenuStation i
 
         TypedValue tv = new TypedValue();
         if (playingStationPosition == position) {
-            getContext().getTheme().resolveAttribute(R.attr.colorAccentMy, tv, true);
+            getContext().getTheme().resolveAttribute(android.R.attr.colorPrimary, tv, true);
             holder.frameLayout.setBackgroundColor(tv.data);
             holder.transparentImageView.setColorFilter(tv.data);
         } else {
-            getContext().getTheme().resolveAttribute(R.attr.boxBackgroundColor, tv, true);
+            getContext().getTheme().resolveAttribute(android.R.attr.colorSecondary, tv, true);
             holder.frameLayout.setBackgroundColor(tv.data);
         }
     }

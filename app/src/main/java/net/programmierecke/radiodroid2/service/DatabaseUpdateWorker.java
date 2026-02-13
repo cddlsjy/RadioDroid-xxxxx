@@ -63,10 +63,10 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                 CHANNEL_ID,
-                "数据库更新",
+                getApplicationContext().getString(R.string.update_notification_channel_name),
                 NotificationManager.IMPORTANCE_LOW
             );
-            channel.setDescription("显示数据库更新进度");
+            channel.setDescription(getApplicationContext().getString(R.string.update_notification_channel_description));
             notificationManager.createNotificationChannel(channel);
         }
     }
@@ -81,7 +81,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
         );
         
         Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-            .setContentTitle("正在更新电台数据库")
+            .setContentTitle(getApplicationContext().getString(R.string.update_dialog_title))
             .setContentText(message + " (" + progress + "/" + total + ")")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setOngoing(true)
@@ -103,7 +103,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
         );
         
         Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-            .setContentTitle("正在更新电台数据库")
+            .setContentTitle(getApplicationContext().getString(R.string.update_dialog_title))
             .setContentText(message + " (" + progress + "/" + total + ")")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setOngoing(true)
@@ -158,7 +158,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
                     .putBoolean(KEY_IS_UPDATING, true)
                     .putLong(KEY_UPDATE_ID, updateId)
                     .putLong(KEY_UPDATE_START_TIME, updateStartTime)
-                    .putString(KEY_PROGRESS_MESSAGE, "正在准备更新...")
+                    .putString(KEY_PROGRESS_MESSAGE, getApplicationContext().getString(R.string.update_preparing))
                     .putInt(KEY_PROGRESS_CURRENT, 0)
                     .putInt(KEY_PROGRESS_TOTAL, 0)
                     .putBoolean(KEY_UPDATE_CANCELLED, false)  // 清除取消标志
@@ -184,7 +184,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
                     .putBoolean(KEY_IS_UPDATING, true)
                     .putLong(KEY_UPDATE_ID, updateId)
                     .putLong(KEY_UPDATE_START_TIME, updateStartTime)
-                    .putString(KEY_PROGRESS_MESSAGE, "正在准备更新...")
+                    .putString(KEY_PROGRESS_MESSAGE, getApplicationContext().getString(R.string.progress_preparing_update))
                     .putInt(KEY_PROGRESS_CURRENT, 0)
                     .putInt(KEY_PROGRESS_TOTAL, 0)
                     .commit();
@@ -194,7 +194,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
             
             // 设置为前台服务，确保应用在后台时也能继续更新
             ForegroundInfo foregroundInfo = createForegroundInfo(
-                "正在准备更新...",
+                getApplicationContext().getString(R.string.progress_preparing_update),
                 0,
                 0
             );
@@ -218,7 +218,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
                     updateId = existingUpdateId;
                     
                     // 恢复进度信息
-                    String lastProgressMessage = prefs.getString(KEY_PROGRESS_MESSAGE, "正在恢复更新...");
+                    String lastProgressMessage = prefs.getString(KEY_PROGRESS_MESSAGE, getApplicationContext().getString(R.string.progress_resuming_update));
                     int lastProgressCurrent = prefs.getInt(KEY_PROGRESS_CURRENT, 0);
                     int lastProgressTotal = prefs.getInt(KEY_PROGRESS_TOTAL, 0);
                     
@@ -258,7 +258,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
                 Log.e(TAG, "Database update failed", e);
                 
                 // 保存错误信息到SharedPreferences
-                String errorMessage = "更新失败: " + e.getMessage();
+                String errorMessage = getApplicationContext().getString(R.string.update_failed_message, e.getMessage());
                 prefs.edit()
                     .putString(KEY_PROGRESS_MESSAGE, errorMessage)
                     .commit();
@@ -276,7 +276,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
             Log.e(TAG, "Unexpected error in doWork", e);
             
             // 保存错误信息到SharedPreferences
-            String errorMessage = "更新失败: " + e.getMessage();
+            String errorMessage = getApplicationContext().getString(R.string.update_failed) + ": " + e.getMessage();
             prefs.edit()
                 .putString(KEY_PROGRESS_MESSAGE, errorMessage)
                 .commit();
@@ -302,14 +302,14 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
         // 检查是否已被取消
         if (isStopped()) {
             Log.d(TAG, "Worker is stopped, throwing exception to interrupt sync process");
-            throw new RuntimeException("更新已被取消");
+            throw new RuntimeException(getApplicationContext().getString(R.string.update_cancelled));
         }
         
         // 检查SharedPreferences中的取消标志
         boolean isCancelled = prefs.getBoolean(KEY_UPDATE_CANCELLED, false);
         if (isCancelled) {
             Log.d(TAG, "Update cancelled flag detected, throwing exception to interrupt sync process");
-            throw new RuntimeException("更新已被取消");
+            throw new RuntimeException(getApplicationContext().getString(R.string.update_cancelled));
         }
         
         prefs.edit()
@@ -398,7 +398,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
         Log.e(TAG, "Database update error: " + error);
         // 更新错误状态 - 使用commit()确保同步更新，立即持久化
         prefs.edit()
-            .putString(KEY_PROGRESS_MESSAGE, "更新失败: " + error)
+            .putString(KEY_PROGRESS_MESSAGE, getApplicationContext().getString(R.string.update_failed) + ": " + error)
             .commit();
     }
     
@@ -595,7 +595,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
                 .putLong(KEY_UPDATE_ID, 0)  // 清除更新ID
                 .putLong(KEY_UPDATE_START_TIME, 0)  // 清除开始时间
                 .putLong(KEY_APP_LAST_FOREGROUND_TIME, 0)  // 清除应用前台时间
-                .putString(KEY_PROGRESS_MESSAGE, "更新已取消")
+                .putString(KEY_PROGRESS_MESSAGE, context.getString(R.string.update_cancelled))
                 .putInt(KEY_PROGRESS_CURRENT, 0)  // 重置当前进度
                 .putInt(KEY_PROGRESS_TOTAL, 0)  // 重置总进度
                 .putBoolean(KEY_UPDATE_CANCELLED, true)  // 设置取消标志
@@ -618,7 +618,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
                         .putLong(KEY_UPDATE_ID, 0)
                         .putLong(KEY_UPDATE_START_TIME, 0)
                         .putLong(KEY_APP_LAST_FOREGROUND_TIME, 0)
-                        .putString(KEY_PROGRESS_MESSAGE, "更新已取消")
+                        .putString(KEY_PROGRESS_MESSAGE, context.getString(R.string.update_cancelled))
                         .putInt(KEY_PROGRESS_CURRENT, 0)
                         .putInt(KEY_PROGRESS_TOTAL, 0)
                         .putBoolean(KEY_UPDATE_CANCELLED, true)

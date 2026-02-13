@@ -159,8 +159,9 @@ public class FragmentLocalStations extends FragmentBase implements IFragmentSear
                     if (!isEmpty) {
                         // 数据库有数据，继续加载
                         if (getActivity() != null) {
-                            // 获取系统语言，优先显示该语言的电台
+                            // 获取系统国家和语言
                             java.util.Locale locale = java.util.Locale.getDefault();
+                            String systemCountry = locale.getCountry();
                             String systemLanguage = locale.getLanguage();
                             
                             // 确保在主线程上加载数据
@@ -172,8 +173,8 @@ public class FragmentLocalStations extends FragmentBase implements IFragmentSear
                                         loadAllStations();
                                         break;
                                     default:
-                                        // 默认情况下，先尝试加载系统语言的电台
-                                        loadStationsBySystemLanguage(systemLanguage);
+                                        // 默认情况下，先尝试加载系统国家的电台
+                                        loadStationsBySystemCountry(systemCountry, systemLanguage);
                                         break;
                                 }
                             });
@@ -195,6 +196,48 @@ public class FragmentLocalStations extends FragmentBase implements IFragmentSear
             });
     }
 
+    private void loadStationsBySystemCountry(String systemCountry, String systemLanguage) {
+        Log.d(TAG, "尝试加载系统国家(" + systemCountry + ")的电台");
+        
+        // 先尝试加载系统国家的电台
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(() -> {
+                // 首先尝试加载系统国家的电台
+                repository.getStationsByCountryWithLimit(systemCountry, 100).observe(getViewLifecycleOwner(), new Observer<List<RadioStation>>() {
+                    @Override
+                    public void onChanged(List<RadioStation> radioStations) {
+                        if (radioStations != null && !radioStations.isEmpty()) {
+                            hideError();
+                            // 转换为DataRadioStation，预分配容量以提高性能
+                            List<DataRadioStation> dataStations = new ArrayList<>(radioStations.size());
+                            for (RadioStation radioStation : radioStations) {
+                                if (radioStation != null) {
+                                    DataRadioStation dataStation = radioStation.toDataRadioStation();
+                                    if (dataStation != null) {
+                                        dataStations.add(dataStation);
+                                    }
+                                }
+                            }
+                            
+                            if (!dataStations.isEmpty()) {
+                                stationListAdapter.updateList(null, dataStations);
+                                Log.d(TAG, "加载了 " + dataStations.size() + " 个系统国家(" + systemCountry + ")的电台");
+                            } else {
+                                // 如果系统国家没有电台，尝试加载系统语言的电台
+                                loadStationsBySystemLanguage(systemLanguage);
+                            }
+                        } else {
+                            // 如果系统国家没有电台，尝试加载系统语言的电台
+                            loadStationsBySystemLanguage(systemLanguage);
+                        }
+                    }
+                });
+            });
+        } else {
+            Log.e(TAG, "Activity is null, cannot load stations by system country");
+        }
+    }
+    
     private void loadStationsBySystemLanguage(String systemLanguage) {
         // 处理中文语言代码的特殊情况
         final String languageCode = "zh".equals(systemLanguage) ? "chinese" : systemLanguage;

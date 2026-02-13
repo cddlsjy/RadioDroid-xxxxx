@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -33,6 +34,7 @@ import android.widget.*;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.IconicsSize;
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial;
+import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageButton;
 
 import net.programmierecke.radiodroid2.*;
@@ -265,6 +267,9 @@ public class ItemAdapterStation
 
     @Override
     public void onBindViewHolder(final StationViewHolder holder, int position) {
+        if (filteredStationsList == null || position < 0 || position >= filteredStationsList.size()) {
+            return;
+        }
         final DataRadioStation station = filteredStationsList.get(position);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
@@ -336,19 +341,19 @@ public class ItemAdapterStation
             }
         });
 
-        TypedValue tv = new TypedValue();
+        // 确保电台名称可见
+        holder.textViewTitle.setText(station.Name != null ? station.Name : "未知电台");
+        
+        // 设置文本颜色，确保与背景有足够对比度
         if (playingStationPosition == position) {
-            getContext().getTheme().resolveAttribute(R.attr.colorAccentMy, tv, true);
-            holder.textViewTitle.setTextColor(tv.data);
+            // 播放中的电台使用黑色粗体
+            holder.textViewTitle.setTextColor(Color.BLACK);
             holder.textViewTitle.setTypeface(null, Typeface.BOLD);
         } else {
-            getContext().getTheme().resolveAttribute(R.attr.boxBackgroundColor, tv, true);
+            // 未播放的电台使用深灰色
+            holder.textViewTitle.setTextColor(Color.DKGRAY);
             holder.textViewTitle.setTypeface(holder.textViewShortDescription.getTypeface());
-            getContext().getTheme().resolveAttribute(R.attr.iconsInItemBackgroundColor, tv, true);
-            holder.textViewTitle.setTextColor(tv.data);
         }
-
-        holder.textViewTitle.setText(station.Name);
         holder.textViewShortDescription.setText(station.getShortDetails(getContext()));
         holder.textViewTags.setText(station.TagsAll.replace(",", ", "));
 
@@ -373,7 +378,7 @@ public class ItemAdapterStation
 
         Drawable flag = CountryFlagsLoader.getInstance().getFlag(activity, station.CountryCode);
 
-        if (flag != null) {
+        if (flag != null && flag.getMinimumHeight() > 0) {
             float k = flag.getMinimumWidth() / (float) flag.getMinimumHeight();
             float viewHeight = holder.textViewShortDescription.getTextSize();
             flag.setBounds(0, 0, (int) (k * viewHeight), (int) viewHeight);

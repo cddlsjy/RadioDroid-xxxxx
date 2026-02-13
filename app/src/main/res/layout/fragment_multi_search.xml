@@ -10,7 +10,7 @@
         android:id="@+id/btnToggleFilters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="展开筛选条件"
+        android:text="@string/multi_search_expand_filters"
         android:textAllCaps="false"
         app:cornerRadius="0dp" />
 
@@ -39,7 +39,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="国家"
+                    android:text="@string/multi_search_country"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -62,7 +62,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="语言"
+                    android:text="@string/multi_search_language"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -85,7 +85,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="标签"
+                    android:text="@string/multi_search_tag"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -108,7 +108,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="关键词"
+                    android:text="@string/multi_search_keyword"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -117,7 +117,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="4dp"
-                    android:hint="输入关键词搜索"
+                    android:hint="@string/multi_search_hint"
                     android:inputType="text"
                     android:maxLines="1"
                     android:padding="8dp" />
@@ -129,7 +129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="重置筛选条件"
+                android:text="@string/multi_search_reset"
                 android:textAllCaps="false"
                 app:cornerRadius="4dp" />
 
@@ -172,7 +172,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     android:gravity="center"
-                    android:text="没有找到匹配的电台"
+                    android:text="@string/multi_search_no_results"
                     android:textSize="16sp" />
 
             </LinearLayout>

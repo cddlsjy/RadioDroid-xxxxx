@@ -141,7 +141,12 @@ public class DataRadioStation implements Parcelable {
 							JSONObject anObject = jsonArray.getJSONObject(i);
 
 							DataRadioStation aStation = new DataRadioStation();
-							aStation.Name = anObject.getString("name");
+							// 检查是否有name字段
+							if (anObject.has("name")) {
+								aStation.Name = anObject.optString("name", "未知电台");
+							} else {
+								aStation.Name = "未知电台";
+							}
 							aStation.StreamUrl = "";
 							if (anObject.has("url")) {
 								aStation.StreamUrl = anObject.getString("url");
@@ -150,30 +155,48 @@ public class DataRadioStation implements Parcelable {
 								aStation.StationUuid = anObject.getString("stationuuid");
 							}
 							if (!aStation.hasValidUuid()) {
-								aStation.StationId = anObject.getString("id");
+								if (anObject.has("id")) {
+									aStation.StationId = anObject.getString("id");
+								}
 							}
 							if (anObject.has("changeuuid")) {
 								aStation.ChangeUuid = anObject.getString("changeuuid");
 							}
-							aStation.Votes = anObject.getInt("votes");
+							if (anObject.has("votes")) {
+								aStation.Votes = anObject.getInt("votes");
+							}
 							if (anObject.has("refreshretrycount")) {
 								aStation.RefreshRetryCount = anObject.getInt("refreshretrycount");
 							} else {
 								aStation.RefreshRetryCount = 0;
 							}
-							aStation.HomePageUrl = anObject.getString("homepage");
-							aStation.TagsAll = anObject.getString("tags");
-							aStation.Country = anObject.getString("country");
+							if (anObject.has("homepage")) {
+								aStation.HomePageUrl = anObject.getString("homepage");
+							}
+							if (anObject.has("tags")) {
+								aStation.TagsAll = anObject.getString("tags");
+							}
+							if (anObject.has("country")) {
+								aStation.Country = anObject.getString("country");
+							}
 							if (anObject.has("countrycode")) {
 								aStation.CountryCode = anObject.getString("countrycode");
 							}
-							aStation.State = anObject.getString("state");
-							aStation.IconUrl = anObject.getString("favicon");
-							aStation.Language = anObject.getString("language");
+							if (anObject.has("state")) {
+								aStation.State = anObject.getString("state");
+							}
+							if (anObject.has("favicon")) {
+								aStation.IconUrl = anObject.getString("favicon");
+							}
+							if (anObject.has("language")) {
+								aStation.Language = anObject.getString("language");
+							}
 							if (anObject.has("lastchangetime")) {
 								aStation.LastChangeTime = anObject.getString("lastchangetime");
 							}
-							aStation.ClickCount = anObject.getInt("clickcount");
+							if (anObject.has("clickcount")) {
+								aStation.ClickCount = anObject.getInt("clickcount");
+							}
 							if (anObject.has("clicktrend")) {
 								aStation.ClickTrend = anObject.getInt("clicktrend");
 							}
@@ -456,7 +479,11 @@ public class DataRadioStation implements Parcelable {
 
         @Override
         public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-            onBitmapLoaded(((BitmapDrawable) errorDrawable).getBitmap(), null);
+            if (errorDrawable instanceof BitmapDrawable) {
+                onBitmapLoaded(((BitmapDrawable) errorDrawable).getBitmap(), null);
+            } else {
+                onBitmapLoaded(null, null);
+            }
         }
 
         @Override

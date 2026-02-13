@@ -601,8 +601,10 @@ public class StationSaveManager extends Observable {
                 Log.v("LOAD", "line: "+line);
                 if (line.startsWith(M3U_PREFIX)) {
                     try {
-                        String uuid = line.substring(M3U_PREFIX.length()).trim();
-                        listUuids.add(uuid);
+                        if (line.length() > M3U_PREFIX.length()) {
+                            String uuid = line.substring(M3U_PREFIX.length()).trim();
+                            listUuids.add(uuid);
+                        }
                     } catch (Exception e) {
                         Log.e("LOAD", e.toString());
                     }

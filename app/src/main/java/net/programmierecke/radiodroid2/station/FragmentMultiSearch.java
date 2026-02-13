@@ -143,7 +143,7 @@ public class FragmentMultiSearch extends FragmentBase {
     
     private void loadFilterOptions() {
         // 加载国家列表
-        countriesList.add("所有国家");
+        countriesList.add(getString(R.string.multi_search_all));
         repository.getAllCountries().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> countries) {
@@ -155,7 +155,7 @@ public class FragmentMultiSearch extends FragmentBase {
         });
         
         // 加载语言列表
-        languagesList.add("所有语言");
+        languagesList.add(getString(R.string.multi_search_all));
         repository.getAllLanguages().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> languages) {
@@ -167,7 +167,7 @@ public class FragmentMultiSearch extends FragmentBase {
         });
         
         // 加载标签列表
-        tagsList.add("所有标签");
+        tagsList.add(getString(R.string.multi_search_all));
         repository.getAllTags().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> tags) {
@@ -280,11 +280,11 @@ public class FragmentMultiSearch extends FragmentBase {
         if (scrollViewFilters.getVisibility() == View.VISIBLE) {
             // 隐藏筛选条件区域
             scrollViewFilters.setVisibility(View.GONE);
-            btnToggleFilters.setText("展开筛选条件");
+            btnToggleFilters.setText(getString(R.string.multi_search_expand_filters));
         } else {
             // 显示筛选条件区域
             scrollViewFilters.setVisibility(View.VISIBLE);
-            btnToggleFilters.setText("收起筛选条件");
+            btnToggleFilters.setText(getString(R.string.multi_search_collapse_filters));
         }
     }
     

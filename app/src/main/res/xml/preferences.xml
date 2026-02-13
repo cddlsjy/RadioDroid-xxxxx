@@ -28,19 +28,27 @@
 
         <Preference
             android:key="export_database"
-            android:title="导出主数据库"
-            android:summary="将主数据库导出到外部存储，便于备份和迁移" />
-
+            android:title="@string/export_database_title"
+            android:summary="@string/export_database_summary" />
         <Preference
             android:key="import_database"
-            android:title="导入主数据库"
-            android:summary="从外部存储导入主数据库，快速恢复电台数据" />
+            android:title="@string/import_database_title"
+            android:summary="@string/import_database_summary" />
 
     </PreferenceScreen>
 
     <PreferenceScreen android:title="@string/settings_appearance"
         search:ignore="true"
         android:key="pref_category_ui">
+
+        <ListPreference
+            android:defaultValue="zh"
+            android:entries="@array/language_entries"
+            android:entryValues="@array/language_values"
+            android:key="app_language"
+            android:title="@string/settings_language"
+            search:summary=""
+            android:summary="%s"/>
 
         <ListPreference
             android:defaultValue="@string/theme_light"

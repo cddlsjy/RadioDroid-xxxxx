@@ -7,7 +7,6 @@
         android:id="@+id/about_version"
         android:layout_width="match_parent"
         android:textSize="15sp"
-        android:text="@string/about_version"
         android:layout_margin="10dp"
         android:elegantTextHeight="false"
         android:typeface="normal"
@@ -15,16 +14,15 @@
         android:layout_height="wrap_content" />
 
     <TextView
+        android:id="@+id/about_github"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autoLink="web|email"
         android:textSize="15sp"
-        android:text="@string/about_text"
         android:layout_margin="10dp"
         android:elegantTextHeight="false"
-        android:linksClickable="true"
         android:typeface="normal"
-        android:textIsSelectable="false"
-        android:singleLine="false" />
+        android:textIsSelectable="true"
+        android:autoLink="web"
+        android:linksClickable="true"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

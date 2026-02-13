@@ -102,69 +102,6 @@
     <string name="settings_local_database_status_default">Not updated yet</string>
     <string name="settings_local_database_status_success">Last update: %1$s\nStation count: %2$d</string>
     <string name="settings_local_database_status_failed">Update failed: %s</string>
-    
-    <string name="settings_language">Interface Language</string>
-    <string name="settings_language_desc">Select language for app interface</string>
-    <string name="language_system">System Default</string>
-    <string name="language_english">English</string>
-    <string name="language_chinese">Chinese</string>
-    
-    <string name="multi_search_title">Multi Criteria Search</string>
-    <string name="multi_search_country">Country</string>
-    <string name="multi_search_language">Language</string>
-    <string name="multi_search_tag">Tag</string>
-    <string name="multi_search_keyword">Keyword</string>
-    <string name="multi_search_hint">Enter keyword to search</string>
-    <string name="multi_search_all">All</string>
-    <string name="multi_search_reset">Reset Filters</string>
-    <string name="multi_search_no_results">No stations found matching the criteria</string>
-    <string name="multi_search_expand_filters">Expand Filters</string>
-    <string name="multi_search_collapse_filters">Collapse Filters</string>
-    
-    <string name="network_check_title">Network Connection Check</string>
-    <string name="network_check_saved_results">Saved test results available (%1$s).\n\nDo you want to view saved results or perform a new test?</string>
-    <string name="network_check_view_saved">View Saved Results</string>
-    <string name="network_check_new_test">Perform New Test</string>
-    <string name="network_check_cancel">Cancel</string>
-    <string name="network_check_testing">Checking network connection speed...</string>
-    <string name="network_check_failed">Network Check Failed</string>
-    <string name="network_check_error">Unable to connect to radio browser server: %1$s</string>
-    <string name="network_check_results_title">Network Connection Speed Test Results</string>
-    <string name="network_check_time">Test Time: %1$s</string>
-    <string name="network_check_server_1">Server 1: fi1.api.radio-browser.info</string>
-    <string name="network_check_server_2">Server 2: de2.api.radio-browser.info</string>
-    <string name="network_check_http">HTTP: %1$s</string>
-    <string name="network_check_https">HTTPS: %1$s</string>
-    <string name="network_check_connection_failed">Connection Failed</string>
-    <string name="network_check_fastest">Fastest Connection:</string>
-    <string name="network_check_no_connection">No Connection</string>
-    <string name="network_check_no_available">No Available Connection</string>
-    <string name="network_check_ok">OK</string>
-    
-    <string name="export_database_title">Export Main Database</string>
-    <string name="export_database_message">Export main database to external storage? The exported file will be saved in the Download folder.</string>
-    <string name="export_database_button">Export</string>
-    <string name="import_database_title">Import Main Database</string>
-    <string name="import_database_message">Import main database from external storage?
-
-Note: The app will automatically restart after import to load the new database.
-
-This will overwrite the current main database, please ensure you have backed up important data.</string>
-    <string name="import_database_button">Select File</string>
-    <string name="export_database_summary">Export main database to external storage, backup radio station data</string>
-    <string name="import_database_summary">Import main database from external storage, quickly restore radio station data</string>
-    <string name="database_not_updated">Database Not Updated Yet</string>
-    <string name="last_update">Last Update: %1$s, Station Count: %2$d</string>
-    <string name="get_status_failed">Failed to Get Status: %1$s</string>
-    <string name="save_file_failed">Failed to Save File: %1$s</string>
-    <string name="import_failed_invalid_format">Please select an M3U format playlist file</string>
-    <string name="import_failed_parse">Import Failed: Unable to Parse File</string>
-    <string name="database_status_updated">Database Status Updated: %1$s</string>
-    <string name="database_status_update_failed">Database Status Update Failed: %1$s</string>
-    <string name="database_status_from_fields">Database Status Updated from Database Fields: %1$s</string>
-    
-    <string name="empty_database_message">Local database is empty, please update the local database in settings first</string>
-    <string name="no_results_message">No %s categories found, database update may be incomplete, please try updating the local database in settings</string>
     <string name="settings_theme_selection_title">Theme</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
@@ -425,40 +362,24 @@ This will overwrite the current main database, please ensure you have backed up 
     <string name="context_menu_create_shortcut">@string/detail_create_shortcut</string>
     <string name="context_menu_delete">@string/action_delete</string>
     
-    <string name="export_success_title">Export Successful</string>
-    <string name="export_success_message">Main database has been successfully exported to:
-%s</string>
-    <string name="export_failed_title">Export Failed</string>
-    <string name="export_failed_message">Error exporting main database: %s</string>
-    <string name="progress_exporting_database">Exporting main database, please wait...</string>
-    <string name="progress_importing_database">Importing main database, please wait...</string>
-    <string name="import_success_title">Import Successful</string>
-    <string name="import_success_message">Main database has been successfully imported, containing %d stations.
-
-The app will automatically restart to load the new database.</string>
-    <string name="import_failed_title">Import Failed</string>
-    <string name="import_failed_message">Error importing main database: %s</string>
-    <string name="import_failed_empty">The imported database file is empty or copy failed</string>
-    <string name="import_failed_invalid">Please select a valid database file</string>
+    <string name="empty_database_message">Local database is empty, please update the local database in settings first</string>
+    <string name="no_results_message">No %s categories found, database update may be incomplete, please try updating the local database in settings</string>
     
-    <string name="progress_preparing_update">Preparing update...</string>
-    <string name="progress_resuming_update">Resuming update...</string>
-    <string name="progress_downloading_stations">Downloading station data</string>
-    <string name="progress_updating_database">Updating database</string>
-    <string name="progress_completing_update">Completing update</string>
-    <string name="update_failed">Update Failed</string>
-    <string name="update_failed_message">Update failed: %s</string>
-    <string name="progress_stalled">Update progress stalled, trying to recover...</string>
-    <string name="progress_downloading_data">Downloading station data</string>
-    <string name="progress_system_paused"> (may be paused by system)</string>
-    <string name="update_dialog_title">Update Radio Database</string>
-    <string name="update_cancelled">Update Cancelled</string>
-    <string name="update_system_paused">Update paused by system, waiting to resume...</string>
-    <string name="update_preparing">Preparing...</string>
-    <string name="update_confirm_cancel_title">Cancel Update</string>
-    <string name="update_confirm_cancel_message">Are you sure you want to cancel the database update?</string>
-    <string name="update_confirm_cancel_positive">Confirm</string>
-    <string name="update_notification_channel_name">Database Update</string>
-    <string name="update_notification_channel_description">Shows database update progress</string>
+    <string name="settings_language">Interface Language</string>
+    <string name="settings_language_desc">Select the language for the app interface</string>
+    <string name="language_system">System Default</string>
+    <string name="language_english">English</string>
+    <string name="language_chinese">Chinese</string>
     
-    </resources>
+    <string name="multi_search_title">Multi Criteria Search</string>
+    <string name="multi_search_country">Country</string>
+    <string name="multi_search_language">Language</string>
+    <string name="multi_search_tag">Tag</string>
+    <string name="multi_search_keyword">Keyword</string>
+    <string name="multi_search_hint">Enter keyword to search</string>
+    <string name="multi_search_all">All</string>
+    <string name="multi_search_reset">Reset Filters</string>
+    <string name="multi_search_no_results">No stations found matching the criteria</string>
+    <string name="multi_search_expand_filters">Expand Filters</string>
+    <string name="multi_search_collapse_filters">Collapse Filters</string>
+</resources>

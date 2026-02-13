@@ -565,7 +565,7 @@ public class Utils {
     }
 
     public static int getAccentColor(Context context) {
-        return themeAttributeToColor(R.attr.colorAccent, context, Color.LTGRAY);
+        return themeAttributeToColor(android.R.attr.colorPrimary, context, Color.LTGRAY);
     }
 
     /**

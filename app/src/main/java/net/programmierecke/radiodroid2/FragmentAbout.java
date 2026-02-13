@@ -19,19 +19,13 @@ public class FragmentAbout extends Fragment {
 
         TextView aTextVersion = (TextView) view.findViewById(R.id.about_version);
         if (aTextVersion != null) {
-
             String version = BuildConfig.VERSION_NAME;
-            String gitHash = getString(R.string.GIT_HASH);
-            String buildDate = getString(R.string.BUILD_DATE);
+            aTextVersion.setText("版本: " + version);
+        }
 
-
-            if (!gitHash.isEmpty()) {
-                version += " (git " + gitHash + ")";
-            }
-
-            Resources resources = getResources();
-            aTextVersion.setText(resources.getString(R.string.about_version, version+" "+buildDate));
-
+        TextView aTextGithub = (TextView) view.findViewById(R.id.about_github);
+        if (aTextGithub != null) {
+            aTextGithub.setText("GitHub: https://github.com/xueshi86/RadioDroid");
         }
 
         return view;

@@ -301,9 +301,9 @@ public class RadioStationRepository {
             ExecutorService downloadExecutor = Executors.newFixedThreadPool(optimalThreadCount);
             
             // 用于线程安全的数据收集
-            List<RadioStation>[] downloadedStationsPerPage = new List[totalPages - startPage];
-            for (int i = 0; i < downloadedStationsPerPage.length; i++) {
-                downloadedStationsPerPage[i] = new ArrayList<>();
+            List<List<RadioStation>> downloadedStationsPerPage = new ArrayList<>();
+            for (int i = 0; i < totalPages - startPage; i++) {
+                downloadedStationsPerPage.add(new ArrayList<>());
             }
             
             // 用于线程安全的进度更新
@@ -401,7 +401,7 @@ public class RadioStationRepository {
                                 radioStations.add(radioStation);
                             }
                             
-                            downloadedStationsPerPage[pageIndex] = radioStations;
+                            downloadedStationsPerPage.set(pageIndex, radioStations);
                             int pageDownloadedCount = radioStations.size();
                             int currentTotal = totalDownloadedAtomic.addAndGet(pageDownloadedCount);
                             

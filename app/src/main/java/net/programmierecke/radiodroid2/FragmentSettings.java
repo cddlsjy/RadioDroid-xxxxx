@@ -301,23 +301,23 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                     if (savedResultsData != null) {
                         // There are saved results, ask user if they want to view them or run a new test
                         androidx.appcompat.app.AlertDialog.Builder choiceBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
-                        choiceBuilder.setTitle("网络连接检查");
+                        choiceBuilder.setTitle(R.string.network_check_title);
                         
                         // Calculate when the test was performed
                         String timeString = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
                             .format(new java.util.Date(savedResultsData.timestamp));
                         
-                        choiceBuilder.setMessage("已有保存的测试结果（" + timeString + "）。\n\n您想要查看保存的结果还是进行新的测试？");
+                        choiceBuilder.setMessage(getString(R.string.network_check_saved_results, timeString));
                         
-                        choiceBuilder.setPositiveButton("查看保存的结果", (dialog, which) -> {
+                        choiceBuilder.setPositiveButton(R.string.network_check_view_saved, (dialog, which) -> {
                             showNetworkConnectionResults(savedResultsData.results, savedResultsData.timestamp);
                         });
                         
-                        choiceBuilder.setNegativeButton("进行新的测试", (dialog, which) -> {
+                        choiceBuilder.setNegativeButton(R.string.network_check_new_test, (dialog, which) -> {
                             performNewNetworkTest();
                         });
                         
-                        choiceBuilder.setNeutralButton("取消", null);
+                        choiceBuilder.setNeutralButton(R.string.network_check_cancel, null);
                         choiceBuilder.show();
                     } else {
                         // No saved results, perform a new test directly
@@ -344,14 +344,14 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                     
                     // 显示确认对话框
                     androidx.appcompat.app.AlertDialog.Builder confirmBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
-                    confirmBuilder.setTitle("导出主数据库");
-                    confirmBuilder.setMessage("是否将主数据库导出到外部存储？导出的文件将保存在Download文件夹中。");
+                    confirmBuilder.setTitle(getString(R.string.export_database_title));
+                    confirmBuilder.setMessage(getString(R.string.export_database_message));
                     
-                    confirmBuilder.setPositiveButton("导出", (dialog, which) -> {
+                    confirmBuilder.setPositiveButton(getString(R.string.export_database_button), (dialog, which) -> {
                         exportDatabase();
                     });
                     
-                    confirmBuilder.setNegativeButton("取消", null);
+                    confirmBuilder.setNegativeButton(getString(android.R.string.cancel), null);
                     confirmBuilder.show();
                     
                     return false;
@@ -374,15 +374,15 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                     
                     // 显示确认对话框
                     androidx.appcompat.app.AlertDialog.Builder confirmBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
-                    confirmBuilder.setTitle("导入主数据库");
-                    confirmBuilder.setMessage("是否从外部存储导入主数据库？\n\n注意：导入完成后应用将自动重启以加载新数据库。\n\n这将覆盖当前的主数据库，请确保已备份重要数据。");
+                    confirmBuilder.setTitle(getString(R.string.import_database_title));
+                    confirmBuilder.setMessage(getString(R.string.import_database_message));
                     
-                    confirmBuilder.setPositiveButton("选择文件", (dialog, which) -> {
+                    confirmBuilder.setPositiveButton(getString(R.string.import_database_button), (dialog, which) -> {
                         // 打开文件选择器，用户可以导航到Download/RadioDroid文件夹选择.db文件
                         filePickerLauncher.launch("*/*");
                     });
                     
-                    confirmBuilder.setNegativeButton("取消", null);
+                    confirmBuilder.setNegativeButton(getString(android.R.string.cancel), null);
                     confirmBuilder.show();
                     
                     return false;
@@ -421,16 +421,16 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                 }
             });
 
-//            findPreference("show_about").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-//                @Override
-//                public boolean onPreferenceClick(Preference preference) {
-//                    ((ActivityMain) getActivity()).getToolbar().setTitle(R.string.settings_about);
-//                    FragmentAbout f = new FragmentAbout();
-//                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-//                    fragmentTransaction.replace(R.id.containerView, f).addToBackStack(String.valueOf(FRAGMENT_FROM_BACKSTACK)).commit();
-//                    return false;
-//                }
-//            });
+            findPreference("show_about").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    ((ActivityMain) getActivity()).getToolbar().setTitle(R.string.settings_about);
+                    FragmentAbout f = new FragmentAbout();
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.containerView, f).addToBackStack(String.valueOf(FRAGMENT_FROM_BACKSTACK)).commit();
+                    return false;
+                }
+            });
         }
 
         Preference batPref = getPreferenceScreen().findPreference(getString(R.string.key_ignore_battery_optimization));
@@ -459,7 +459,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
         
         // Title
         TextView titleView = new TextView(requireContext());
-        titleView.setText("网络连接速度测试结果");
+        titleView.setText(R.string.network_check_results_title);
         titleView.setTextSize(20);
         titleView.setTypeface(null, Typeface.BOLD);
         titleView.setPadding(0, 0, 0, 30);
@@ -470,67 +470,77 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
         if (timestamp > 0) {
             String timeString = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
                 .format(new java.util.Date(timestamp));
-            timeView.setText("测试时间: " + timeString);
+            timeView.setText(getString(R.string.network_check_time, timeString));
         } else {
-            timeView.setText("测试时间: " + new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
-                .format(new java.util.Date()));
+            timeView.setText(getString(R.string.network_check_time, new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
+                .format(new java.util.Date())));
         }
         timeView.setTextSize(14);
         timeView.setPadding(0, 0, 0, 20);
         timeView.setTextColor(Color.GRAY);
         linearLayout.addView(timeView);
         
-        // Server 1
-        TextView server1Title = new TextView(requireContext());
-        server1Title.setText("服务器 1: fi1.api.radio-browser.info");
-        server1Title.setTextSize(16);
-        server1Title.setTypeface(null, Typeface.BOLD);
-        server1Title.setPadding(0, 20, 0, 10);
-        linearLayout.addView(server1Title);
+        // 动态显示DNS返回的服务器的测试结果
+        Map<String, Map<String, Long>> serverResults = new HashMap<>();
         
-        // Server 1 HTTP
-        TextView server1Http = new TextView(requireContext());
-        long httpTime1 = results.get("fi1.api.radio-browser.info_HTTP");
-        server1Http.setText("HTTP: " + (httpTime1 == Long.MAX_VALUE ? "连接失败" : httpTime1 + " ms"));
-        server1Http.setTextSize(14);
-        server1Http.setPadding(30, 5, 0, 5);
-        server1Http.setTextColor(httpTime1 == Long.MAX_VALUE ? Color.RED : Color.BLACK);
-        linearLayout.addView(server1Http);
+        // 按服务器分组结果
+        for (Map.Entry<String, Long> entry : results.entrySet()) {
+            String[] parts = entry.getKey().split("_");
+            if (parts.length == 2) {
+                String server = parts[0];
+                String protocol = parts[1];
+                
+                if (!serverResults.containsKey(server)) {
+                    serverResults.put(server, new HashMap<>());
+                }
+                serverResults.get(server).put(protocol, entry.getValue());
+            }
+        }
         
-        // Server 1 HTTPS
-        TextView server1Https = new TextView(requireContext());
-        long httpsTime1 = results.get("fi1.api.radio-browser.info_HTTPS");
-        server1Https.setText("HTTPS: " + (httpsTime1 == Long.MAX_VALUE ? "连接失败" : httpsTime1 + " ms"));
-        server1Https.setTextSize(14);
-        server1Https.setPadding(30, 5, 0, 5);
-        server1Https.setTextColor(httpsTime1 == Long.MAX_VALUE ? Color.RED : Color.BLACK);
-        linearLayout.addView(server1Https);
+        // 显示每个服务器的结果
+        int serverIndex = 1;
+        for (Map.Entry<String, Map<String, Long>> serverEntry : serverResults.entrySet()) {
+            String server = serverEntry.getKey();
+            Map<String, Long> protocolResults = serverEntry.getValue();
+            
+            // Server title
+            TextView serverTitle = new TextView(requireContext());
+            serverTitle.setText("服务器 " + serverIndex + ": " + server);
+            serverTitle.setTextSize(16);
+            serverTitle.setTypeface(null, Typeface.BOLD);
+            serverTitle.setPadding(0, 20, 0, 10);
+            linearLayout.addView(serverTitle);
+            
+            // HTTP result
+            long httpTime = protocolResults.getOrDefault("HTTP", Long.MAX_VALUE);
+            TextView httpView = new TextView(requireContext());
+            httpView.setText("HTTP: " + (httpTime == Long.MAX_VALUE ? "连接失败" : httpTime + " ms"));
+            httpView.setTextSize(14);
+            httpView.setPadding(30, 5, 0, 5);
+            httpView.setTextColor(httpTime == Long.MAX_VALUE ? Color.RED : Color.BLACK);
+            linearLayout.addView(httpView);
+            
+            // HTTPS result
+            long httpsTime = protocolResults.getOrDefault("HTTPS", Long.MAX_VALUE);
+            TextView httpsView = new TextView(requireContext());
+            httpsView.setText("HTTPS: " + (httpsTime == Long.MAX_VALUE ? "连接失败" : httpsTime + " ms"));
+            httpsView.setTextSize(14);
+            httpsView.setPadding(30, 5, 0, 5);
+            httpsView.setTextColor(httpsTime == Long.MAX_VALUE ? Color.RED : Color.BLACK);
+            linearLayout.addView(httpsView);
+            
+            serverIndex++;
+        }
         
-        // Server 2
-        TextView server2Title = new TextView(requireContext());
-        server2Title.setText("服务器 2: de2.api.radio-browser.info");
-        server2Title.setTextSize(16);
-        server2Title.setTypeface(null, Typeface.BOLD);
-        server2Title.setPadding(0, 20, 0, 10);
-        linearLayout.addView(server2Title);
-        
-        // Server 2 HTTP
-        TextView server2Http = new TextView(requireContext());
-        long httpTime2 = results.get("de2.api.radio-browser.info_HTTP");
-        server2Http.setText("HTTP: " + (httpTime2 == Long.MAX_VALUE ? "连接失败" : httpTime2 + " ms"));
-        server2Http.setTextSize(14);
-        server2Http.setPadding(30, 5, 0, 5);
-        server2Http.setTextColor(httpTime2 == Long.MAX_VALUE ? Color.RED : Color.BLACK);
-        linearLayout.addView(server2Http);
-        
-        // Server 2 HTTPS
-        TextView server2Https = new TextView(requireContext());
-        long httpsTime2 = results.get("de2.api.radio-browser.info_HTTPS");
-        server2Https.setText("HTTPS: " + (httpsTime2 == Long.MAX_VALUE ? "连接失败" : httpsTime2 + " ms"));
-        server2Https.setTextSize(14);
-        server2Https.setPadding(30, 5, 0, 5);
-        server2Https.setTextColor(httpsTime2 == Long.MAX_VALUE ? Color.RED : Color.BLACK);
-        linearLayout.addView(server2Https);
+        // 如果没有服务器结果，显示提示
+        if (serverResults.isEmpty()) {
+            TextView noResultsView = new TextView(requireContext());
+            noResultsView.setText("未检测到服务器结果");
+            noResultsView.setTextSize(14);
+            noResultsView.setPadding(30, 5, 0, 5);
+            noResultsView.setTextColor(Color.RED);
+            linearLayout.addView(noResultsView);
+        }
         
         // Fastest connection
         TextView fastestTitle = new TextView(requireContext());
@@ -548,7 +558,11 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
             if (entry.getValue() < minTime) {
                 minTime = entry.getValue();
                 String[] parts = entry.getKey().split("_");
-                fastestConnection = parts[0] + " (" + parts[1] + ")";
+                if (parts.length >= 2) {
+                    fastestConnection = parts[0] + " (" + parts[1] + ")";
+                } else {
+                    fastestConnection = entry.getKey();
+                }
             }
         }
         
@@ -573,7 +587,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
         // Show progress dialog
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
         builder.setTitle(R.string.settings_check_network_connection);
-        builder.setMessage("正在检查网络连接速度...");
+        builder.setMessage(R.string.network_check_testing);
         androidx.appcompat.app.AlertDialog dialog = builder.create();
         dialog.show();
         
@@ -595,9 +609,9 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                 requireActivity().runOnUiThread(() -> {
                     dialog.dismiss();
                     androidx.appcompat.app.AlertDialog.Builder errorBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
-                    errorBuilder.setTitle("网络检查失败");
-                    errorBuilder.setMessage("无法连接到电台浏览器服务器: " + e.getMessage());
-                    errorBuilder.setPositiveButton("确定", null);
+                    errorBuilder.setTitle(R.string.network_check_failed);
+                    errorBuilder.setMessage(getString(R.string.network_check_error, e.getMessage()));
+                    errorBuilder.setPositiveButton(R.string.action_ok, null);
                     errorBuilder.show();
                 });
             }
@@ -620,6 +634,9 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
         SharedPreferences sharedPref = requireContext().getSharedPreferences(
             "NetworkCheckResults", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
+        
+        // 清除之前的所有结果，确保只保存最新的测试结果
+        editor.clear();
         
         // 保存每个服务器和协议的结果
         for (Map.Entry<String, Long> entry : results.entrySet()) {
@@ -644,15 +661,15 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
         
         Map<String, Long> results = new HashMap<>();
         
-        // 加载每个服务器和协议的结果
-        results.put("fi1.api.radio-browser.info_HTTP", 
-            sharedPref.getLong("fi1.api.radio-browser.info_HTTP", Long.MAX_VALUE));
-        results.put("fi1.api.radio-browser.info_HTTPS", 
-            sharedPref.getLong("fi1.api.radio-browser.info_HTTPS", Long.MAX_VALUE));
-        results.put("de2.api.radio-browser.info_HTTP", 
-            sharedPref.getLong("de2.api.radio-browser.info_HTTP", Long.MAX_VALUE));
-        results.put("de2.api.radio-browser.info_HTTPS", 
-            sharedPref.getLong("de2.api.radio-browser.info_HTTPS", Long.MAX_VALUE));
+        // 加载所有保存的服务器和协议的结果
+        Map<String, ?> allEntries = sharedPref.getAll();
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            String key = entry.getKey();
+            // 跳过timestamp键，只加载服务器测试结果
+            if (!key.equals("timestamp") && entry.getValue() instanceof Long) {
+                results.put(key, (Long) entry.getValue());
+            }
+        }
         
         return new NetworkCheckResults(results, timestamp);
     }
@@ -1009,6 +1026,29 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                 ((RadioDroidApp) getActivity().getApplication()).getFavouriteManager().updateShortcuts();
             getActivity().recreate();
         }
+        if (key.equals("app_language")) {
+            String language = sharedPreferences.getString(key, "system");
+            updateAppLanguage(language);
+            getActivity().recreate();
+        }
+    }
+    
+    private void updateAppLanguage(String language) {
+        Locale locale;
+        if (language.equals("system")) {
+            locale = Locale.getDefault();
+        } else if (language.equals("en")) {
+            locale = new Locale("en");
+        } else if (language.equals("zh")) {
+            locale = new Locale("zh");
+        } else {
+            locale = Locale.getDefault();
+        }
+        
+        Locale.setDefault(locale);
+        android.content.res.Configuration config = new android.content.res.Configuration();
+        config.setLocale(locale);
+        requireContext().getResources().updateConfiguration(config, requireContext().getResources().getDisplayMetrics());
     }
 
     @Override
@@ -1028,8 +1068,8 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
     private void exportDatabase() {
         // 显示进度对话框
         androidx.appcompat.app.AlertDialog.Builder progressBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
-        progressBuilder.setTitle("导出数据库");
-        progressBuilder.setMessage("正在导出主数据库，请稍候...");
+        progressBuilder.setTitle(R.string.export_database_title);
+        progressBuilder.setMessage(getString(R.string.progress_exporting_database));
         androidx.appcompat.app.AlertDialog progressDialog = progressBuilder.create();
         progressDialog.show();
         
@@ -1078,9 +1118,9 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                 requireActivity().runOnUiThread(() -> {
                     progressDialog.dismiss();
                     androidx.appcompat.app.AlertDialog.Builder successBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
-                    successBuilder.setTitle("导出成功");
-                    successBuilder.setMessage("主数据库已成功导出到：\n" + exportFile.getAbsolutePath());
-                    successBuilder.setPositiveButton("确定", null);
+                    successBuilder.setTitle(R.string.export_success_title);
+                    successBuilder.setMessage(getString(R.string.export_success_message, exportFile.getAbsolutePath()));
+                    successBuilder.setPositiveButton(R.string.action_ok, null);
                     successBuilder.show();
                 });
                 
@@ -1090,9 +1130,9 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                 requireActivity().runOnUiThread(() -> {
                     progressDialog.dismiss();
                     androidx.appcompat.app.AlertDialog.Builder errorBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
-                    errorBuilder.setTitle("导出失败");
-                    errorBuilder.setMessage("导出主数据库时发生错误：" + e.getMessage());
-                    errorBuilder.setPositiveButton("确定", null);
+                    errorBuilder.setTitle(R.string.export_failed_title);
+                    errorBuilder.setMessage(getString(R.string.export_failed_message, e.getMessage()));
+                    errorBuilder.setPositiveButton(R.string.action_ok, null);
                     errorBuilder.show();
                 });
             }
@@ -1103,8 +1143,8 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
     private void importDatabase(Uri uri) {
         // 显示进度对话框
         androidx.appcompat.app.AlertDialog.Builder progressBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
-        progressBuilder.setTitle("导入数据库");
-        progressBuilder.setMessage("正在导入主数据库，请稍候...");
+        progressBuilder.setTitle(R.string.import_database_title);
+        progressBuilder.setMessage(getString(R.string.progress_importing_database));
         androidx.appcompat.app.AlertDialog progressDialog = progressBuilder.create();
         progressDialog.show();
         
@@ -1157,7 +1197,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                     Log.d("FragmentSettings", "源文件大小: " + sourceFileSize + " 字节");
                     
                     if (sourceFileSize == 0) {
-                        throw new Exception("源文件为空，请选择有效的数据库文件");
+                        throw new Exception(getString(R.string.import_failed_invalid));
                     }
                     
                     // 使用FileChannel进行更可靠的文件复制
@@ -1303,7 +1343,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                         Log.d("FragmentSettings", "格式化的更新时间: " + updateTime);
                     } else {
                         // 如果数据库中没有时间戳且无法从文件名提取，显示"数据库尚未更新"
-                        updateTime = "数据库尚未更新";
+                        updateTime = getString(R.string.database_not_updated);
                         Log.d("FragmentSettings", "数据库中没有时间戳且无法从文件名提取，显示数据库尚未更新");
                     }
                     
@@ -1312,15 +1352,15 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString("local_database_last_status", "success");
                     editor.putString("local_database_last_update", updateTime);
-                    editor.putString("database_status_summary", "上次更新: " + updateTime + ", 电台数量: " + finalStationCount);
+                    editor.putString("database_status_summary", getString(R.string.last_update, updateTime, finalStationCount));
                     editor.apply();
                     
                     Log.d("FragmentSettings", "已保存数据库状态到SharedPreferences: " + updateTime);
                     
                     androidx.appcompat.app.AlertDialog.Builder successBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
-                    successBuilder.setTitle("导入成功");
-                    successBuilder.setMessage("主数据库已成功导入，包含 " + finalStationCount + " 个电台。\n\n应用将自动重启以加载新数据库。");
-                    successBuilder.setPositiveButton("确定", (dialog, which) -> {
+                    successBuilder.setTitle(R.string.import_success_title);
+                    successBuilder.setMessage(getString(R.string.import_success_message, finalStationCount));
+                    successBuilder.setPositiveButton(R.string.action_ok, (dialog, which) -> {
                         // 重启应用
                         Intent intent = new Intent(requireContext(), ActivityMain.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -1338,9 +1378,9 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                 requireActivity().runOnUiThread(() -> {
                     progressDialog.dismiss();
                     androidx.appcompat.app.AlertDialog.Builder errorBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
-                    errorBuilder.setTitle("导入失败");
-                    errorBuilder.setMessage("导入主数据库时发生错误：" + e.getMessage());
-                    errorBuilder.setPositiveButton("确定", null);
+                    errorBuilder.setTitle(R.string.import_failed_title);
+                    errorBuilder.setMessage(getString(R.string.import_failed_message, e.getMessage()));
+                    errorBuilder.setPositiveButton(R.string.action_ok, null);
                     errorBuilder.show();
                 });
             }

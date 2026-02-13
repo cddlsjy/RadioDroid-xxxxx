@@ -100,7 +100,7 @@ public class DatabaseUpdateProgressDialog {
         });
         
         builder.setView(view)
-            .setTitle("更新电台数据库")
+            .setTitle(R.string.update_dialog_title)
             .setCancelable(false);
         
         dialog = builder.create();
@@ -287,7 +287,7 @@ public class DatabaseUpdateProgressDialog {
         
         // 如果message为空，设置默认值
         if (progressMessage.isEmpty()) {
-            progressMessage = "正在下载电台数据";
+            progressMessage = context.getString(R.string.progress_downloading_data);
             Log.w(TAG, "Message为空，使用默认值: " + progressMessage);
         }
         
@@ -318,7 +318,7 @@ public class DatabaseUpdateProgressDialog {
             Log.d(TAG, "Update was cancelled or no update ID, not showing system paused message. isCancelled=" + isCancelled + 
                       ", updateId=" + updateId + ", recentlyCancelled=" + recentlyCancelled);
             isUpdating = false;
-            progressMessage = "更新已取消";
+            progressMessage = context.getString(R.string.update_cancelled);
             
             // 不清除取消标志，让DatabaseUpdateWorker在真正开始新更新时清除
             // 这样可以确保UI能够正确显示取消状态
@@ -336,7 +336,7 @@ public class DatabaseUpdateProgressDialog {
                     !progressMessage.contains("准备开始") && !progressMessage.contains("更新已取消")) {
                     Log.w(TAG, "检测到可能的残留状态，进度为0/0，重置状态");
                     isUpdating = false;
-                    progressMessage = "更新已取消";
+                    progressMessage = context.getString(R.string.update_cancelled);
                     prefsCheck.edit()
                         .putBoolean(KEY_IS_UPDATING, false)
                         .putString(KEY_PROGRESS_MESSAGE, progressMessage)
@@ -348,7 +348,7 @@ public class DatabaseUpdateProgressDialog {
                     if (isCancelled || recentlyCancelled) {
                         Log.w(TAG, "检测到取消标志，不显示系统暂停消息");
                         isUpdating = false;
-                        progressMessage = "更新已取消";
+                        progressMessage = context.getString(R.string.update_cancelled);
                         
                         // 确保SharedPreferences中的取消状态被正确设置
                         SharedPreferences prefsUpdate = context.getSharedPreferences("database_update_prefs", Context.MODE_PRIVATE);
@@ -362,7 +362,7 @@ public class DatabaseUpdateProgressDialog {
                         Log.w(TAG, "检测到系统暂停：WorkManager显示更新中，但SharedPreferences显示未更新");
                         // 这种情况下，任务可能被系统暂停，但WorkManager仍认为在运行
                         isUpdating = true;
-                        progressMessage = "更新被系统暂停，等待恢复...";
+                        progressMessage = context.getString(R.string.update_system_paused);
                         
                         // 强制更新SharedPreferences状态，确保下次检测一致
                         SharedPreferences prefsUpdate = context.getSharedPreferences("database_update_prefs", Context.MODE_PRIVATE);
@@ -380,7 +380,7 @@ public class DatabaseUpdateProgressDialog {
             // 如果进度长时间没有变化，可能是网络问题或系统暂停
             if (currentProgress == lastProgressValue && currentTime - lastProgressTime > 10000) {
                 Log.w(TAG, "检测到进度长时间未变化，可能卡死，当前进度: " + currentProgress);
-                progressMessage = "更新进度停滞，正在尝试恢复...";
+                progressMessage = context.getString(R.string.progress_stalled);
                 
                 // 尝试从临时数据库获取实际进度
                 try {
@@ -389,7 +389,7 @@ public class DatabaseUpdateProgressDialog {
                     if (tempDatabaseCount > currentProgress) {
                         Log.w(TAG, "发现临时数据库中有更多数据: " + tempDatabaseCount + " > " + currentProgress);
                         currentProgress = tempDatabaseCount;
-                        progressMessage = "正在下载电台数据";
+                        progressMessage = context.getString(R.string.progress_downloading_data);
                         // 更新SharedPreferences，确保下次读取到正确的进度
                         SharedPreferences prefs = context.getSharedPreferences("database_update_prefs", Context.MODE_PRIVATE);
                         prefs.edit()
@@ -434,7 +434,7 @@ public class DatabaseUpdateProgressDialog {
                 Log.d(TAG, "Displaying error message: " + progressMessage);
             } else if (progress.isUpdating && !workManagerUpdating) {
                 // SharedPreferences显示正在更新，但WorkManager没有运行的任务，说明可能被系统暂停
-                messageText.setText(progress.message + " (可能被系统暂停)");
+                messageText.setText(progress.message + context.getString(R.string.progress_system_paused));
                 Log.d(TAG, "Detected possible system pause: SharedPreferences shows updating but WorkManager has no running task");
             } else {
                 messageText.setText(progress.message);
@@ -477,7 +477,7 @@ public class DatabaseUpdateProgressDialog {
                     progress.current, progress.total, progress.getPercentage()));
             } else {
                 progressText.setVisibility(View.VISIBLE);
-                progressText.setText("准备中...");
+                progressText.setText(context.getString(R.string.update_preparing));
             }
         }
         
@@ -534,9 +534,9 @@ public class DatabaseUpdateProgressDialog {
      */
     private void showCancelConfirmation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("取消更新")
-            .setMessage("确定要取消数据库更新吗？")
-            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.update_confirm_cancel_title)
+            .setMessage(R.string.update_confirm_cancel_message)
+            .setPositiveButton(R.string.update_confirm_cancel_positive, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // 立即关闭进度对话框，不等待取消操作完成
@@ -552,7 +552,7 @@ public class DatabaseUpdateProgressDialog {
                     }).start();
                 }
             })
-            .setNegativeButton("取消", null)
+            .setNegativeButton(context.getString(android.R.string.cancel), null)
             .show();
     }
     
