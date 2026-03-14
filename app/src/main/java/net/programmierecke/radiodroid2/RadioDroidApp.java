@@ -103,7 +103,7 @@ public class RadioDroidApp extends MultiDexApplication {
         UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
         if (uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION) {
             tvChannelManager = new TvChannelManager(this);
-            favouriteManager.addObserver(tvChannelManager);
+            favouriteManager.addStationUpdateListener(tvChannelManager);
         }
 
         trackHistoryRepository = new TrackHistoryRepository(this);

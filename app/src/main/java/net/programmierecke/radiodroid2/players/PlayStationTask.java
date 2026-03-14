@@ -104,6 +104,11 @@ public class PlayStationTask extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... params) {
         Context ctx = contextWeakReference.get();
         if (ctx != null) {
+            // 优先使用本地存储的StreamUrl
+            if (stationToPlay.StreamUrl != null && !stationToPlay.StreamUrl.isEmpty()) {
+                return stationToPlay.StreamUrl;
+            }
+
             RadioDroidApp radioDroidApp = (RadioDroidApp) ctx.getApplicationContext();
 
             if (!stationToPlay.hasValidUuid()) {
@@ -116,6 +121,7 @@ public class PlayStationTask extends AsyncTask<Void, Void, String> {
                 return null;
             }
 
+            // 只有当本地StreamUrl不可用时，才访问远程服务器获取真实链接
             return Utils.getRealStationLink(radioDroidApp.getHttpClient(), ctx.getApplicationContext(), stationToPlay.StationUuid);
         } else {
             return null;

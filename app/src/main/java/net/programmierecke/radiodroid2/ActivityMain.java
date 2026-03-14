@@ -1332,10 +1332,12 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
     
     // 从URI获取文件路径
     private String getPathFromUri(Uri uri) {
-        String docId = DocumentsContract.getTreeDocumentId(uri);
-        if (docId.startsWith(":")) {
-            // 如果是相对路径，返回空字符串，让SaveM3UInternal方法处理
-            return "";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String docId = DocumentsContract.getTreeDocumentId(uri);
+            if (docId.startsWith(":")) {
+                // 如果是相对路径，返回空字符串，让SaveM3UInternal方法处理
+                return "";
+            }
         }
         
         // 尝试从URI中提取路径
@@ -1465,7 +1467,12 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
         
         Locale.setDefault(locale);
         android.content.res.Configuration config = new android.content.res.Configuration();
-        config.setLocale(locale);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            config.setLocale(locale);
+        } else {
+            // 在API级别17以下，直接设置config.locale
+            config.locale = locale;
+        }
         getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 }

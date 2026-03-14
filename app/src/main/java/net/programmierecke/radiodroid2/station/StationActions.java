@@ -83,6 +83,11 @@ public class StationActions {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
+                // 优先使用本地存储的StreamUrl
+                if (station.StreamUrl != null && !station.StreamUrl.isEmpty()) {
+                    return station.StreamUrl;
+                }
+
                 Context ctx = contextRef.get();
                 if (ctx == null) {
                     return null;
@@ -157,6 +162,11 @@ public class StationActions {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
+                // 优先使用本地存储的StreamUrl
+                if (station.StreamUrl != null && !station.StreamUrl.isEmpty()) {
+                    return station.StreamUrl;
+                }
+
                 Context ctx = contextRef.get();
                 if (ctx == null) {
                     return null;

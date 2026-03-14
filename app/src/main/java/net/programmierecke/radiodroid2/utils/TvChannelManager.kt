@@ -13,6 +13,7 @@ import androidx.tvprovider.media.tv.*
 import net.programmierecke.radiodroid2.ActivityMain
 import net.programmierecke.radiodroid2.R
 import net.programmierecke.radiodroid2.RadioDroidApp
+import net.programmierecke.radiodroid2.StationUpdateListener
 import net.programmierecke.radiodroid2.service.MediaSessionCallback
 import java.io.IOException
 import java.util.*
@@ -34,7 +35,7 @@ fun <T : BaseProgram> Cursor.asSequence(fromCursor: (Cursor) -> T): Sequence<T> 
 }
 
 @SuppressLint("RestrictedApi")
-class TvChannelManager(val app: RadioDroidApp) : Observer {
+class TvChannelManager(val app: RadioDroidApp) : StationUpdateListener {
     private val helper = PreviewChannelHelper(app)
     private var channelId = INVALID_CONTENT_ID
 
@@ -128,7 +129,7 @@ class TvChannelManager(val app: RadioDroidApp) : Observer {
         }
     }
 
-    override fun update(p0: Observable?, p1: Any?) {
+    override fun onStationListUpdated() {
         publishStarred()
     }
 

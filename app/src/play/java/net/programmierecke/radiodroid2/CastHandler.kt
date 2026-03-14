@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.google.android.gms.cast.MediaInfo
+import com.google.android.gms.cast.MediaLoadRequestData
 import com.google.android.gms.cast.MediaMetadata
 import com.google.android.gms.cast.framework.*
 import com.google.android.gms.common.ConnectionResult
@@ -112,7 +113,11 @@ private class CastAvailable(val castContext: CastContext,
                 .setMetadata(movieMetadata)
                 .build()
 
-        castSession?.remoteMediaClient?.load(mediaInfo, true)
+        val mediaLoadRequestData = MediaLoadRequestData.Builder()
+                .setMediaInfo(mediaInfo)
+                .setAutoplay(true)
+                .build()
+        castSession?.remoteMediaClient?.load(mediaLoadRequestData)
     }
 
     private fun invalidateOptions() {

@@ -1,6 +1,7 @@
 package net.programmierecke.radiodroid2.station
 
 import android.content.Context
+import android.os.AsyncTask
 import android.os.Build
 import android.view.View
 import android.widget.PopupMenu
@@ -36,7 +37,7 @@ object StationPopupMenu {
                 }
                 R.id.menu_play_in_external_player -> {
                     Utils.playAndWarnIfMetered(context.applicationContext as RadioDroidApp, station,
-                            PlayerType.EXTERNAL) { PlayStationTask.playExternal(station, context).execute() }
+                            PlayerType.EXTERNAL) { PlayStationTask.playExternal(station, context).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR) }
                     true
                 }
                 R.id.menu_visit_homepage -> {

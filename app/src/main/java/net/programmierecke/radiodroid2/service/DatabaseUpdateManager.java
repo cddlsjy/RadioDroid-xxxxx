@@ -66,12 +66,16 @@ public class DatabaseUpdateManager {
             .commit();
         
         // 创建WorkManager任务
-        Constraints constraints = new Constraints.Builder()
+        Constraints.Builder constraintsBuilder = new Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
-            // 确保任务可以在应用后台运行
-            .setRequiresDeviceIdle(false)
-            .setRequiresCharging(false)
-            .build();
+            .setRequiresCharging(false);
+        
+        // 只在API级别23及以上时设置setRequiresDeviceIdle
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            constraintsBuilder.setRequiresDeviceIdle(false);
+        }
+        
+        Constraints constraints = constraintsBuilder.build();
         
         OneTimeWorkRequest updateRequest = new OneTimeWorkRequest.Builder(DatabaseUpdateWorker.class)
             .setConstraints(constraints)

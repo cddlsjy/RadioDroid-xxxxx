@@ -48,8 +48,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 33
 
-        versionCode 100
-        versionName "0.91"
+        versionCode 101
+        versionName "0.92"
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -119,6 +119,7 @@ android {
     }
     lint {
         abortOnError true
+        baseline = file("lint-baseline.xml")
     }
     namespace 'net.programmierecke.radiodroid2'
 

@@ -151,6 +151,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
+                // 优先使用本地存储的StreamUrl
+                if (station != null && station.StreamUrl != null && !station.StreamUrl.isEmpty()) {
+                    return station.StreamUrl;
+                }
+
                 String result = null;
                 for (int i=0;i<20;i++){
                     result = Utils.getRealStationLink(httpClient, context, stationId);

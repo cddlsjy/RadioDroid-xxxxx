@@ -51,6 +51,7 @@ public class StationSaveManager extends Observable {
     List<DataRadioStation> listStations = new ArrayList<DataRadioStation>();
 
     protected StationStatusListener stationStatusListener;
+    private List<StationUpdateListener> updateListeners = new ArrayList<>();
 
     public StationSaveManager(Context ctx) {
         this.context = ctx;
@@ -96,7 +97,7 @@ public class StationSaveManager extends Observable {
         listStations.add(station);
         Save();
 
-        notifyObservers();
+        notifyAllListeners();
 
         if (stationStatusListener != null) {
             stationStatusListener.onStationStatusChanged(station, true);
@@ -113,7 +114,7 @@ public class StationSaveManager extends Observable {
         }
         Save();
 
-        notifyObservers();
+        notifyAllListeners();
     }
 
     public void replaceList(List<DataRadioStation> stations_new) {
@@ -127,7 +128,7 @@ public class StationSaveManager extends Observable {
         }
         Save();
 
-        notifyObservers();
+        notifyAllListeners();
     }
 
     public void addFront(DataRadioStation station) {
@@ -136,7 +137,7 @@ public class StationSaveManager extends Observable {
         listStations.add(0, station);
         Save();
 
-        notifyObservers();
+        notifyAllListeners();
 
         if (stationStatusListener != null) {
             stationStatusListener.onStationStatusChanged(station, true);
@@ -207,7 +208,7 @@ public class StationSaveManager extends Observable {
 
     public void move(int fromPos, int toPos) {
         moveWithoutNotify(fromPos, toPos);
-        notifyObservers();
+        notifyAllListeners();
     }
 
     public @Nullable
@@ -234,7 +235,7 @@ public class StationSaveManager extends Observable {
             if (station.StationUuid.equals(id)) {
                 listStations.remove(i);
                 Save();
-                notifyObservers();
+                notifyAllListeners();
 
                 if (stationStatusListener != null) {
                     stationStatusListener.onStationStatusChanged(station, false);
@@ -252,7 +253,7 @@ public class StationSaveManager extends Observable {
         listStations.add(pos, station);
         Save();
 
-        notifyObservers();
+        notifyAllListeners();
 
         if (stationStatusListener != null) {
             stationStatusListener.onStationStatusChanged(station, false);
@@ -264,7 +265,7 @@ public class StationSaveManager extends Observable {
         listStations = new ArrayList<>();
         Save();
 
-        notifyObservers();
+        notifyAllListeners();
 
         if (stationStatusListener != null) {
             for (DataRadioStation station : oldStation) {
@@ -278,6 +279,18 @@ public class StationSaveManager extends Observable {
         return true;
     }
 
+    /**
+     * 通知所有观察者和监听器
+     */
+    private void notifyAllListeners() {
+        // 通知传统的Observer
+        notifyObservers();
+        // 通知新的StationUpdateListener
+        for (StationUpdateListener listener : updateListeners) {
+            listener.onStationListUpdated();
+        }
+    }
+
     public int size() {
         return listStations.size();
     }
@@ -289,6 +302,24 @@ public class StationSaveManager extends Observable {
     public boolean has(String id) {
         DataRadioStation station = getById(id);
         return station != null;
+    }
+
+    /**
+     * 添加电台更新监听器
+     * @param listener 监听器
+     */
+    public void addStationUpdateListener(StationUpdateListener listener) {
+        if (!updateListeners.contains(listener)) {
+            updateListeners.add(listener);
+        }
+    }
+
+    /**
+     * 移除电台更新监听器
+     * @param listener 监听器
+     */
+    public void removeStationUpdateListener(StationUpdateListener listener) {
+        updateListeners.remove(listener);
     }
 
     private boolean hasInvalidUuids() {
@@ -336,7 +367,7 @@ public class StationSaveManager extends Observable {
 
                 Save();
 
-                notifyObservers();
+                notifyAllListeners();
 
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(ActivityMain.ACTION_HIDE_LOADING));
                 super.onPostExecute(stationsToRemove);
@@ -481,7 +512,7 @@ public class StationSaveManager extends Observable {
                     toast.show();
                 }
 
-                notifyObservers();
+                notifyAllListeners();
 
                 super.onPostExecute(result);
             }
@@ -515,7 +546,7 @@ public class StationSaveManager extends Observable {
                     toast.show();
                 }
 
-                notifyObservers();
+                notifyAllListeners();
 
                 super.onPostExecute(result);
             }
