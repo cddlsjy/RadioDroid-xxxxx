@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -14,13 +15,16 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+
 import java.io.File;
 import java.util.Date;
 
 import net.programmierecke.radiodroid2.R;
+import net.programmierecke.radiodroid2.Utils;
 import net.programmierecke.radiodroid2.database.RadioStationRepository;
 import net.programmierecke.radiodroid2.service.DatabaseUpdateManager;
 import net.programmierecke.radiodroid2.service.DatabaseUpdateWorker;
+
 
 public class DatabaseUpdateProgressDialog {
     private static final String TAG = "DatabaseUpdateProgressDialog";
@@ -28,6 +32,123 @@ public class DatabaseUpdateProgressDialog {
     
     private Context context;
     private Dialog dialog;
+    
+    // 资源ID映射表，用于根据消息内容查找对应的资源ID
+    private static final java.util.HashMap<String, Integer> MESSAGE_TO_RES_ID = new java.util.HashMap<>();
+    static {
+        // 中文key
+        MESSAGE_TO_RES_ID.put("正在检查网络连接", R.string.progress_checking_network);
+        MESSAGE_TO_RES_ID.put("正在检查网络连接速度", R.string.progress_checking_network_speed);
+        MESSAGE_TO_RES_ID.put("正在获取电台总数", R.string.progress_getting_station_count);
+        MESSAGE_TO_RES_ID.put("查询到网络数据库现存", R.string.progress_found_stations);
+        MESSAGE_TO_RES_ID.put("开始更新临时数据库", R.string.progress_starting_temp_db_update);
+        MESSAGE_TO_RES_ID.put("恢复下载进度", R.string.progress_resuming_download);
+        MESSAGE_TO_RES_ID.put("正在处理下载的数据", R.string.progress_processing_data);
+        MESSAGE_TO_RES_ID.put("正在读取临时数据库", R.string.progress_reading_temp_db);
+        MESSAGE_TO_RES_ID.put("正在验证数据完整性", R.string.progress_validating_data);
+        MESSAGE_TO_RES_ID.put("正在写入主数据库", R.string.progress_writing_main_db);
+        MESSAGE_TO_RES_ID.put("正在下载电台数据", R.string.progress_downloading_stations);
+        MESSAGE_TO_RES_ID.put("正在切换到新数据库", R.string.progress_switching_db);
+        MESSAGE_TO_RES_ID.put("更新完成", R.string.update_completed);
+        MESSAGE_TO_RES_ID.put("准备中", R.string.progress_preparing_update);
+        MESSAGE_TO_RES_ID.put("更新已取消", R.string.update_cancelled);
+        MESSAGE_TO_RES_ID.put("更新被系统暂停", R.string.update_system_paused);
+        MESSAGE_TO_RES_ID.put("更新失败", R.string.update_failed);
+        
+        // 英文key
+        MESSAGE_TO_RES_ID.put("Checking network connection", R.string.progress_checking_network);
+        MESSAGE_TO_RES_ID.put("Checking network connection speed", R.string.progress_checking_network_speed);
+        MESSAGE_TO_RES_ID.put("Getting station count", R.string.progress_getting_station_count);
+        MESSAGE_TO_RES_ID.put("Found", R.string.progress_found_stations);
+        MESSAGE_TO_RES_ID.put("Starting temporary database update", R.string.progress_starting_temp_db_update);
+        MESSAGE_TO_RES_ID.put("Resuming download progress", R.string.progress_resuming_download);
+        MESSAGE_TO_RES_ID.put("Processing downloaded data", R.string.progress_processing_data);
+        MESSAGE_TO_RES_ID.put("Reading temporary database", R.string.progress_reading_temp_db);
+        MESSAGE_TO_RES_ID.put("Validating data integrity", R.string.progress_validating_data);
+        MESSAGE_TO_RES_ID.put("Writing to main database", R.string.progress_writing_main_db);
+        MESSAGE_TO_RES_ID.put("Downloading station data", R.string.progress_downloading_stations);
+        MESSAGE_TO_RES_ID.put("Switching to new database", R.string.progress_switching_db);
+        MESSAGE_TO_RES_ID.put("Update completed", R.string.update_completed);
+        MESSAGE_TO_RES_ID.put("Preparing", R.string.progress_preparing_update);
+        MESSAGE_TO_RES_ID.put("preparing update", R.string.progress_preparing_update);
+
+        MESSAGE_TO_RES_ID.put("Update cancelled", R.string.update_cancelled);
+        MESSAGE_TO_RES_ID.put("may be paused by system", R.string.update_system_paused);
+        MESSAGE_TO_RES_ID.put("Update failed", R.string.update_failed);
+        
+        // 俄文key
+        MESSAGE_TO_RES_ID.put("Проверка подключения к сети", R.string.progress_checking_network);
+        MESSAGE_TO_RES_ID.put("Проверка скорости подключения к сети", R.string.progress_checking_network_speed);
+        MESSAGE_TO_RES_ID.put("Получение количества станций", R.string.progress_getting_station_count);
+        MESSAGE_TO_RES_ID.put("Найдено", R.string.progress_found_stations);
+        MESSAGE_TO_RES_ID.put("Начинаем обновление временной базы данных", R.string.progress_starting_temp_db_update);
+        MESSAGE_TO_RES_ID.put("Возобновление загрузки", R.string.progress_resuming_download);
+        MESSAGE_TO_RES_ID.put("Обработка загруженных данных", R.string.progress_processing_data);
+        MESSAGE_TO_RES_ID.put("Чтение временной базы данных", R.string.progress_reading_temp_db);
+        MESSAGE_TO_RES_ID.put("Проверка целостности данных", R.string.progress_validating_data);
+        MESSAGE_TO_RES_ID.put("Запись в основную базу данных", R.string.progress_writing_main_db);
+        MESSAGE_TO_RES_ID.put("Загрузка данных станций", R.string.progress_downloading_stations);
+        MESSAGE_TO_RES_ID.put("Переключение на новую базу данных", R.string.progress_switching_db);
+        MESSAGE_TO_RES_ID.put("Обновление завершено", R.string.update_completed);
+        MESSAGE_TO_RES_ID.put("Подготовка", R.string.progress_preparing_update);
+        MESSAGE_TO_RES_ID.put("Обновление отменено", R.string.update_cancelled);
+        MESSAGE_TO_RES_ID.put("может быть приостановлено системой", R.string.update_system_paused);
+        MESSAGE_TO_RES_ID.put("Обновление не удалось", R.string.update_failed);
+    }
+    
+    // 使用Activity Context重新获取本地化字符串
+    private String getLocalizedMessage(String message) {
+        if (message == null || message.isEmpty()) {
+            return message;
+        }
+        
+        // 检查消息是否包含映射表中的某个key
+        for (java.util.Map.Entry<String, Integer> entry : MESSAGE_TO_RES_ID.entrySet()) {
+            String key = entry.getKey();
+            if (message.contains(key)) {
+                // 获取资源ID
+                int resId = entry.getValue();
+                try {
+                    // 使用Activity Context获取本地化字符串
+                    String localizedTemplate = context.getString(resId);
+                    
+                    // 检查原始消息是否包含数值参数（从key之后的部分提取）
+                    String afterKey = message.substring(message.indexOf(key) + key.length()).trim();
+                    
+                    // 如果key之后还有内容，尝试提取参数
+                    if (!afterKey.isEmpty()) {
+                        // 尝试匹配数值参数
+                        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("-?\\d+");
+                        java.util.regex.Matcher matcher = pattern.matcher(afterKey);
+                        java.util.ArrayList<String> args = new java.util.ArrayList<>();
+                        while (matcher.find()) {
+                            args.add(matcher.group());
+                        }
+                        
+                        if (!args.isEmpty()) {
+                            // 将参数转换为Object数组并重新格式化
+                            Object[] formatArgs = new Object[args.size()];
+                            for (int i = 0; i < args.size(); i++) {
+                                try {
+                                    formatArgs[i] = Integer.parseInt(args.get(i));
+                                } catch (NumberFormatException e) {
+                                    formatArgs[i] = args.get(i);
+                                }
+                            }
+                            return String.format(localizedTemplate, formatArgs);
+                        }
+                    }
+                    
+                    return localizedTemplate;
+                } catch (Exception e) {
+                    Log.w(TAG, "Failed to get localized string for: " + message, e);
+                    return message;
+                }
+            }
+        }
+        
+        return message;
+    }
     private ProgressBar progressBar;
     private TextView messageText;
     private TextView progressText;
@@ -82,7 +203,7 @@ public class DatabaseUpdateProgressDialog {
         }
         
         // 创建对话框
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, Utils.getAlertDialogThemeResId(context));
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.dialog_database_update_progress, null);
         
@@ -90,6 +211,17 @@ public class DatabaseUpdateProgressDialog {
         messageText = view.findViewById(R.id.message_text);
         progressText = view.findViewById(R.id.progress_text);
         cancelButton = view.findViewById(R.id.cancel_button);
+        
+        // 根据主题设置文本颜色和背景
+        boolean isDarkTheme = Utils.isDarkTheme(context);
+        if (isDarkTheme) {
+            messageText.setTextColor(Color.WHITE);
+            progressText.setTextColor(Color.WHITE);
+            cancelButton.setTextColor(Color.WHITE);
+            view.setBackgroundColor(Color.parseColor("#2c2c2e")); // 使用暗色主题的背景颜色
+        }
+
+
         
         // 设置取消按钮点击事件
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -285,6 +417,9 @@ public class DatabaseUpdateProgressDialog {
             isUpdating = prefs.getBoolean(KEY_IS_UPDATING, false);
         }
         
+        // 使用Activity Context重新获取本地化字符串
+        progressMessage = getLocalizedMessage(progressMessage);
+        
         // 如果message为空，设置默认值
         if (progressMessage.isEmpty()) {
             progressMessage = context.getString(R.string.progress_downloading_data);
@@ -292,7 +427,7 @@ public class DatabaseUpdateProgressDialog {
         }
         
         // 检查是否是错误消息
-        boolean isError = progressMessage.contains("更新失败") || progressMessage.contains("错误");
+        boolean isError = progressMessage.contains(context.getString(R.string.update_failed)) || progressMessage.contains(context.getString(R.string.error_list_update));
         
         // 检查取消标志，如果设置了取消标志，不显示"更新被系统暂停"消息
         SharedPreferences prefsCheck = context.getSharedPreferences("database_update_prefs", Context.MODE_PRIVATE);
@@ -333,7 +468,7 @@ public class DatabaseUpdateProgressDialog {
             if (workManagerUpdating && !isUpdating) {
                 // 额外检查：如果进度为0/0且消息不是初始消息，可能是取消后的残留状态
                 if (currentProgress == 0 && totalProgress == 0 && 
-                    !progressMessage.contains("准备开始") && !progressMessage.contains("更新已取消")) {
+                    !progressMessage.contains(context.getString(R.string.update_preparing)) && !progressMessage.contains(context.getString(R.string.update_cancelled))) {
                     Log.w(TAG, "检测到可能的残留状态，进度为0/0，重置状态");
                     isUpdating = false;
                     progressMessage = context.getString(R.string.update_cancelled);
@@ -434,7 +569,7 @@ public class DatabaseUpdateProgressDialog {
                 Log.d(TAG, "Displaying error message: " + progressMessage);
             } else if (progress.isUpdating && !workManagerUpdating) {
                 // SharedPreferences显示正在更新，但WorkManager没有运行的任务，说明可能被系统暂停
-                messageText.setText(progress.message + context.getString(R.string.progress_system_paused));
+                messageText.setText(progress.message + context.getString(R.string.progress_system_paused_suffix));
                 Log.d(TAG, "Detected possible system pause: SharedPreferences shows updating but WorkManager has no running task");
             } else {
                 messageText.setText(progress.message);
@@ -533,7 +668,7 @@ public class DatabaseUpdateProgressDialog {
      * 显示取消确认对话框
      */
     private void showCancelConfirmation() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, Utils.getAlertDialogThemeResId(context));
         builder.setTitle(R.string.update_confirm_cancel_title)
             .setMessage(R.string.update_confirm_cancel_message)
             .setPositiveButton(R.string.update_confirm_cancel_positive, new DialogInterface.OnClickListener() {

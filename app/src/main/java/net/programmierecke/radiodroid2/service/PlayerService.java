@@ -498,6 +498,11 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
         radioPlayer.destroy();
 
         unregisterReceiver(headsetConnectionReceiver);
+        
+        // Clean up handler to prevent memory leaks
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
     }
 
     @Override

@@ -487,22 +487,37 @@ public class FragmentPlayerFull extends Fragment {
             String displayText = "";
             String displayTextForAccessibility = "";
             
+            // 获取本地化的艺术家和歌曲名
+            String artistDisplay = liveInfo.getArtist();
+            String trackDisplay = liveInfo.getTrack();
+            
+            // 如果是英文的Unknown值或中文的"未知"，替换为本地化的Unknown
+            if ("Unknown Artist".equals(artistDisplay) || "未知".equals(artistDisplay)) {
+                artistDisplay = getString(R.string.unknown_artist);
+            }
+            if ("Unknown Track".equals(trackDisplay) || "未知".equals(trackDisplay)) {
+                trackDisplay = getString(R.string.unknown_track);
+            }
+            
             if (liveInfo.hasArtistAndTrack()) {
-                displayText = liveInfo.getArtist() + " - " + liveInfo.getTrack();
+                displayText = artistDisplay + " - " + trackDisplay;
                 // 为无障碍服务提供更详细的信息
-                displayTextForAccessibility = "正在播放：" + liveInfo.getArtist() + "的歌曲" + liveInfo.getTrack();
+                displayTextForAccessibility = getString(R.string.now_playing_accessibility, trackDisplay, artistDisplay);
                 
                 // 如果艺术家或歌曲名包含"未知"信息，提供更友好的提示
-                if (liveInfo.getArtist().equals("未知艺术家") && !liveInfo.getTrack().equals("未知歌曲")) {
-                    displayTextForAccessibility = "正在播放：" + liveInfo.getTrack() + "，艺术家信息未知";
-                } else if (!liveInfo.getArtist().equals("未知艺术家") && liveInfo.getTrack().equals("未知歌曲")) {
-                    displayTextForAccessibility = "正在播放" + liveInfo.getArtist() + "的歌曲，歌曲名信息未知";
-                } else if (liveInfo.getArtist().equals("未知艺术家") && liveInfo.getTrack().equals("未知歌曲")) {
-                    displayTextForAccessibility = "正在播放音乐，艺术家和歌曲信息未知";
+                if (("Unknown Artist".equals(liveInfo.getArtist()) || "未知".equals(liveInfo.getArtist())) && 
+                    !("Unknown Track".equals(liveInfo.getTrack()) || "未知".equals(liveInfo.getTrack()))) {
+                    displayTextForAccessibility = getString(R.string.now_playing_artist_unknown, trackDisplay);
+                } else if (!("Unknown Artist".equals(liveInfo.getArtist()) || "未知".equals(liveInfo.getArtist())) && 
+                           ("Unknown Track".equals(liveInfo.getTrack()) || "未知".equals(liveInfo.getTrack()))) {
+                    displayTextForAccessibility = getString(R.string.now_playing_track_unknown, artistDisplay);
+                } else if (("Unknown Artist".equals(liveInfo.getArtist()) || "未知".equals(liveInfo.getArtist())) && 
+                           ("Unknown Track".equals(liveInfo.getTrack()) || "未知".equals(liveInfo.getTrack()))) {
+                    displayTextForAccessibility = getString(R.string.now_playing_all_unknown);
                 }
             } else if (!TextUtils.isEmpty(streamTitle)) {
                 displayText = streamTitle;
-                displayTextForAccessibility = "正在播放：" + streamTitle;
+                displayTextForAccessibility = getString(R.string.now_playing_stream, streamTitle);
             }
 
             if (!TextUtils.isEmpty(displayText)) {

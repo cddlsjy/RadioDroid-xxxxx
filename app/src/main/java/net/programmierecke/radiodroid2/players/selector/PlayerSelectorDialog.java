@@ -170,11 +170,12 @@ public class PlayerSelectorDialog extends BottomSheetDialogFragment {
             editPort.setText(String.valueOf(server.port));
         }
 
-        final AlertDialog dialog = new AlertDialog.Builder(requireContext())
+        final AlertDialog dialog = new AlertDialog.Builder(requireContext(), net.programmierecke.radiodroid2.Utils.getAlertDialogThemeResId(requireContext()))
                 .setView(server_view)
                 .setPositiveButton(R.string.alert_select_mpd_server_save, null)
                 .setNeutralButton(R.string.alert_select_mpd_server_remove, null)
                 .setTitle(R.string.alert_add_or_edit_mpd_server).create();
+
 
         dialog.setOnShowListener(dialogInterface -> {
             Button btnPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);

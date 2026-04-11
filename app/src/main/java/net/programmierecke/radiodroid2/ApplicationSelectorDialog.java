@@ -41,7 +41,8 @@ public class ApplicationSelectorDialog extends DialogFragment {
         }
 
         // Use the Builder class for convenient dialog construction
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), Utils.getAlertDialogThemeResId(getActivity()));
+
         builder.setTitle(R.string.alert_select_external_alarm_app);
         builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

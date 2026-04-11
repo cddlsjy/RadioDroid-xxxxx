@@ -60,7 +60,7 @@ public class DatabaseUpdateManager {
             .putBoolean("is_updating", false)  // 先设为false，让Worker来设置为true
             .putLong("update_id", System.currentTimeMillis())  // 设置新的更新ID
             .putLong("update_start_time", System.currentTimeMillis())
-            .putString("progress_message", "准备开始更新...")
+            .putString("progress_message", context.getString(R.string.update_preparing))
             .putInt("progress_current", 0)
             .putInt("progress_total", 0)
             .commit();
@@ -140,10 +140,10 @@ public class DatabaseUpdateManager {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                 CHANNEL_ID,
-                "数据库更新",
+                context.getString(R.string.notification_channel_name),
                 NotificationManager.IMPORTANCE_LOW
             );
-            channel.setDescription("电台数据库更新通知");
+            channel.setDescription(context.getString(R.string.notification_channel_description));
             channel.enableLights(false);
             channel.enableVibration(false);
             channel.setShowBadge(false);
@@ -157,8 +157,8 @@ public class DatabaseUpdateManager {
         
         // 创建通知
         Notification notification = new NotificationCompat.Builder(context, CHANNEL_ID)
-            .setContentTitle("电台数据库更新")
-            .setContentText("正在后台更新电台数据库，您可以继续使用其他功能")
+            .setContentTitle(context.getString(R.string.notification_title))
+            .setContentText(context.getString(R.string.notification_text))
             .setSmallIcon(R.drawable.ic_refresh)
             .setContentIntent(pendingIntent)
             .setAutoCancel(false)
@@ -184,7 +184,7 @@ public class DatabaseUpdateManager {
         
         // 创建通知
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-            .setContentTitle("电台数据库更新")
+            .setContentTitle(context.getString(R.string.notification_title))
             .setContentText(message)
             .setSmallIcon(R.drawable.ic_refresh)
             .setContentIntent(pendingIntent)

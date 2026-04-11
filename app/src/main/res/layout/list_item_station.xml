@@ -11,7 +11,7 @@
             android:id="@+id/layoutMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="90dp">
+            android:minHeight="78dp">
 
         <FrameLayout
                 android:id="@+id/frameLayout"
@@ -69,10 +69,10 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:paddingBottom="8dp"
+                android:paddingBottom="4dp"
                 android:paddingLeft="5dp"
                 android:paddingStart="5dp"
-                android:paddingTop="8dp">
+                android:paddingTop="4dp">
 
             <TextView
                     android:id="@+id/textViewTitle"

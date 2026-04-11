@@ -70,6 +70,7 @@
     <string name="sleep_timer_apply">应用</string>
     <string name="sleep_timer_clear">清除</string>
     <string name="nav_item_add_sleep">睡眠定时器</string>
+    <string name="action_random_play">随机播放</string>
     
     <string name="nav_item_save_playlist">导出收藏到播放列表</string>
     <string name="nav_item_load_playlist">从播放列表导入收藏</string>
@@ -358,4 +359,20 @@
     
     <string name="empty_database_message">本地数据库为空，请先在设置中更新本地数据库</string>
     <string name="no_results_message">没有找到%s分类，可能数据库更新不完整，请尝试在设置中更新本地数据库</string>
+    
+    <string name="progress_checking_network">正在检查网络连接</string>
+    <string name="progress_getting_station_count">正在获取电台总数</string>
+    <string name="progress_found_stations">查询到网络数据库现存 %d 个电台</string>
+    <string name="progress_starting_temp_db_update">开始更新临时数据库</string>
+    <string name="progress_resuming_download">恢复下载进度</string>
+    <string name="progress_downloading_stations">正在下载电台数据</string>
+    <string name="progress_processing_data">正在处理下载的数据...</string>
+    <string name="progress_reading_temp_db">正在读取临时数据库...</string>
+    <string name="progress_validating_data">正在验证数据完整性...</string>
+    <string name="progress_writing_main_db">正在写入主数据库...</string>
+    <string name="progress_switching_db">正在切换到新数据库...</string>
+    <string name="update_completed">更新完成，共同步 %d 个电台，已切换到新数据</string>
+    <string name="update_confirm_replace_message">新数据(%d个)比现有数据(%d个)少，是否替换？</string>
+    <string name="update_completed_keep_existing">更新完成，但用户选择继续使用现有数据</string>
+    <string name="language_russian">Русский</string>
 </resources>

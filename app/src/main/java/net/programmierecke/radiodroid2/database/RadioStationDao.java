@@ -34,6 +34,10 @@ public interface RadioStationDao {
     @Query("SELECT * FROM radio_stations ORDER BY name ASC LIMIT 1000")
     LiveData<List<RadioStation>> getAllStationsByName();
 
+    @Query("SELECT * FROM radio_stations WHERE lastcheckok = 1 ORDER BY RANDOM() LIMIT 1")
+    RadioStation getRandomStationSync();
+
+
     @Query("SELECT * FROM radio_stations ORDER BY clickcount DESC LIMIT 1000")
     LiveData<List<RadioStation>> getStationsByClickCount();
 
@@ -116,6 +120,13 @@ public interface RadioStationDao {
     @Query("SELECT COUNT(*) FROM radio_stations WHERE language = :language")
     int getStationCountByLanguageSync(String language);
     
+    @Query("SELECT COUNT(*) FROM radio_stations WHERE lastcheckok = 1")
+    int getWorkingStationCount();
+    
+    @Query("SELECT COUNT(*) FROM radio_stations WHERE lastcheckok = 0")
+    int getBrokenStationCount();
+
+    
     // 优化的查询方法 - 一次性获取所有国家及其电台数量
     @Query("SELECT country, COUNT(*) as stationCount FROM radio_stations WHERE country != '' GROUP BY country HAVING COUNT(*) > 0 ORDER BY country ASC")
     List<CountryCount> getAllCountriesWithCountSync();
@@ -128,7 +139,7 @@ public interface RadioStationDao {
     @Query("SELECT DISTINCT tags FROM radio_stations WHERE tags != '' AND tags != ','")
     List<String> getAllTagStringsSync();
 
-    @Query("SELECT * FROM radio_stations WHERE name LIKE '%' || :query || '%' OR tags LIKE '%' || :query || ',%' OR tags LIKE :query || ',%' OR tags LIKE '%,' || :query OR tags = :query OR country LIKE '%' || :query || '%' OR language LIKE '%' || :query || '%' ORDER BY clickcount DESC LIMIT 100")
+    @Query("SELECT * FROM radio_stations WHERE name LIKE :query || '%' OR name LIKE '%' || :query || '%' OR tags LIKE '%' || :query || ',%' OR tags LIKE :query || ',%' OR tags LIKE '%,' || :query OR tags = :query OR country LIKE :query || '%' OR country LIKE '%' || :query || '%' OR language LIKE :query || '%' OR language LIKE '%' || :query || '%' ORDER BY CASE WHEN name LIKE :query || '%' THEN 0 WHEN name LIKE '%' || :query || '%' THEN 1 WHEN tags LIKE :query || ',%' THEN 2 WHEN tags = :query THEN 3 ELSE 4 END, clickcount DESC LIMIT 100")
     LiveData<List<RadioStation>> searchStations(String query);
     
     // 使用FTS进行快速搜索
@@ -151,7 +162,7 @@ public interface RadioStationDao {
     @Query("SELECT rs.* FROM radio_stations rs JOIN radio_stations_fts fts ON rs.station_uuid = fts.station_uuid WHERE radio_stations_fts MATCH :query ORDER BY rs.clickcount DESC LIMIT 100")
     LiveData<List<RadioStation>> searchStationsByLanguageFast(String query);
 
-    @Query("SELECT * FROM radio_stations WHERE name LIKE '%' || :query || '%' OR tags LIKE '%' || :query || ',%' OR tags LIKE :query || ',%' OR tags LIKE '%,' || :query OR tags = :query ORDER BY clickcount DESC LIMIT 100")
+    @Query("SELECT * FROM radio_stations WHERE name LIKE :query || '%' OR name LIKE '%' || :query || '%' OR tags LIKE '%' || :query || ',%' OR tags LIKE :query || ',%' OR tags LIKE '%,' || :query OR tags = :query ORDER BY CASE WHEN name LIKE :query || '%' THEN 0 WHEN name LIKE '%' || :query || '%' THEN 1 WHEN tags LIKE :query || ',%' THEN 2 WHEN tags = :query THEN 3 ELSE 4 END, clickcount DESC LIMIT 100")
     LiveData<List<RadioStation>> searchStationsByName(String query);
 
     @Query("SELECT * FROM radio_stations WHERE tags LIKE '%' || :query || ',%' OR tags LIKE :query || ',%' OR tags LIKE '%,' || :query OR tags = :query ORDER BY clickcount DESC LIMIT 100")
@@ -212,6 +223,14 @@ public interface RadioStationDao {
      * @param keyword 关键词搜索，为空表示不搜索
      * @return 符合条件的电台列表
      */
-    @Query("SELECT * FROM radio_stations WHERE (:country = '' OR country = :country) AND (:language = '' OR language = :language) AND (:tag = '' OR tags LIKE ',' || :tag || ',' OR tags LIKE :tag || ',%' OR tags LIKE '%,' || :tag OR tags = :tag) AND (:keyword = '' OR name LIKE '%' || :keyword || '%' OR country LIKE '%' || :keyword || '%' OR language LIKE '%' || :keyword || '%' OR tags LIKE '%' || :keyword || '%') ORDER BY clickcount DESC LIMIT 1000")
+    @Query("SELECT * FROM radio_stations WHERE (:country = '' OR country = :country) AND (:language = '' OR language = :language) AND (:tag = '' OR tags LIKE ',' || :tag || ',' OR tags LIKE :tag || ',%' OR tags LIKE '%,' || :tag OR tags = :tag) AND (:keyword = '' OR name LIKE :keyword || '%' OR name LIKE '%' || :keyword || '%' OR country LIKE :keyword || '%' OR country LIKE '%' || :keyword || '%' OR language LIKE :keyword || '%' OR language LIKE '%' || :keyword || '%' OR tags LIKE '%' || :keyword || '%') ORDER BY CASE WHEN :keyword != '' AND name LIKE :keyword || '%' THEN 0 WHEN :keyword != '' AND name LIKE '%' || :keyword || '%' THEN 1 ELSE 2 END, clickcount DESC LIMIT 1000")
     LiveData<List<RadioStation>> searchStationsByMultiCriteria(String country, String language, String tag, String keyword);
+    
+    // 获取搜索建议
+    @Query("SELECT DISTINCT name FROM radio_stations WHERE name LIKE :query || '%' ORDER BY name ASC LIMIT 5")
+    LiveData<List<String>> getSearchSuggestions(String query);
+    
+    // 获取标签建议
+    @Query("SELECT DISTINCT tags FROM radio_stations WHERE tags LIKE '%' || :query || '%' LIMIT 10")
+    LiveData<List<String>> getTagSuggestions(String query);
 }

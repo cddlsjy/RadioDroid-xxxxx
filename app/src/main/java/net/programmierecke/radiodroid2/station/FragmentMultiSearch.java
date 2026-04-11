@@ -1,22 +1,32 @@
 package net.programmierecke.radiodroid2.station;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import java.lang.reflect.Field;
+import android.content.Context;
+import android.widget.ListPopupWindow;
+import net.programmierecke.radiodroid2.views.CustomSpinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,11 +48,12 @@ public class FragmentMultiSearch extends FragmentBase {
 
     private RecyclerView recyclerViewStations;
     private EditText etSearchQuery;
-    private Spinner spinnerCountry;
-    private Spinner spinnerLanguage;
-    private Spinner spinnerTag;
+    private CustomSpinner spinnerCountry;
+    private CustomSpinner spinnerLanguage;
+    private CustomSpinner spinnerTag;
     private MaterialButton btnResetFilters;
     private MaterialButton btnToggleFilters;
+    private MaterialButton btnExpandFilters;
     private ScrollView scrollViewFilters;
     private androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefreshLayout;
     
@@ -60,6 +71,11 @@ public class FragmentMultiSearch extends FragmentBase {
     private List<String> languagesList = new ArrayList<>();
     private List<String> tagsList = new ArrayList<>();
     
+    // 防抖处理
+    private Handler searchHandler = new Handler();
+    private static final long DEBOUNCE_DELAY = 500; // 500ms
+    private Runnable searchRunnable;
+    
     private ArrayAdapter<String> countryAdapter;
     private ArrayAdapter<String> languageAdapter;
     private ArrayAdapter<String> tagAdapter;
@@ -76,6 +92,7 @@ public class FragmentMultiSearch extends FragmentBase {
         spinnerTag = view.findViewById(R.id.spinnerTag);
         btnResetFilters = view.findViewById(R.id.btnResetFilters);
         btnToggleFilters = view.findViewById(R.id.btnToggleFilters);
+        btnExpandFilters = view.findViewById(R.id.btnExpandFilters);
         scrollViewFilters = view.findViewById(R.id.scrollViewFilters);
         swipeRefreshLayout = view.findViewById(R.id.swiperefresh);
 
@@ -87,61 +104,102 @@ public class FragmentMultiSearch extends FragmentBase {
         super.onActivityCreated(savedInstanceState);
         
         // 初始化Repository和Adapter
-        if (getContext() != null) {
-            repository = RadioStationRepository.getInstance(getContext());
-            
-            // 初始化Adapter
-            if (getActivity() != null) {
-                stationListAdapter = new ItemAdapterStation(getActivity(), R.layout.list_item_station);
-                stationListAdapter.setStationActionsListener(new ItemAdapterStation.StationActionsListener() {
-                    @Override
-                    public void onStationClick(DataRadioStation station, int pos) {
-                        if (getActivity() == null) {
-                            Log.e(TAG, "Activity is null, cannot play station");
-                            return;
+            if (getContext() != null) {
+                repository = RadioStationRepository.getInstance(getContext());
+                
+                // 初始化Adapter
+                if (getActivity() != null) {
+                    stationListAdapter = new ItemAdapterStation(getActivity(), R.layout.list_item_station);
+                    stationListAdapter.setStationActionsListener(new ItemAdapterStation.StationActionsListener() {
+                        @Override
+                        public void onStationClick(DataRadioStation station, int pos) {
+                            if (getActivity() == null) {
+                                Log.e(TAG, "Activity is null, cannot play station");
+                                return;
+                            }
+                            
+                            RadioDroidApp radioDroidApp = (RadioDroidApp) getActivity().getApplication();
+                            if (radioDroidApp == null) {
+                                Log.e(TAG, "RadioDroidApp is null, cannot play station");
+                                return;
+                            }
+                            
+                            Utils.showPlaySelection(radioDroidApp, station, getActivity().getSupportFragmentManager());
                         }
-                        
-                        RadioDroidApp radioDroidApp = (RadioDroidApp) getActivity().getApplication();
-                        if (radioDroidApp == null) {
-                            Log.e(TAG, "RadioDroidApp is null, cannot play station");
-                            return;
+
+                        @Override
+                        public void onStationSwiped(DataRadioStation station) {
+                            // 处理电台滑动事件
                         }
-                        
-                        Utils.showPlaySelection(radioDroidApp, station, getActivity().getSupportFragmentManager());
-                    }
 
-                    @Override
-                    public void onStationSwiped(DataRadioStation station) {
-                        // 处理电台滑动事件
-                    }
+                        @Override
+                        public void onStationMoved(int from, int to) {
+                            // 处理电台移动事件
+                        }
 
-                    @Override
-                    public void onStationMoved(int from, int to) {
-                        // 处理电台移动事件
-                    }
+                        @Override
+                        public void onStationMoveFinished() {
+                            // 处理电台移动完成事件
+                        }
+                    });
+                    recyclerViewStations.setAdapter(stationListAdapter);
+                    recyclerViewStations.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    // 添加分隔线
+                    recyclerViewStations.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+                }
+                
+                // 加载所有国家、语言和标签
+                loadFilterOptions();
+                
+                // 禁用下拉刷新功能
+                swipeRefreshLayout.setEnabled(false);
+                swipeRefreshLayout.setRefreshing(false);
+                
+                // 根据主题设置按钮文字颜色
+                boolean isDarkTheme = Utils.isDarkTheme(getContext());
+                if (isDarkTheme) {
+                    // 暗色主题下使用白色文字
+                    btnResetFilters.setTextColor(android.graphics.Color.WHITE);
+                    btnToggleFilters.setTextColor(android.graphics.Color.WHITE);
+                    btnExpandFilters.setTextColor(android.graphics.Color.WHITE);
+                }
+                
+                // 设置事件监听器
+                setupEventListeners();
+                
+                // 设置Spinner下拉监听
 
-                    @Override
-                    public void onStationMoveFinished() {
-                        // 处理电台移动完成事件
-                    }
-                });
-                recyclerViewStations.setAdapter(stationListAdapter);
-                recyclerViewStations.setLayoutManager(new LinearLayoutManager(getActivity()));
+                
+                // 设置初始按钮文本和可见性
+                btnToggleFilters.setText(getString(R.string.multi_search_collapse_filters));
+                scrollViewFilters.setVisibility(View.VISIBLE);
+                btnExpandFilters.setVisibility(View.GONE);
+
             }
-            
-            // 加载所有国家、语言和标签
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        // 重新加载筛选选项，确保下拉选择框内容不丢失
+        if (countriesList.size() <= 1 || languagesList.size() <= 1 || tagsList.size() <= 1) {
             loadFilterOptions();
-            
-            // 禁用下拉刷新功能
-            swipeRefreshLayout.setEnabled(false);
-            swipeRefreshLayout.setRefreshing(false);
-            
-            // 设置事件监听器
-            setupEventListeners();
         }
     }
     
+
+    
     private void loadFilterOptions() {
+        // 清空列表，重新加载数据
+        countriesList.clear();
+        languagesList.clear();
+        tagsList.clear();
+        
+        // 重置适配器
+        countryAdapter = null;
+        languageAdapter = null;
+        tagAdapter = null;
+        
         // 加载国家列表
         countriesList.add(getString(R.string.multi_search_all));
         repository.getAllCountries().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
@@ -182,7 +240,7 @@ public class FragmentMultiSearch extends FragmentBase {
     private void updateCountrySpinner() {
         if (countryAdapter == null) {
             countryAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, countriesList);
-            countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            countryAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
             spinnerCountry.setAdapter(countryAdapter);
         } else {
             countryAdapter.notifyDataSetChanged();
@@ -192,7 +250,7 @@ public class FragmentMultiSearch extends FragmentBase {
     private void updateLanguageSpinner() {
         if (languageAdapter == null) {
             languageAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, languagesList);
-            languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            languageAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
             spinnerLanguage.setAdapter(languageAdapter);
         } else {
             languageAdapter.notifyDataSetChanged();
@@ -202,12 +260,18 @@ public class FragmentMultiSearch extends FragmentBase {
     private void updateTagSpinner() {
         if (tagAdapter == null) {
             tagAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, tagsList);
-            tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            tagAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
             spinnerTag.setAdapter(tagAdapter);
         } else {
             tagAdapter.notifyDataSetChanged();
         }
     }
+    
+
+    
+
+    
+
     
     private void setupEventListeners() {
         // 国家选择监听器
@@ -262,7 +326,28 @@ public class FragmentMultiSearch extends FragmentBase {
             @Override
             public void afterTextChanged(Editable s) {
                 searchQuery = s.toString();
-                performMultiSearch();
+                
+                // 防抖处理
+                if (searchRunnable != null) {
+                    searchHandler.removeCallbacks(searchRunnable);
+                }
+                
+                searchRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        performMultiSearch();
+                    }
+                };
+                
+                searchHandler.postDelayed(searchRunnable, DEBOUNCE_DELAY);
+            }
+        });
+        
+        // 搜索框焦点监听器
+        etSearchQuery.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // 移除自动折叠筛选条件的逻辑，允许用户在筛选条件展开时输入关键词
             }
         });
         
@@ -271,6 +356,9 @@ public class FragmentMultiSearch extends FragmentBase {
         
         // 筛选条件折叠/展开按钮
         btnToggleFilters.setOnClickListener(v -> toggleFilters());
+        
+        // 展开筛选条件按钮
+        btnExpandFilters.setOnClickListener(v -> toggleFilters());
     }
     
     /**
@@ -281,10 +369,12 @@ public class FragmentMultiSearch extends FragmentBase {
             // 隐藏筛选条件区域
             scrollViewFilters.setVisibility(View.GONE);
             btnToggleFilters.setText(getString(R.string.multi_search_expand_filters));
+            btnExpandFilters.setVisibility(View.VISIBLE);
         } else {
             // 显示筛选条件区域
             scrollViewFilters.setVisibility(View.VISIBLE);
             btnToggleFilters.setText(getString(R.string.multi_search_collapse_filters));
+            btnExpandFilters.setVisibility(View.GONE);
         }
     }
     

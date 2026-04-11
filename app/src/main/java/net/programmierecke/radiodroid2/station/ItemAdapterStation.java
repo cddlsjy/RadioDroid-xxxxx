@@ -342,20 +342,42 @@ public class ItemAdapterStation
         });
 
         // 确保电台名称可见
-        holder.textViewTitle.setText(station.Name != null ? station.Name : "未知电台");
+        holder.textViewTitle.setText(station.Name != null ? station.Name : activity.getString(R.string.unknown_station));
         
         // 设置文本颜色，确保与背景有足够对比度
+        boolean isDarkTheme = Utils.isDarkTheme(getContext());
         if (playingStationPosition == position) {
-            // 播放中的电台使用黑色粗体
-            holder.textViewTitle.setTextColor(Color.BLACK);
+            // 播放中的电台
+            if (isDarkTheme) {
+                // 暗色主题下使用白色粗体
+                holder.textViewTitle.setTextColor(Color.WHITE);
+            } else {
+                // 亮色主题下使用黑色粗体
+                holder.textViewTitle.setTextColor(Color.BLACK);
+            }
             holder.textViewTitle.setTypeface(null, Typeface.BOLD);
         } else {
-            // 未播放的电台使用深灰色
-            holder.textViewTitle.setTextColor(Color.DKGRAY);
+            // 未播放的电台
+            if (isDarkTheme) {
+                // 暗色主题下使用浅灰色
+                holder.textViewTitle.setTextColor(Color.LTGRAY);
+            } else {
+                // 亮色主题下使用深灰色
+                holder.textViewTitle.setTextColor(Color.DKGRAY);
+            }
             holder.textViewTitle.setTypeface(holder.textViewShortDescription.getTypeface());
         }
+
         holder.textViewShortDescription.setText(station.getShortDetails(getContext()));
         holder.textViewTags.setText(station.TagsAll.replace(",", ", "));
+        
+        // 设置简短描述和标签的文本颜色
+        if (isDarkTheme) {
+            // 暗色主题下使用浅灰色
+            holder.textViewShortDescription.setTextColor(Color.LTGRAY);
+            holder.textViewTags.setTextColor(Color.LTGRAY);
+        }
+
 
         boolean inFavourites = favouriteManager.has(station.StationUuid);
         holder.starredStatusIcon.setVisibility(inFavourites ? View.VISIBLE : View.GONE);

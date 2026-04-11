@@ -16,12 +16,13 @@ import net.programmierecke.radiodroid2.history.TrackHistoryEntry;
 import net.programmierecke.radiodroid2.database.RadioStation;
 import net.programmierecke.radiodroid2.database.RadioStationDao;
 
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import static net.programmierecke.radiodroid2.history.TrackHistoryEntry.MAX_UNKNOWN_TRACK_DURATION;
 
-@Database(entities = {TrackHistoryEntry.class, RadioStation.class, UpdateTimestamp.class, RadioStationFts.class}, version = 5)
+@Database(entities = {TrackHistoryEntry.class, RadioStation.class, UpdateTimestamp.class, RadioStationFts.class}, version = 14)
 @TypeConverters({Converters.class})
 public abstract class RadioDroidDatabase extends RoomDatabase {
     public abstract TrackHistoryDao songHistoryDao();
@@ -60,14 +61,38 @@ public abstract class RadioDroidDatabase extends RoomDatabase {
             database.execSQL(
                 "CREATE VIRTUAL TABLE IF NOT EXISTS `radio_stations_fts` USING FTS4(" +
                 "`station_uuid`, `name`, `tags`, `country`, `language`, " +
-                "content=`radio_stations`)"
-            );
+                "content=`radio_stations`)");
             
             // Populate FTS table with existing data, ignoring duplicates
             database.execSQL(
                 "INSERT OR IGNORE INTO `radio_stations_fts` (`station_uuid`, `name`, `tags`, `country`, `language`) " +
-                "SELECT `station_uuid`, `name`, `tags`, `country`, `language` FROM `radio_stations`"
-            );
+                "SELECT `station_uuid`, `name`, `tags`, `country`, `language` FROM `radio_stations`");
+        }
+    };
+    
+    // Migration from version 5 to version 6 - Add radio_stations_fts table
+    static final Migration MIGRATION_5_6 = new Migration(5, 6) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            // No changes needed for this migration
+        }
+    };
+    
+    // Migration from version 5 to version 14 - Empty migration for version jumps
+    static final Migration MIGRATION_5_14 = new Migration(5, 14) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            // No changes needed for this migration
+            // This migration handles jumps from version 5 to version 14
+        }
+    };
+    
+    // Migration from version 6 to version 14 - Empty migration for version jumps
+    static final Migration MIGRATION_6_14 = new Migration(6, 14) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            // No changes needed for this migration
+            // This migration handles jumps from version 6 to version 14
         }
     };
 
@@ -78,7 +103,8 @@ public abstract class RadioDroidDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RadioDroidDatabase.class, "radio_droid_database")
                             .addCallback(CALLBACK)
-                            .addMigrations(MIGRATION_3_4, MIGRATION_4_5)
+                            .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_5_14, MIGRATION_6_14)
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }
@@ -130,7 +156,7 @@ public abstract class RadioDroidDatabase extends RoomDatabase {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                     RadioDroidDatabase.class, "radio_droid_database")
                     .addCallback(CALLBACK)
-                    .addMigrations(MIGRATION_3_4, MIGRATION_4_5)
+                    .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_5_14, MIGRATION_6_14)
                     .build();
             
             // 重置关闭标志

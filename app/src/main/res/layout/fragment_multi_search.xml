@@ -5,14 +5,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- 筛选条件折叠/展开按钮 -->
+    <!-- 展开筛选条件按钮 -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnToggleFilters"
-        android:layout_width="match_parent"
+        android:id="@+id/btnExpandFilters"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:text="@string/multi_search_expand_filters"
         android:textAllCaps="false"
-        app:cornerRadius="0dp" />
+        app:cornerRadius="4dp" />
 
     <!-- 筛选条件区域 -->
     <ScrollView
@@ -27,87 +28,95 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="2dp">
 
             <!-- 国家筛选 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="2dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp"
                     android:text="@string/multi_search_country"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-                <Spinner
+                <net.programmierecke.radiodroid2.views.CustomSpinner
                     android:id="@+id/spinnerCountry"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="2dp"
                     android:background="@android:drawable/btn_dropdown"
-                    android:spinnerMode="dropdown" />
+                    android:spinnerMode="dropdown"
+                    style="@style/CustomSpinner" />
             </LinearLayout>
 
             <!-- 语言筛选 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="2dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp"
                     android:text="@string/multi_search_language"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-                <Spinner
+                <net.programmierecke.radiodroid2.views.CustomSpinner
                     android:id="@+id/spinnerLanguage"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="2dp"
                     android:background="@android:drawable/btn_dropdown"
-                    android:spinnerMode="dropdown" />
+                    android:spinnerMode="dropdown"
+                    style="@style/CustomSpinner" />
             </LinearLayout>
 
             <!-- 标签筛选 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="0dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp"
                     android:text="@string/multi_search_tag"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-                <Spinner
+                <net.programmierecke.radiodroid2.views.CustomSpinner
                     android:id="@+id/spinnerTag"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="2dp"
                     android:background="@android:drawable/btn_dropdown"
-                    android:spinnerMode="dropdown" />
+                    android:spinnerMode="dropdown"
+                    style="@style/CustomSpinner" />
             </LinearLayout>
 
             <!-- 关键词搜索 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="0dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="-2dp"
+                    android:includeFontPadding="false"
                     android:text="@string/multi_search_keyword"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -115,23 +124,48 @@
                 <EditText
                     android:id="@+id/etSearchQuery"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="2dp"
                     android:hint="@string/multi_search_hint"
+                    app:hintTextColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="13sp"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:padding="8dp" />
+                    android:padding="12dp"
+                    android:background="@drawable/rounded_search_box"
+                    android:elevation="0dp"
+                    android:translationZ="0dp" />
             </LinearLayout>
 
-            <!-- 重置按钮 -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnResetFilters"
-                android:layout_width="wrap_content"
+            <!-- 按钮区域 -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/multi_search_reset"
-                android:textAllCaps="false"
-                app:cornerRadius="4dp" />
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="0dp">
+                <!-- 收起筛选条件按钮 -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnToggleFilters"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/multi_search_expand_filters"
+                    android:textAllCaps="false"
+                    app:cornerRadius="4dp" />
+                <!-- 重置筛选按钮 -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnResetFilters"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/multi_search_reset"
+                    android:textAllCaps="false"
+                    app:cornerRadius="4dp" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

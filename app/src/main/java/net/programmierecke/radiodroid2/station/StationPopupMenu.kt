@@ -1,12 +1,14 @@
 package net.programmierecke.radiodroid2.station
 
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Build
 import android.view.View
 import android.widget.PopupMenu
 import androidx.fragment.app.FragmentActivity
 import androidx.preference.PreferenceManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.programmierecke.radiodroid2.R
 import net.programmierecke.radiodroid2.RadioDroidApp
 import net.programmierecke.radiodroid2.Utils
@@ -37,7 +39,11 @@ object StationPopupMenu {
                 }
                 R.id.menu_play_in_external_player -> {
                     Utils.playAndWarnIfMetered(context.applicationContext as RadioDroidApp, station,
-                            PlayerType.EXTERNAL) { PlayStationTask.playExternal(station, context).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR) }
+                            PlayerType.EXTERNAL) { 
+                        CoroutineScope(Dispatchers.IO).launch {
+                            PlayStationTask.playExternal(station, context).execute()
+                        }
+                    }
                     true
                 }
                 R.id.menu_visit_homepage -> {

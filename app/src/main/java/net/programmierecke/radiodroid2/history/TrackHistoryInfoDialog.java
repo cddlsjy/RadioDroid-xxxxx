@@ -74,8 +74,23 @@ public class TrackHistoryInfoDialog extends BottomSheetDialogFragment {
             textViewDuration.setText("");
         }
 
+        // 获取本地化的艺术家和曲名
+        final String artistName;
+        final String trackName;
+        if ("Unknown Artist".equals(historyEntry.artist)) {
+            artistName = getString(R.string.unknown_artist);
+        } else {
+            artistName = historyEntry.artist;
+        }
+        if ("Unknown Track".equals(historyEntry.track)) {
+            trackName = getString(R.string.unknown_track);
+        } else {
+            trackName = historyEntry.track;
+        }
+
         btnLyrics.setOnClickListener(v -> {
             if (isQuickLyricInstalled()) {
+                // 传递原始数据给QuickLyric
                 getContext().startActivity(new Intent("com.geecko.QuickLyric.getLyrics")
                         .putExtra("TAGS", new String[]{historyEntry.artist, historyEntry.track}));
             } else {
@@ -104,7 +119,7 @@ public class TrackHistoryInfoDialog extends BottomSheetDialogFragment {
         btnCopyInfo.setOnClickListener(v -> {
             ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
             if (clipboard != null) {
-                ClipData clip = ClipData.newPlainText("Track info", String.format("%s %s", historyEntry.artist, historyEntry.track));
+                ClipData clip = ClipData.newPlainText("Track info", String.format("%s %s", artistName, trackName));
                 clipboard.setPrimaryClip(clip);
 
                 CharSequence toastText = getContext().getResources().getText(R.string.notify_track_info_copied);

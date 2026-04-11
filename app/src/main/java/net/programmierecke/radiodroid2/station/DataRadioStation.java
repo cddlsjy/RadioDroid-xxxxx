@@ -143,10 +143,10 @@ public class DataRadioStation implements Parcelable {
 							DataRadioStation aStation = new DataRadioStation();
 							// 检查是否有name字段
 							if (anObject.has("name")) {
-								aStation.Name = anObject.optString("name", "未知电台");
-							} else {
-								aStation.Name = "未知电台";
-							}
+								aStation.Name = anObject.optString("name", "Unknown Station");
+						} else {
+							aStation.Name = "Unknown Station";
+						}
 							aStation.StreamUrl = "";
 							if (anObject.has("url")) {
 								aStation.StreamUrl = anObject.getString("url");

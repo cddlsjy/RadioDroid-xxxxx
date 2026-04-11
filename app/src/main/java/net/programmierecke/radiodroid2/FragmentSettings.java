@@ -231,17 +231,23 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     Intent intent = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
+                    
+                    // 添加更多参数以确保均衡器正确启动
+                    intent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getContext().getPackageName());
+                    intent.putExtra(AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC);
+                    intent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, 0); // 0表示使用默认音频会话
 
                     if (getContext().getPackageManager().resolveActivity(intent, 0) == null) {
                         Toast.makeText(getContext(), R.string.error_no_equalizer_found, Toast.LENGTH_SHORT).show();
                     } else {
-                        intent.putExtra(AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC);
-                        startActivityForResult(intent, ActivityMain.LAUNCH_EQUALIZER_REQUEST);
+                        // 使用getActivity()确保在Fragment中正确启动
+                        startActivity(intent);
                     }
 
                     return false;
                 }
             });
+
 
         } else if (s.equals("pref_category_connectivity")) {
             //final ListPreference servers = (ListPreference) findPreference("radiobrowser_server");
@@ -300,7 +306,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                     
                     if (savedResultsData != null) {
                         // There are saved results, ask user if they want to view them or run a new test
-                        androidx.appcompat.app.AlertDialog.Builder choiceBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+                        androidx.appcompat.app.AlertDialog.Builder choiceBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext(), Utils.getAlertDialogThemeResId(requireContext()));
                         choiceBuilder.setTitle(R.string.network_check_title);
                         
                         // Calculate when the test was performed
@@ -343,7 +349,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                     }
                     
                     // 显示确认对话框
-                    androidx.appcompat.app.AlertDialog.Builder confirmBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+                    androidx.appcompat.app.AlertDialog.Builder confirmBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext(), Utils.getAlertDialogThemeResId(requireContext()));
                     confirmBuilder.setTitle(getString(R.string.export_database_title));
                     confirmBuilder.setMessage(getString(R.string.export_database_message));
                     
@@ -373,7 +379,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                     }
                     
                     // 显示确认对话框
-                    androidx.appcompat.app.AlertDialog.Builder confirmBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+                    androidx.appcompat.app.AlertDialog.Builder confirmBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext(), Utils.getAlertDialogThemeResId(requireContext()));
                     confirmBuilder.setTitle(getString(R.string.import_database_title));
                     confirmBuilder.setMessage(getString(R.string.import_database_message));
                     
@@ -457,12 +463,19 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setPadding(60, 40, 60, 40);
         
+        // Check if dark theme is active
+        boolean isDarkTheme = Utils.isDarkTheme(requireContext());
+        int textColor = isDarkTheme ? Color.WHITE : Color.BLACK;
+        int grayColor = isDarkTheme ? Color.GRAY : Color.DKGRAY;
+        int successColor = isDarkTheme ? Color.GREEN : Color.parseColor("#008000");
+        
         // Title
         TextView titleView = new TextView(requireContext());
         titleView.setText(R.string.network_check_results_title);
         titleView.setTextSize(20);
         titleView.setTypeface(null, Typeface.BOLD);
         titleView.setPadding(0, 0, 0, 30);
+        titleView.setTextColor(textColor);
         linearLayout.addView(titleView);
         
         // Test time
@@ -477,7 +490,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
         }
         timeView.setTextSize(14);
         timeView.setPadding(0, 0, 0, 20);
-        timeView.setTextColor(Color.GRAY);
+        timeView.setTextColor(grayColor);
         linearLayout.addView(timeView);
         
         // 动态显示DNS返回的服务器的测试结果
@@ -505,28 +518,29 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
             
             // Server title
             TextView serverTitle = new TextView(requireContext());
-            serverTitle.setText("服务器 " + serverIndex + ": " + server);
+            serverTitle.setText(String.format(requireContext().getString(R.string.network_check_server_label), serverIndex) + ": " + server);
             serverTitle.setTextSize(16);
             serverTitle.setTypeface(null, Typeface.BOLD);
             serverTitle.setPadding(0, 20, 0, 10);
+            serverTitle.setTextColor(textColor);
             linearLayout.addView(serverTitle);
             
             // HTTP result
             long httpTime = protocolResults.getOrDefault("HTTP", Long.MAX_VALUE);
             TextView httpView = new TextView(requireContext());
-            httpView.setText("HTTP: " + (httpTime == Long.MAX_VALUE ? "连接失败" : httpTime + " ms"));
+            httpView.setText("HTTP: " + (httpTime == Long.MAX_VALUE ? requireContext().getString(R.string.network_check_connection_failed) : httpTime + " ms"));
             httpView.setTextSize(14);
             httpView.setPadding(30, 5, 0, 5);
-            httpView.setTextColor(httpTime == Long.MAX_VALUE ? Color.RED : Color.BLACK);
+            httpView.setTextColor(httpTime == Long.MAX_VALUE ? Color.RED : textColor);
             linearLayout.addView(httpView);
             
             // HTTPS result
             long httpsTime = protocolResults.getOrDefault("HTTPS", Long.MAX_VALUE);
             TextView httpsView = new TextView(requireContext());
-            httpsView.setText("HTTPS: " + (httpsTime == Long.MAX_VALUE ? "连接失败" : httpsTime + " ms"));
+            httpsView.setText("HTTPS: " + (httpsTime == Long.MAX_VALUE ? requireContext().getString(R.string.network_check_connection_failed) : httpsTime + " ms"));
             httpsView.setTextSize(14);
             httpsView.setPadding(30, 5, 0, 5);
-            httpsView.setTextColor(httpsTime == Long.MAX_VALUE ? Color.RED : Color.BLACK);
+            httpsView.setTextColor(httpsTime == Long.MAX_VALUE ? Color.RED : textColor);
             linearLayout.addView(httpsView);
             
             serverIndex++;
@@ -535,7 +549,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
         // 如果没有服务器结果，显示提示
         if (serverResults.isEmpty()) {
             TextView noResultsView = new TextView(requireContext());
-            noResultsView.setText("未检测到服务器结果");
+            noResultsView.setText(requireContext().getString(R.string.network_check_no_available));
             noResultsView.setTextSize(14);
             noResultsView.setPadding(30, 5, 0, 5);
             noResultsView.setTextColor(Color.RED);
@@ -544,15 +558,16 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
         
         // Fastest connection
         TextView fastestTitle = new TextView(requireContext());
-        fastestTitle.setText("最快连接:");
+        fastestTitle.setText(requireContext().getString(R.string.network_check_fastest_label) + ":");
         fastestTitle.setTextSize(16);
         fastestTitle.setTypeface(null, Typeface.BOLD);
         fastestTitle.setPadding(0, 20, 0, 10);
+        fastestTitle.setTextColor(textColor);
         linearLayout.addView(fastestTitle);
         
         // Find the fastest connection
         long minTime = Long.MAX_VALUE;
-        String fastestConnection = "无";
+        String fastestConnection = requireContext().getString(R.string.network_check_no_connection);
         
         for (Map.Entry<String, Long> entry : results.entrySet()) {
             if (entry.getValue() < minTime) {
@@ -567,25 +582,26 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
         }
         
         TextView fastestResult = new TextView(requireContext());
-        fastestResult.setText(fastestConnection + " - " + (minTime == Long.MAX_VALUE ? "无可用连接" : minTime + " ms"));
+        fastestResult.setText(fastestConnection + " - " + (minTime == Long.MAX_VALUE ? requireContext().getString(R.string.network_check_no_available) : minTime + " ms"));
         fastestResult.setTextSize(14);
         fastestResult.setPadding(30, 5, 0, 5);
-        fastestResult.setTextColor(minTime == Long.MAX_VALUE ? Color.RED : Color.parseColor("#008000"));
+        fastestResult.setTextColor(minTime == Long.MAX_VALUE ? Color.RED : successColor);
         linearLayout.addView(fastestResult);
         
         scrollView.addView(linearLayout);
+
         
         // Create and show the dialog
-        androidx.appcompat.app.AlertDialog.Builder resultsBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+        androidx.appcompat.app.AlertDialog.Builder resultsBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext(), Utils.getAlertDialogThemeResId(requireContext()));
         resultsBuilder.setView(scrollView);
-        resultsBuilder.setPositiveButton("确定", null);
+        resultsBuilder.setPositiveButton(requireContext().getString(R.string.action_ok), null);
         resultsBuilder.show();
     }
     
     // Method to perform a new network test
     private void performNewNetworkTest() {
         // Show progress dialog
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(requireContext(), Utils.getAlertDialogThemeResId(requireContext()));
         builder.setTitle(R.string.settings_check_network_connection);
         builder.setMessage(R.string.network_check_testing);
         androidx.appcompat.app.AlertDialog dialog = builder.create();
@@ -608,7 +624,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
             } catch (Exception e) {
                 requireActivity().runOnUiThread(() -> {
                     dialog.dismiss();
-                    androidx.appcompat.app.AlertDialog.Builder errorBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+                    androidx.appcompat.app.AlertDialog.Builder errorBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext(), Utils.getAlertDialogThemeResId(requireContext()));
                     errorBuilder.setTitle(R.string.network_check_failed);
                     errorBuilder.setMessage(getString(R.string.network_check_error, e.getMessage()));
                     errorBuilder.setPositiveButton(R.string.action_ok, null);
@@ -861,7 +877,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                                         updateTime = dateFormat.format(new java.util.Date(statusInfo.timestamp));
                                     } else {
                                         // 如果数据库中没有时间戳，显示"数据库尚未更新"
-                                        updateTime = "数据库尚未更新";
+                                        updateTime = getString(R.string.database_not_updated);
                                     }
                                     
                                     // 更新状态显示
@@ -928,7 +944,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                                     updateTime = dateFormat.format(new java.util.Date(statusInfo.timestamp));
                                 } else {
                                     // 如果数据库中没有时间戳，显示"数据库尚未更新"
-                                    updateTime = "数据库尚未更新";
+                                    updateTime = getString(R.string.database_not_updated);
                                 }
                                 
                                 // 更新状态显示
@@ -1041,6 +1057,8 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
             locale = new Locale("en");
         } else if (language.equals("zh")) {
             locale = new Locale("zh");
+        } else if (language.equals("ru")) {
+            locale = new Locale("ru");
         } else {
             locale = Locale.getDefault();
         }
@@ -1067,7 +1085,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
     // 导出主数据库到外部存储
     private void exportDatabase() {
         // 显示进度对话框
-        androidx.appcompat.app.AlertDialog.Builder progressBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+        androidx.appcompat.app.AlertDialog.Builder progressBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext(), Utils.getAlertDialogThemeResId(requireContext()));
         progressBuilder.setTitle(R.string.export_database_title);
         progressBuilder.setMessage(getString(R.string.progress_exporting_database));
         androidx.appcompat.app.AlertDialog progressDialog = progressBuilder.create();
@@ -1117,7 +1135,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                 // 在UI线程显示结果
                 requireActivity().runOnUiThread(() -> {
                     progressDialog.dismiss();
-                    androidx.appcompat.app.AlertDialog.Builder successBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+                    androidx.appcompat.app.AlertDialog.Builder successBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext(), Utils.getAlertDialogThemeResId(requireContext()));
                     successBuilder.setTitle(R.string.export_success_title);
                     successBuilder.setMessage(getString(R.string.export_success_message, exportFile.getAbsolutePath()));
                     successBuilder.setPositiveButton(R.string.action_ok, null);
@@ -1129,7 +1147,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                 // 在UI线程显示错误
                 requireActivity().runOnUiThread(() -> {
                     progressDialog.dismiss();
-                    androidx.appcompat.app.AlertDialog.Builder errorBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+                    androidx.appcompat.app.AlertDialog.Builder errorBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext(), Utils.getAlertDialogThemeResId(requireContext()));
                     errorBuilder.setTitle(R.string.export_failed_title);
                     errorBuilder.setMessage(getString(R.string.export_failed_message, e.getMessage()));
                     errorBuilder.setPositiveButton(R.string.action_ok, null);
@@ -1142,7 +1160,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
     // 从外部存储导入主数据库
     private void importDatabase(Uri uri) {
         // 显示进度对话框
-        androidx.appcompat.app.AlertDialog.Builder progressBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+        androidx.appcompat.app.AlertDialog.Builder progressBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext(), Utils.getAlertDialogThemeResId(requireContext()));
         progressBuilder.setTitle(R.string.import_database_title);
         progressBuilder.setMessage(getString(R.string.progress_importing_database));
         androidx.appcompat.app.AlertDialog progressDialog = progressBuilder.create();
@@ -1179,7 +1197,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                     boolean deleted = mainDatabaseFile.delete();
                     Log.d("FragmentSettings", "删除旧数据库文件: " + deleted);
                     if (!deleted) {
-                        throw new Exception("无法删除旧数据库文件");
+                        throw new Exception(getString(R.string.error_cannot_delete_old_db));
                     }
                     
                     // 添加延迟，确保文件删除完成
@@ -1228,14 +1246,14 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                 
                 // 验证文件是否成功复制
                 if (!mainDatabaseFile.exists()) {
-                    throw new Exception("目标文件不存在，复制失败");
+                    throw new Exception(getString(R.string.error_target_file_not_exist));
                 }
                 
                 long targetFileSize = mainDatabaseFile.length();
                 Log.d("FragmentSettings", "目标文件大小: " + targetFileSize + " 字节");
                 
                 if (targetFileSize == 0) {
-                    throw new Exception("导入的数据库文件为空或复制失败");
+                    throw new Exception(getString(R.string.import_failed_empty));
                 }
                 
                 if (targetFileSize != sourceFileSize) {
@@ -1273,7 +1291,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                 // 验证数据库是否可以正常访问
                 int stationCount = repository.getStationCountSync();
                 if (stationCount < 0) {
-                    throw new Exception("导入的数据库无法正常访问，可能文件已损坏");
+                    throw new Exception(getString(R.string.error_database_corrupted));
                 }
                 
                 Log.d("FragmentSettings", "数据库导入成功，电台数量: " + stationCount);
@@ -1357,7 +1375,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                     
                     Log.d("FragmentSettings", "已保存数据库状态到SharedPreferences: " + updateTime);
                     
-                    androidx.appcompat.app.AlertDialog.Builder successBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+                    androidx.appcompat.app.AlertDialog.Builder successBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext(), Utils.getAlertDialogThemeResId(requireContext()));
                     successBuilder.setTitle(R.string.import_success_title);
                     successBuilder.setMessage(getString(R.string.import_success_message, finalStationCount));
                     successBuilder.setPositiveButton(R.string.action_ok, (dialog, which) -> {
@@ -1377,7 +1395,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                 // 在UI线程显示错误
                 requireActivity().runOnUiThread(() -> {
                     progressDialog.dismiss();
-                    androidx.appcompat.app.AlertDialog.Builder errorBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+                    androidx.appcompat.app.AlertDialog.Builder errorBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext(), Utils.getAlertDialogThemeResId(requireContext()));
                     errorBuilder.setTitle(R.string.import_failed_title);
                     errorBuilder.setMessage(getString(R.string.import_failed_message, e.getMessage()));
                     errorBuilder.setPositiveButton(R.string.action_ok, null);
@@ -1388,7 +1406,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
     }
     
     private void showSleepTimerDialog() {
-        final androidx.appcompat.app.AlertDialog.Builder seekDialog = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+        final androidx.appcompat.app.AlertDialog.Builder seekDialog = new androidx.appcompat.app.AlertDialog.Builder(requireContext(), Utils.getAlertDialogThemeResId(requireContext()));
         View seekView = View.inflate(requireContext(), R.layout.layout_timer_chooser, null);
 
         seekDialog.setTitle(R.string.sleep_timer_title);

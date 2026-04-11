@@ -72,7 +72,16 @@ public class FragmentLocalStations extends FragmentBase implements IFragmentSear
         // repository = RadioStationRepository.getInstance(getContext()); // 移到onActivityCreated中初始化
 
         // 设置下拉刷新
-        swipeRefreshLayout.setEnabled(false); // 本地数据不需要下拉刷新
+        swipeRefreshLayout.setEnabled(true);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // 下拉刷新时重新加载数据，始终按系统国家优先的逻辑
+                loadDataWithSystemCountryPriority();
+                // 刷新完成后停止刷新动画
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         
         // 设置重试按钮
         btnRetry.setOnClickListener(new View.OnClickListener() {
@@ -592,5 +601,29 @@ public class FragmentLocalStations extends FragmentBase implements IFragmentSear
                 }
             }
         });
+    }
+
+    private void loadDataWithSystemCountryPriority() {
+        if (repository == null) {
+            if (getContext() != null) {
+                repository = RadioStationRepository.getInstance(getContext());
+            } else {
+                showError("数据仓库未初始化，请重启应用");
+                return;
+            }
+        }
+
+        java.util.Locale locale = java.util.Locale.getDefault();
+        String systemCountry = locale.getCountry();
+        String systemLanguage = locale.getLanguage();
+
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(() -> {
+                loadStationsBySystemCountry(systemCountry, systemLanguage);
+            });
+        } else {
+            Log.e(TAG, "Activity is null, cannot load stations");
+            showError("Activity不可用，请重启应用");
+        }
     }
 }

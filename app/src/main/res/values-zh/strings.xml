@@ -65,6 +65,19 @@
     <string name="detail_unstar">从收藏中删除</string>
     <string name="detail_play_in_external_player">@string/action_play_in_external</string>
     <string name="progress_loading">加载中...</string>
+    
+    <!-- Unknown artist/track/station -->
+    <string name="unknown_artist">未知艺术家</string>
+    <string name="unknown_track">未知曲目</string>
+    <string name="unknown_station">未知电台</string>
+    <string name="unknown">未知</string>
+    
+    <!-- Now playing accessibility -->
+    <string name="now_playing_accessibility">正在播放：%2$s 的歌曲 %1$s</string>
+    <string name="now_playing_artist_unknown">正在播放：%s，艺术家信息未知</string>
+    <string name="now_playing_track_unknown">正在播放 %s 的歌曲，歌曲名信息未知</string>
+    <string name="now_playing_all_unknown">正在播放音乐，艺术家和歌曲信息未知</string>
+    <string name="now_playing_stream">正在播放：%s</string>
 
     <string name="sleep_timer" formatted="true">睡眠定时器：%1$02d:%2$02d</string>
     <string name="sleep_timer_title">在选定的分钟后停止播放</string>
@@ -417,7 +430,69 @@
     <string name="save_file_failed">保存文件失败：%1$s</string>
     <string name="import_failed_invalid_format">请选择M3U格式的播放列表文件</string>
     <string name="import_failed_parse">导入失败：无法解析文件</string>
+    <string name="progress_importing_database">正在导入主数据库，请稍候...</string>
+    <string name="import_success_message">主数据库导入成功，共包含 %d 个电台。应用将自动重启以加载新数据库。</string>
+    <string name="import_failed_title">导入失败</string>
+    <string name="import_failed_message">导入主数据库时出错：%s</string>
+    <string name="import_failed_empty">导入的数据库文件为空或复制失败</string>
+    <string name="import_failed_invalid">请选择有效的数据库文件</string>
+    <string name="error_cannot_delete_old_db">无法删除旧数据库文件</string>
+    <string name="error_target_file_not_exist">目标文件不存在，复制失败</string>
+    <string name="error_database_corrupted">导入的数据库无法正常访问，可能文件已损坏</string>
     <string name="database_status_updated">数据库状态已更新：%1$s</string>
     <string name="database_status_update_failed">数据库状态更新失败：%1$s</string>
     <string name="database_status_from_fields">数据库状态已从数据库字段更新：%1$s</string>
+    
+    <string name="progress_checking_network">正在检查网络连接</string>
+    <string name="progress_getting_station_count">正在获取电台总数</string>
+    <string name="progress_found_stations">查询到网络数据库现存 %d 个电台</string>
+    <string name="progress_starting_temp_db_update">开始更新临时数据库</string>
+    <string name="progress_resuming_download">恢复下载进度</string>
+    <string name="progress_downloading_stations">正在下载电台数据</string>
+    <string name="progress_processing_data">正在处理下载的数据...</string>
+    <string name="progress_reading_temp_db">正在读取临时数据库...</string>
+    <string name="progress_validating_data">正在验证数据完整性...</string>
+    <string name="progress_writing_main_db">正在写入主数据库...</string>
+    <string name="progress_switching_db">正在切换到新数据库...</string>
+    <string name="update_completed">更新完成，共同步 %d 个电台，已切换到新数据</string>
+    <string name="update_confirm_replace_message">新数据 (%d 个) 比现有数据 (%d 个) 少，是否替换？</string>
+    <string name="update_completed_keep_existing">更新完成，但用户选择继续使用现有数据</string>
+    <string name="update_failed">更新失败</string>
+    <string name="update_failed_message">更新失败：%s</string>
+    <string name="language_russian">Русский</string>
+    
+    <!-- Database update progress dialog -->
+    <string name="update_dialog_title">更新电台数据库</string>
+    <string name="progress_downloading_data">正在下载电台数据</string>
+    <string name="update_cancelled">更新已取消</string>
+    <string name="update_system_paused">更新被系统暂停，等待恢复...</string>
+    <string name="progress_stalled">更新进度停滞，尝试恢复...</string>
+    <string name="progress_system_paused_suffix">（可能被系统暂停）</string>
+    <string name="update_preparing">准备中...</string>
+    <string name="update_confirm_cancel_title">取消更新</string>
+    <string name="update_confirm_cancel_message">确定要取消数据库更新吗？</string>
+    <string name="update_confirm_cancel_positive">确认</string>
+    
+    <!-- Database update progress messages -->
+    <string name="progress_checking_network_speed">正在检查网络连接速度</string>
+    <string name="warning_low_battery">电量较低 (%1$d%%)，请连接充电器后再更新数据库</string>
+    <string name="error_low_battery">电量过低 (%1$d%%)，请连接充电器后再更新数据库</string>
+    <string name="progress_cannot_check_battery">无法检查电池电量，继续更新</string>
+    <string name="error_insufficient_storage">内部存储空间不足，至少需要50MB</string>
+    <string name="warning_low_external_storage">外部存储空间较少，建议释放一些空间以确保更新顺利完成</string>
+    <string name="progress_cannot_check_storage">无法检查存储空间，继续更新</string>
+    
+    <!-- Error messages -->
+    <string name="error_network_unavailable">网络连接不可用，请检查网络设置</string>
+    <string name="error_server_stats_failed">获取服务器统计信息失败</string>
+    <string name="error_stats_parse_failed">解析统计信息失败</string>
+    <string name="error_no_stations_found">没有获取到任何电台数据</string>
+    <string name="error_sync_failed">同步出错</string>
+    <string name="error_network_check_failed">检查网络连接出错</string>
+    <string name="error_no_servers_available">没有找到可用的服务器</string>
+    
+    <!-- Network check UI labels -->
+    <string name="network_check_server_label">服务器 %1$d</string>
+    <string name="network_check_fastest_label">最快连接</string>
+    
 </resources>

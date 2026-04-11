@@ -682,7 +682,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
      */
     private String decodeMetadataWithCharsetDetection(byte[] metadataBytes) {
         if (metadataBytes == null || metadataBytes.length == 0) {
-            return "未知";
+            return context.getString(R.string.unknown);
         }
         
         // 调试信息
@@ -693,7 +693,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         // 检查原始数据是否已损坏
         if (checkIfDataIsCorrupted(metadataBytes)) {
             Log.w(TAG, "检测到原始数据已损坏，可能是服务器端编码转换错误");
-            return "未知";
+            return context.getString(R.string.unknown);
         }
 
         // 首先特别检查是否是有效的UTF-8字节序列
@@ -764,7 +764,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         // 预处理：移除可能的控制字符和无效字符
         String cleanedMetadata = preprocessMetadata(metadata);
         if (cleanedMetadata.isEmpty()) {
-            return "未知";
+            return context.getString(R.string.unknown);
         }
 
         // 获取原始字节数据
@@ -778,7 +778,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         // 检查原始数据是否已损坏
         if (checkIfDataIsCorrupted(originalBytes)) {
             Log.w(TAG, "检测到原始数据已损坏，可能是服务器端编码转换错误");
-            return "未知";
+            return context.getString(R.string.unknown);
         }
 
         // 优先使用多种编码尝试解码，按照用户建议的顺序
@@ -1285,7 +1285,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
      */
     private String preprocessMetadata(String metadata) {
         if (metadata == null || metadata.isEmpty()) {
-            return "未知";
+            return context.getString(R.string.unknown);
         }
         
         // 移除控制字符（保留常见的空白字符）
@@ -2075,12 +2075,12 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         // 总是输出最佳编码选择信息
         Log.i(TAG, "选择最佳编码: " + bestCharset + ", 分数: " + bestScore + ", 结果: " + bestResult);
         
-        // 最终检查：如果最佳结果仍然包含明显的乱码字符，返回"未知"
+        // 最终检查：如果最佳结果仍然包含明显的乱码字符，返回"Unknown"
         if (containsObviousGarbledCharacters(bestResult)) {
             if (BuildConfig.DEBUG) {
-                Log.w(TAG, "最佳编码结果仍然包含明显的乱码字符，返回未知: " + bestResult);
+                Log.w(TAG, "最佳编码结果仍然包含明显的乱码字符，返回Unknown: " + bestResult);
             }
-            return "未知";
+            return context.getString(R.string.unknown);
         }
         
         return bestResult;

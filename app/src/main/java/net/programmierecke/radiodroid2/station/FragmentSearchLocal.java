@@ -131,6 +131,8 @@ public class FragmentSearchLocal extends FragmentBase implements IFragmentSearch
         lastSearchStyle = searchStyle;
         lastSearchQuery = query;
         
+
+        
         if (query == null || query.isEmpty()) {
             Log.d(TAG, "Query is null or empty, showing error");
             if (stationListAdapter != null) {

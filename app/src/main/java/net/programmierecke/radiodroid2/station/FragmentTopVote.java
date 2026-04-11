@@ -105,6 +105,8 @@ public class FragmentTopVote extends FragmentBase implements IFragmentSearchable
             recyclerViewStations.setAdapter(stationListAdapter);
             // 设置LayoutManager
             recyclerViewStations.setLayoutManager(new LinearLayoutManager(getActivity()));
+            // 添加分隔线
+            recyclerViewStations.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         } else {
             Log.e(TAG, "Activity is null in onActivityCreated, cannot initialize adapter");
             return;

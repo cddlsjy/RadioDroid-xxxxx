@@ -40,6 +40,12 @@
         app:showAsAction="always"/>
 
     <item
+        android:id="@+id/action_random_play"
+        android:icon="@drawable/ic_shuffle_24dp"
+        android:title="@string/action_random_play"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/action_save"
         android:icon="@drawable/ic_save_black_24dp"
         android:title="@string/nav_item_save_playlist"

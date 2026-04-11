@@ -83,8 +83,20 @@ public class TrackHistoryAdapter extends PagedListAdapter<TrackHistoryEntry, Tra
             holder.imageViewStationIcon.setVisibility(View.GONE);
         }
 
-        holder.textViewTrackName.setText(historyEntry.track);
-        holder.textViewTrackArtist.setText(historyEntry.artist);
+        // 显示曲名和艺术家，如果存储的是英文的Unknown或中文的未知，则显示本地化的Unknown
+        String trackName = historyEntry.track;
+        String artistName = historyEntry.artist;
+        
+        // 检查是否需要本地化显示
+        if ("Unknown Track".equals(trackName) || "未知".equals(trackName)) {
+            trackName = context.getString(R.string.unknown_track);
+        }
+        if ("Unknown Artist".equals(artistName) || "未知".equals(artistName)) {
+            artistName = context.getString(R.string.unknown_artist);
+        }
+        
+        holder.textViewTrackName.setText(trackName);
+        holder.textViewTrackArtist.setText(artistName);
 
         holder.textViewTrackName.setSelected(true);
         holder.textViewTrackArtist.setSelected(true);

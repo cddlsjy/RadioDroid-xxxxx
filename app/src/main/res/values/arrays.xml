@@ -65,11 +65,13 @@
         <item>@string/language_system</item>
         <item>@string/language_english</item>
         <item>@string/language_chinese</item>
+        <item>@string/language_russian</item>
     </string-array>
     <string-array name="language_values">
         <item>system</item>
         <item>en</item>
         <item>zh</item>
+        <item>ru</item>
     </string-array>
 
 </resources>

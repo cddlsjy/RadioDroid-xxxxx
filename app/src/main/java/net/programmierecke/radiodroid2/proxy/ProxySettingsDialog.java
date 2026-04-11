@@ -52,7 +52,8 @@ public class ProxySettingsDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), Utils.getAlertDialogThemeResId(getActivity()));
+
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View layout = inflater.inflate(R.layout.dialog_proxy_settings, null);

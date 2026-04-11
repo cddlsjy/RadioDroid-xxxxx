@@ -32,6 +32,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
     private static final String PREFS_NAME = "database_update_prefs";
     private static final String KEY_IS_UPDATING = "is_updating";
     private static final String KEY_PROGRESS_MESSAGE = "progress_message";
+    private static final String KEY_PROGRESS_MESSAGE_RES_ID = "progress_message_res_id";
     private static final String KEY_PROGRESS_CURRENT = "progress_current";
     private static final String KEY_PROGRESS_TOTAL = "progress_total";
     private static final String KEY_UPDATE_ID = "update_id";
@@ -292,6 +293,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
         // 更新进度信息 - 使用commit()确保同步更新，立即持久化
         prefs.edit()
             .putString(KEY_PROGRESS_MESSAGE, message)
+            .putInt(KEY_PROGRESS_MESSAGE_RES_ID, 0)  // 标记为使用字符串方式
             .commit();
     }
     
@@ -314,6 +316,7 @@ public class DatabaseUpdateWorker extends Worker implements RadioStationReposito
         
         prefs.edit()
             .putString(KEY_PROGRESS_MESSAGE, message)
+            .putInt(KEY_PROGRESS_MESSAGE_RES_ID, 0)  // 标记为使用字符串方式
             .putInt(KEY_PROGRESS_CURRENT, progress)
             .putInt(KEY_PROGRESS_TOTAL, total)
             .commit();

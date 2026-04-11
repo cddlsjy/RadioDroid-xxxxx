@@ -390,8 +390,8 @@ public class StreamLiveInfo implements Parcelable {
         } catch (Exception e) {
             Log.e(TAG, "parseMetadataIntelligently - 解析过程中出错: " + e.getMessage(), e);
             // 出错时使用安全的默认值
-            artist = "未知艺术家";
-            track = "未知歌曲";
+            artist = "Unknown Artist";
+            track = "Unknown Track";
         }
         
         // 清理结果
@@ -671,7 +671,7 @@ public class StreamLiveInfo implements Parcelable {
         if (title.startsWith(" - ")) {
             String remaining = title.substring(3).trim();
             if (!remaining.isEmpty()) {
-                artist = "未知艺术家";
+                artist = "Unknown Artist";
                 track = remaining;
                 if (BuildConfig.DEBUG) {
                     Log.d(TAG, "parseSpecialFormats - 检测到空艺术家字段，艺术家设为: " + artist + ", 歌曲名: " + track);
@@ -765,7 +765,7 @@ public class StreamLiveInfo implements Parcelable {
             if (title.contains("title=") && !title.contains("artist=")) {
                 Log.i(TAG, "parseFieldFormats - 检测到只有title字段");
                 track = extractFieldValue(title, "title");
-                artist = "未知艺术家";
+                artist = "Unknown Artist";
                 return true;
             }
             
@@ -773,7 +773,7 @@ public class StreamLiveInfo implements Parcelable {
             if (title.contains("artist=") && !title.contains("title=")) {
                 Log.i(TAG, "parseFieldFormats - 检测到只有artist字段");
                 artist = extractFieldValue(title, "artist");
-                track = "未知歌曲";
+                track = "Unknown Track";
                 return true;
             }
             
@@ -808,12 +808,12 @@ public class StreamLiveInfo implements Parcelable {
             } else if (title.contains("title:")) {
                 // 只提取title
                 track = extractColonFieldValue(title, "title");
-                artist = "未知艺术家";
+                artist = "Unknown Artist";
                 return true;
             } else if (title.contains("artist:")) {
                 // 只提取artist
                 artist = extractColonFieldValue(title, "artist");
-                track = "未知歌曲";
+                track = "Unknown Track";
                 return true;
             }
             return false;
@@ -915,7 +915,7 @@ public class StreamLiveInfo implements Parcelable {
                     track.matches(".*\\bBUMPER\\b.*")) { // 匹配过渡片段
                     // 如果是特殊标识模式，不进行分割
                     Log.i(TAG, "parseTextFieldFormat - 检测到特殊标识模式，不进行分割");
-                    artist = "未知艺术家";
+                    artist = "Unknown Artist";
                 } 
                 // 检查track是否包含多个单词
                 else if (track.split("\\s+").length > 2) {
@@ -932,8 +932,8 @@ public class StreamLiveInfo implements Parcelable {
                     }
                 } else {
                     // 设置默认艺术家
-                    Log.i(TAG, "parseTextFieldFormat - 艺术家为空但track不为空，设置为'未知艺术家'");
-                    artist = "未知艺术家";
+                    Log.i(TAG, "parseTextFieldFormat - 艺术家为空但track不为空，设置为'Unknown Artist'");
+                    artist = "Unknown Artist";
                 }
             }
             
@@ -1103,11 +1103,11 @@ public class StreamLiveInfo implements Parcelable {
         
         // 处理空值情况
         if (artist == null || artist.isEmpty()) {
-            artist = "未知艺术家";
+            artist = "Unknown Artist";
         }
         
         if (track == null || track.isEmpty()) {
-            track = "未知歌曲";
+            track = "Unknown Track";
         }
         
         // 处理解析结果过于相似的情况（可能是分割错误）
@@ -1117,9 +1117,9 @@ public class StreamLiveInfo implements Parcelable {
             if (similarity > 0.8 || artist.equals(track)) {
                 // 如果相似度超过80%或完全相同，可能是分割错误
                 track = artist;
-                artist = "未知艺术家";
+                artist = "Unknown Artist";
                 
-                Log.d(TAG, "cleanParsingResults - 检测到艺术家和歌曲名过于相似，调整为未知艺术家");
+                Log.d(TAG, "cleanParsingResults - 检测到艺术家和歌曲名过于相似，调整为Unknown Artist");
             }
         }
         
@@ -1299,7 +1299,7 @@ public class StreamLiveInfo implements Parcelable {
         }
         
         // 如果解码后仍然无法解析，使用解码后的标题作为歌曲名
-        artist = "未知艺术家";
+        artist = "Unknown Artist";
         track = decodedTitle.trim();
         
         if (BuildConfig.DEBUG) {
@@ -1335,7 +1335,7 @@ public class StreamLiveInfo implements Parcelable {
         }
         
         // 如果仍然无法解析，使用标准化后的标题作为歌曲名
-        artist = "未知艺术家";
+        artist = "Unknown Artist";
         track = normalizedTitle;
         
         if (BuildConfig.DEBUG) {
@@ -1364,7 +1364,7 @@ public class StreamLiveInfo implements Parcelable {
         }
         
         // 如果移除URL后仍然无法解析，使用移除URL后的标题作为歌曲名
-        artist = "未知艺术家";
+        artist = "Unknown Artist";
         track = withoutUrl;
         
         if (BuildConfig.DEBUG) {
@@ -1389,7 +1389,7 @@ public class StreamLiveInfo implements Parcelable {
         }
         
         // 如果清理后仍然无法解析，使用清理后的标题作为歌曲名
-        artist = "未知艺术家";
+        artist = "Unknown Artist";
         track = cleanTitle;
         
         if (BuildConfig.DEBUG) {

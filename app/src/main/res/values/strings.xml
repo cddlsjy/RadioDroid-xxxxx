@@ -65,12 +65,26 @@
     <string name="detail_unstar">Delete from favorites</string>
     <string name="detail_play_in_external_player">@string/action_play_in_external</string>
     <string name="progress_loading">Loading...</string>
+    
+    <!-- Unknown artist/track/station -->
+    <string name="unknown_artist">Unknown Artist</string>
+    <string name="unknown_track">Unknown Track</string>
+    <string name="unknown_station">Unknown Station</string>
+    <string name="unknown">Unknown</string>
+    
+    <!-- Now playing accessibility -->
+    <string name="now_playing_accessibility">Now playing: %1$s by %2$s</string>
+    <string name="now_playing_artist_unknown">Now playing: %s, artist unknown</string>
+    <string name="now_playing_track_unknown">Now playing song by %s, track name unknown</string>
+    <string name="now_playing_all_unknown">Now playing music, artist and track unknown</string>
+    <string name="now_playing_stream">Now playing: %s</string>
 
     <string name="sleep_timer" formatted="true">Sleep timer: %1$02d:%2$02d</string>
     <string name="sleep_timer_title">Stop playing after the selected minute</string>
     <string name="sleep_timer_apply">Apply</string>
     <string name="sleep_timer_clear">Clear</string>
     <string name="nav_item_add_sleep">Sleep timer</string>
+    <string name="action_random_play">Random play</string>
 
     <string name="nav_item_save_playlist">Export favorites as playlist</string>
     <string name="nav_item_load_playlist">Import favorites from playlist</string>
@@ -440,6 +454,9 @@ The app will automatically restart to load the new database.</string>
     <string name="import_failed_message">Error importing main database: %s</string>
     <string name="import_failed_empty">The imported database file is empty or copy failed</string>
     <string name="import_failed_invalid">Please select a valid database file</string>
+    <string name="error_cannot_delete_old_db">Cannot delete old database file</string>
+    <string name="error_target_file_not_exist">Target file does not exist, copy failed</string>
+    <string name="error_database_corrupted">The imported database cannot be accessed properly, the file may be corrupted</string>
     
     <string name="progress_preparing_update">Preparing update...</string>
     <string name="progress_resuming_update">Resuming update...</string>
@@ -461,4 +478,55 @@ The app will automatically restart to load the new database.</string>
     <string name="update_notification_channel_name">Database Update</string>
     <string name="update_notification_channel_description">Shows database update progress</string>
     
-    </resources>
+    <string name="progress_checking_network">Checking network connection</string>
+    <string name="progress_getting_station_count">Getting station count</string>
+    <string name="progress_found_stations">Found %d stations in network database</string>
+    <string name="progress_starting_temp_db_update">Starting temporary database update</string>
+    <string name="progress_resuming_download">Resuming download progress</string>
+    <string name="progress_processing_data">Processing downloaded data...</string>
+    <string name="progress_reading_temp_db">Reading temporary database...</string>
+    <string name="progress_validating_data">Validating data integrity...</string>
+    <string name="progress_writing_main_db">Writing to main database...</string>
+    <string name="progress_switching_db">Switching to new database...</string>
+    <string name="update_completed">Update completed, synchronized %d stations, switched to new data</string>
+    <string name="update_confirm_replace_message">New data (%d stations) has fewer stations than existing data (%d stations), do you want to replace?</string>
+    <string name="update_completed_keep_existing">Update completed, but user chose to keep existing data</string>
+    <string name="language_russian">Russian</string>
+    <string name="progress_system_paused_suffix"> (may be paused by system)</string>
+    
+    <!-- Database update progress messages -->
+    <string name="progress_checking_network_speed">Checking network connection speed</string>
+    <string name="warning_low_battery">Low battery (%1$d%%), please connect charger before updating database</string>
+    <string name="error_low_battery">Very low battery (%1$d%%), please connect charger before updating database</string>
+    <string name="progress_cannot_check_battery">Cannot check battery level, continuing update</string>
+    <string name="error_insufficient_storage">Insufficient internal storage, at least 50MB required</string>
+    <string name="warning_low_external_storage">Low external storage,建议释放一些空间以确保更新顺利完成</string>
+    <string name="progress_cannot_check_storage">Cannot check storage space, continuing update</string>
+    
+    <!-- Notification messages -->
+    <string name="notification_channel_name">Database Update</string>
+    <string name="notification_channel_description">Shows database update progress</string>
+    <string name="notification_title">Radio Database Update</string>
+    <string name="notification_text">Updating radio database in background, you can continue using other features</string>
+    
+    <!-- File operations messages -->
+    <string name="error_save_file_failed">Failed to save file: %1$s</string>
+    <string name="error_invalid_file_format">Please select an M3U format playlist file</string>
+    <string name="error_import_failed_parse">Import failed: Unable to parse file</string>
+    <string name="error_import_failed">Import failed: %1$s</string>
+    <string name="success_imported_stations">Imported %1$d stations from %2$s</string>
+    
+    <!-- Error messages -->
+    <string name="error_network_unavailable">Network connection unavailable, please check network settings</string>
+    <string name="error_server_stats_failed">Failed to get server statistics</string>
+    <string name="error_stats_parse_failed">Failed to parse statistics</string>
+    <string name="error_no_stations_found">No radio stations found</string>
+    <string name="error_sync_failed">Synchronization failed</string>
+    <string name="error_network_check_failed">Network check failed</string>
+    <string name="error_no_servers_available">No servers available</string>
+    
+    <!-- Network check UI labels -->
+    <string name="network_check_server_label">Server %1$d</string>
+    <string name="network_check_fastest_label">Fastest Connection</string>
+    
+</resources>

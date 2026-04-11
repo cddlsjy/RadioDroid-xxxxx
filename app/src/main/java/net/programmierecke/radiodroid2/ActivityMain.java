@@ -150,6 +150,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
     MenuItem menuItemListView;
     MenuItem menuItemAddAlarm;
     MenuItem menuItemMpd;
+    MenuItem menuItemRandomPlay;
 
     private SharedPreferences sharedPref;
 
@@ -700,6 +701,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
         menuItemIconsView = menu.findItem(R.id.action_icons_view);
         menuItemAddAlarm = menu.findItem(R.id.action_add_alarm);
         menuItemMpd = menu.findItem(R.id.action_mpd);
+        menuItemRandomPlay = menu.findItem(R.id.action_random_play);
         // 移除SearchView，直接使用onOptionsItemSelected处理点击事件跳转到多条件搜索界面
         MenuItemCompat.setActionView(menuItemSearch, null);
 
@@ -711,6 +713,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
         menuItemListView.setVisible(false);
         menuItemIconsView.setVisible(false);
         menuItemAddAlarm.setVisible(false);
+        menuItemRandomPlay.setVisible(false);
 
         boolean mpd_is_visible = false;
         RadioDroidApp radioDroidApp = (RadioDroidApp) getApplication();
@@ -726,6 +729,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
         if (selectedMenuItem == R.id.nav_item_stations) {
             menuItemSleepTimer.setVisible(true);
             menuItemSearch.setVisible(true);
+            menuItemRandomPlay.setVisible(true);
             myToolbar.setTitle(R.string.nav_item_stations);
         } else if (selectedMenuItem == R.id.nav_item_starred) {
             menuItemSleepTimer.setVisible(true);
@@ -768,6 +772,17 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
         ((RadioDroidApp) getApplication()).getCastHandler().getRouteItem(getApplicationContext(), menu);
 
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (menuItemRandomPlay == null) {
+            menuItemRandomPlay = menu.findItem(R.id.action_random_play);
+        }
+
+        menuItemRandomPlay.setVisible(selectedMenuItem == R.id.nav_item_stations);
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -821,7 +836,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
                     @Override
                     protected void onPostExecute(Boolean result) {
                         if (exception != null) {
-                            Toast.makeText(ActivityMain.this, "保存文件失败: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(ActivityMain.this, getResources().getString(R.string.error_save_file_failed, exception.getMessage()), Toast.LENGTH_LONG).show();
                         } else if (result.booleanValue()) {
                             Toast.makeText(ActivityMain.this, getResources().getString(R.string.notify_save_playlist_ok, "文件", fileName), Toast.LENGTH_LONG).show();
                         } else {
@@ -855,7 +870,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
                             
                             // 检查文件是否为M3U格式
                             if (!fileName.toLowerCase().endsWith(".m3u")) {
-                                exception = new Exception("请选择M3U格式的播放列表文件");
+                                exception = new Exception(getResources().getString(R.string.error_invalid_file_format));
                                 return null;
                             }
                             
@@ -871,7 +886,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
                                 importedCount = importedStations.size();
                                 // 不在这里调用addMultiple，只保存数据
                             } else {
-                                exception = new Exception("导入失败：无法解析文件");
+                                exception = new Exception(getResources().getString(R.string.error_import_failed_parse));
                             }
                             
                             reader.close();
@@ -889,14 +904,14 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
                             if (exception.getMessage() != null && exception.getMessage().contains("M3U")) {
                                 Toast.makeText(ActivityMain.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(ActivityMain.this, "导入失败: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ActivityMain.this, getResources().getString(R.string.error_import_failed, exception.getMessage()), Toast.LENGTH_SHORT).show();
                             }
                         } else if (importedStations != null) {
                             // 在主线程中添加电台到收藏列表
                             RadioDroidApp radioDroidApp = (RadioDroidApp) getApplication();
                             FavouriteManager favouriteManager = radioDroidApp.getFavouriteManager();
                             favouriteManager.addMultiple(importedStations);
-                            Toast.makeText(ActivityMain.this, "已从" + fileName + "导入" + importedCount + "个电台", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ActivityMain.this, getResources().getString(R.string.success_imported_stations, importedCount, fileName), Toast.LENGTH_LONG).show();
                         }
                     }
                 }.execute();
@@ -1049,12 +1064,15 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
         } else if (itemId == R.id.action_set_sleep_timer) {
             changeTimer();
             return true;
+        } else if (itemId == R.id.action_random_play) {
+            playRandomStation();
+            return true;
         } else if (itemId == R.id.action_mpd) {
             selectMPDServer();
             return true;
         } else if (itemId == R.id.action_delete) {
                 if (selectedMenuItem == R.id.nav_item_history) {
-                    new AlertDialog.Builder(this)
+                    new AlertDialog.Builder(this, Utils.getAlertDialogThemeResId(this))
                             .setMessage(this.getString(R.string.alert_delete_history))
                             .setCancelable(true)
                             .setPositiveButton(this.getString(R.string.yes), new DialogInterface.OnClickListener() {
@@ -1072,7 +1090,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
                             .setNegativeButton(this.getString(R.string.no), null)
                             .show();
                 } else if (selectedMenuItem == R.id.nav_item_starred) {
-                    new AlertDialog.Builder(this)
+                    new AlertDialog.Builder(this, Utils.getAlertDialogThemeResId(this))
                             .setMessage(this.getString(R.string.alert_delete_favorites))
                             .setCancelable(true)
                             .setPositiveButton(this.getString(R.string.yes), new DialogInterface.OnClickListener() {
@@ -1262,7 +1280,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
         Resources res = this.getResources();
         String title = res.getString(R.string.alert_metered_connection_title);
         String text = res.getString(R.string.alert_metered_connection_message);
-        meteredConnectionAlertDialog = new AlertDialog.Builder(this)
+        meteredConnectionAlertDialog = new AlertDialog.Builder(this, Utils.getAlertDialogThemeResId(this))
                 .setTitle(title)
                 .setMessage(text)
                 .setNegativeButton(android.R.string.cancel, null)
@@ -1380,7 +1398,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
     }
 
     private void changeTimer() {
-        final AlertDialog.Builder seekDialog = new AlertDialog.Builder(this);
+        final AlertDialog.Builder seekDialog = new AlertDialog.Builder(this, Utils.getAlertDialogThemeResId(this));
         View seekView = View.inflate(this, R.layout.layout_timer_chooser, null);
 
         seekDialog.setTitle(R.string.sleep_timer_title);
@@ -1433,6 +1451,123 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
 
         seekDialog.create();
         seekDialog.show();
+    }
+
+    private void playRandomStation() {
+        Toast.makeText(this, R.string.action_random_play, Toast.LENGTH_SHORT).show();
+
+        new Thread(() -> {
+            RadioStationRepository repository;
+            try {
+                repository = RadioStationRepository.getInstance(ActivityMain.this);
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to get repository", e);
+                showToastOnUiThread(R.string.error_station_load);
+                return;
+            }
+
+            if (repository == null) {
+                showToastOnUiThread(R.string.error_station_load);
+                return;
+            }
+
+            int stationCount;
+            try {
+                stationCount = repository.getStationCountSync();
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to get station count", e);
+                showToastOnUiThread(R.string.error_station_load);
+                return;
+            }
+
+            if (stationCount == 0) {
+                showToastOnUiThread(R.string.error_station_load);
+                return;
+            }
+
+            final int MAX_ATTEMPTS = 10;
+            int attempts = 0;
+            final boolean[] foundWorkingStation = {false};
+
+            while (attempts < MAX_ATTEMPTS && !foundWorkingStation[0]) {
+                attempts++;
+                Log.d(TAG, "Attempt " + attempts + " to find working station");
+
+                RadioStation randomStation;
+                try {
+                    randomStation = repository.getRandomStationSync();
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to get random station", e);
+                    continue;
+                }
+
+                if (randomStation == null) {
+                    continue;
+                }
+
+                DataRadioStation dataStation;
+                try {
+                    dataStation = randomStation.toDataRadioStation();
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to convert station", e);
+                    continue;
+                }
+
+                if (dataStation == null) {
+                    continue;
+                }
+
+                final DataRadioStation finalStation = dataStation;
+                final boolean[] stationPlayed = {false};
+                final Object lock = new Object();
+
+                runOnUiThread(() -> {
+                    new PlayStationTask(finalStation, ActivityMain.this,
+                            url -> {
+                                finalStation.playableUrl = url;
+                                PlayerServiceUtil.play(finalStation);
+                                synchronized (lock) {
+                                    stationPlayed[0] = true;
+                                    foundWorkingStation[0] = true;
+                                    lock.notify();
+                                }
+                            },
+                            result -> {
+                                synchronized (lock) {
+                                    if (result == PlayStationTask.ExecutionResult.FAILURE) {
+                                        Log.d(TAG, "Station failed to play, trying next");
+                                    } else {
+                                        stationPlayed[0] = true;
+                                        foundWorkingStation[0] = true;
+                                    }
+                                    lock.notify();
+                                }
+                            }).execute();
+                });
+
+                synchronized (lock) {
+                    try {
+                        lock.wait(10000); // Wait up to 10 seconds for result
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
+                }
+
+                if (foundWorkingStation[0]) {
+                    break;
+                }
+            }
+
+            if (!foundWorkingStation[0]) {
+                showToastOnUiThread(R.string.error_station_load);
+                Log.e(TAG, "Failed to find working station after " + MAX_ATTEMPTS + " attempts");
+            }
+        }).start();
+    }
+
+    private void showToastOnUiThread(int resId) {
+        runOnUiThread(() -> Toast.makeText(ActivityMain.this, resId, Toast.LENGTH_SHORT).show());
     }
 
     private void selectMPDServer() {

@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="正在准备更新..."
+        android:text="@string/update_preparing"
         android:textSize="14sp" />
     
     <TextView
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:gravity="end"
-        android:text="准备中..."
+        android:text="@string/update_preparing"
         android:textSize="12sp" />
     
     <Button
@@ -35,6 +35,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:text="取消" />
+        android:text="@string/action_cancel" />
     
 </LinearLayout>
