@@ -3,27 +3,72 @@ name: RadioDroid CI
 on:
   push:
     branches:
-      - '*'
+      - '**'
   pull_request:
     branches:
       - master
-  # Also trigger on page_build, as well as release created events
-  page_build:
   release:
-    types: # This configuration does not affect the page_build event above
+    types:
       - created
 
 jobs:
-  test:
-    name: Run Tests
+  build:
+    name: Build & Unit Test
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'zulu'
-        java-version: 11
-    - name: Tests
-      run: bash ./gradlew build --stacktrace
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # 需要完整 git 历史，用于 gitHash() 构建脚本
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run Lint (free flavor)
+        run: ./gradlew lintFreeDebug --stacktrace
+
+      - name: Run unit tests
+        run: ./gradlew testFreeDebugUnitTest --stacktrace
+
+      - name: Upload lint report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-report
+          path: app/build/reports/lint-results-*.html
+          if-no-files-found: ignore
+
+      - name: Upload unit test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-report
+          path: app/build/reports/tests/
+          if-no-files-found: ignore
+
+      - name: Assemble free debug APK
+        run: ./gradlew assembleFreeDebug --stacktrace
+
+      - name: Upload free debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: radiodroid-free-debug
+          path: app/build/outputs/apk/free/debug/*.apk
+          if-no-files-found: warn

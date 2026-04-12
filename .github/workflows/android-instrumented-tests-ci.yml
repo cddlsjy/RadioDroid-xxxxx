@@ -1,39 +1,62 @@
 name: RadioDroid Instrumented Tests CI
 
+# 仅在 master 分支推送时运行（Instrumentation 测试耗时较长）
 on:
   push:
     branches:
       - master
-#  pull_request:
-#    branches:
-#      - master
+  # 如需在 PR 时也运行，取消以下注释
+  # pull_request:
+  #   branches:
+  #     - master
 
 jobs:
-  test:
-    runs-on: macos-latest
+  instrumented-tests:
+    name: API ${{ matrix.api-level }} Instrumented Tests
+    runs-on: macos-latest   # macOS runner 支持 Android 模拟器硬件加速
     strategy:
+      fail-fast: false       # 某个 API 失败时不中断其他矩阵任务
       matrix:
         api-level: [16, 27, 33]
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
 
-      - name: Restore Android virtual device
-        uses: actions/cache@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # -------------------------------------------------------
+      # AVD 快照缓存：首次构建需要约 10 分钟，之后走缓存只需 1-2 分钟
+      # -------------------------------------------------------
+      - name: Restore Android virtual device cache
+        uses: actions/cache@v4
         id: avd-cache
         with:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: RadioDroid-${{ runner.os }}-avd-api${{ matrix.api-level }}
+          key: RadioDroid-avd-api${{ matrix.api-level }}-${{ runner.os }}-v2
 
-      - name: set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'zulu'
-
-      - name: Set up Android virtual device if not cached
+      - name: Create Android virtual device (if not cached)
         uses: reactivecircus/android-emulator-runner@v2
         if: steps.avd-cache.outputs.cache-hit != 'true'
         with:
@@ -43,9 +66,15 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
-          script: echo "Generated AVD snapshot for caching."
+          script: echo "AVD snapshot created for caching."
 
-      - name: Run instrumented tests on Android virtual device
+      # -------------------------------------------------------
+      # 根据 API 级别选择测试变体：
+      #   API  16: free flavor（最低兼容性验证）
+      #   API  27: 全部 flavor（connectedCheck，回归测试）
+      #   API  33: play flavor（最新 API + Google APIs）
+      # -------------------------------------------------------
+      - name: Run instrumented tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
@@ -54,4 +83,17 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: /Users/runner/Library/Android/sdk/platform-tools/adb uninstall net.programmierecke.radiodroid2.test; ./gradlew ${{ matrix.api-level < 26 && 'connectedFreeDebugAndroidTest' ||  matrix.api-level > 29 && 'installPlayDebugAndroidTest' || 'connectedCheck' }}
+          script: |
+            adb uninstall net.programmierecke.radiodroid2.test || true
+            adb uninstall net.programmierecke.radiodroid2 || true
+            ./gradlew ${{ matrix.api-level < 26 && 'connectedFreeDebugAndroidTest' || matrix.api-level > 29 && 'installPlayDebugAndroidTest' || 'connectedCheck' }} --stacktrace
+
+      - name: Upload instrumented test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: instrumented-test-results-api${{ matrix.api-level }}
+          path: |
+            app/build/reports/androidTests/
+            app/build/outputs/androidTest-results/
+          if-no-files-found: ignore
