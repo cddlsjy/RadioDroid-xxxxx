@@ -40,6 +40,8 @@ jobs:
 
       - name: Set up Gradle
         uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: '8.5'
 
       - name: Run Lint (free flavor)
         run: gradle lintFreeDebug --stacktrace
