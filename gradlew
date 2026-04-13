@@ -2,25 +2,24 @@
 
 set -e
 
-if [ -n "$DEBUG" ]; then
-  set -x
-fi
-
 dirname="$(cd "$(dirname "$0")" && pwd)"
 
-if [ -f "$dirname/gradle/wrapper/gradle-wrapper.jar" ]; then
-  if [ "$(uname)" = "Darwin" ]; then
-    # Add workaround for issue with JDK 14 on macOS
-    # See: https://github.com/gradle/gradle/issues/12518
-    export JAVA_OPTS="$JAVA_OPTS -Xmx4096m"
-  fi
-
-  if [ -n "$JAVA_HOME" ]; then
-    exec "$JAVA_HOME/bin/java" "$JAVA_OPTS" -jar "$dirname/gradle/wrapper/gradle-wrapper.jar" "$@"
-  else
-    exec java "$JAVA_OPTS" -jar "$dirname/gradle/wrapper/gradle-wrapper.jar" "$@"
-  fi
+if [ -z "$JAVA_HOME" ] ; then
+    JAVACMD=$(which java)
 else
-  echo "Error: Could not find gradle-wrapper.jar"
-  exit 1
+    JAVACMD="$JAVA_HOME/bin/java"
+fi
+
+if [ ! -x "$JAVACMD" ] ; then
+    echo "Error: JAVA_HOME is not set and no 'java' command could be found in your PATH."
+    echo "Please set the JAVA_HOME variable in your environment to match the"
+    echo "location of your Java installation."
+    exit 1
+fi
+
+if [ -f "$dirname/gradle/wrapper/gradle-wrapper.jar" ]; then
+    exec "$JAVACMD" "$JAVA_OPTS" -jar "$dirname/gradle/wrapper/gradle-wrapper.jar" "$@"
+else
+    echo "Error: Could not find gradle-wrapper.jar"
+    exit 1
 fi
