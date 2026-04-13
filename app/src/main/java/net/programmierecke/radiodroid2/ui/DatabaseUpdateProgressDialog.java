@@ -27,7 +27,7 @@ import net.programmierecke.radiodroid2.service.DatabaseUpdateWorker;
 
 
 public class DatabaseUpdateProgressDialog {
-    private static final String TAG = "DatabaseUpdateProgressDialog";
+    private static final String TAG = "DBUpdateProgressDialog";
     private static final int UPDATE_INTERVAL = 500; // 更新间隔(毫秒)
     
     private Context context;

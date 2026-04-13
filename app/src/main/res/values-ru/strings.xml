@@ -507,7 +507,7 @@ https://www.gnu.org/licenses/gpl-3.0.html</string>
     <string name="progress_writing_main_db">Запись в основную базу данных...</string>
     <string name="progress_switching_db">Переключение на новую базу данных...</string>
     <string name="update_completed">Обновление завершено, синхронизировано %d станций, переключено на новые данные</string>
-    <string name="update_confirm_replace_message">Новые данные (%d станций) содержат меньше станций, чем существующие данные (%d станций), хотите заменить?</string>
+    <string name="update_confirm_replace_message">Новые данные (%1$d станций) содержат меньше станций, чем существующие данные (%2$d станций), хотите заменить?</string>
     <string name="update_completed_keep_existing">Обновление завершено, но пользователь выбрал сохранить существующие данные</string>
     <string name="progress_system_paused_suffix"> (может быть приостановлено системой)</string>
     
