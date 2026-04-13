@@ -38,14 +38,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@v2
 
       - name: Run Lint (free flavor)
-        run: ./gradlew lintFreeDebug --stacktrace
+        run: gradle lintFreeDebug --stacktrace
 
       - name: Run unit tests
-        run: ./gradlew testFreeDebugUnitTest --stacktrace
+        run: gradle testFreeDebugUnitTest --stacktrace
 
       - name: Upload lint report
         if: always()
@@ -64,7 +64,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Assemble free debug APK
-        run: ./gradlew assembleFreeDebug --stacktrace
+        run: gradle assembleFreeDebug --stacktrace
 
       - name: Upload free debug APK
         uses: actions/upload-artifact@v4
