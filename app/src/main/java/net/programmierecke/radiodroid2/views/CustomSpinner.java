@@ -2,9 +2,9 @@ package net.programmierecke.radiodroid2.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.Spinner;
+import androidx.appcompat.widget.AppCompatSpinner;
 
-public class CustomSpinner extends Spinner {
+public class CustomSpinner extends AppCompatSpinner {
     public CustomSpinner(Context context) {
         super(context);
     }
