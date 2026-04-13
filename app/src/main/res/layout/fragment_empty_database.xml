@@ -13,7 +13,7 @@
         android:layout_height="72dp"
         android:layout_marginBottom="16dp"
         android:src="@drawable/ic_database_outline"
-        android:tint="?android:attr/textColorSecondary"
+        app:tint="?android:attr/textColorSecondary"
         android:contentDescription="空数据库图标" />
 
     <TextView

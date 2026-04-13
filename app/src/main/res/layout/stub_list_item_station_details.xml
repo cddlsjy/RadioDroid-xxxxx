@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/detail_visit_website"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:tint="?attr/iconsInItemBackgroundColor"
+                app:tint="?attr/iconsInItemBackgroundColor"
                 app:iiv_icon="gmd-home"
                 app:iiv_padding="2dp"
                 app:iiv_size="24dp"/>
