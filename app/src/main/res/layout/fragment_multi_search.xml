@@ -152,6 +152,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
                     android:text="@string/multi_search_expand_filters"
                     android:textAllCaps="false"
                     app:cornerRadius="4dp" />
@@ -162,6 +163,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="4dp"
+                    android:layout_marginLeft="4dp"
                     android:text="@string/multi_search_reset"
                     android:textAllCaps="false"
                     app:cornerRadius="4dp" />
