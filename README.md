@@ -1,5 +1,40 @@
-v0.93版本：增加随机播放功能，在电台界面右上角增加随机播放按钮，会从本地数据库随机选取一个电台播放，增加发现电台渠道和趣味性；优化搜索界面和搜索功能实现，优化了现有的搜索算法，支持部分匹配和近似匹配，和标签组合搜索，以便更快找到电台；修改了部分界面遗留的硬编码问题，目前基本没有中英文混杂的界面显示问题了；添加了俄语支持；修正了暗色主题下某些界面和字体颜色错误的问题；修正了均衡器和统计页面的显示问题。
+# RadioDroid
 
+## 项目介绍
+
+### 中文
+RadioDroid是一款基于Android平台的收音机应用，使用[www.radio-browser.info](https://www.radio-browser.info)提供的API获取全球电台数据。
+
+**项目由来**：本项目是从segler-alex/RadioDroid fork而来的自用魔改版。原版RadioDroid v0.86版存在几个影响使用的bug，且自2023年以来没有更新，因此进行了自主修改和优化，形成了当前版本。
+
+**主要功能**：
+- 全球电台浏览和搜索
+- 本地数据库存储，提高应用响应速度
+- 电台收藏和管理
+- 睡眠定时器功能
+- 均衡器设置
+- 多语言支持（中文、英文、俄语等）
+- 随机播放功能
+- 暗色主题支持
+
+### English
+RadioDroid is an Android radio browser app that uses the [www.radio-browser.info](https://www.radio-browser.info) API to access global radio station data.
+
+**Project Origin**：This project is a self-modified fork of segler-alex/RadioDroid. The original RadioDroid v0.86 had several bugs affecting usage, and it hasn't been updated since 2023. Therefore, we made independent modifications and optimizations to create the current version.
+
+**Main Features**：
+- Global radio station browsing and searching
+- Local database storage for improved app response speed
+- Radio station favorites and management
+- Sleep timer functionality
+- Equalizer settings
+- Multi-language support (Chinese, English, Russian, etc.)
+- Random play feature
+- Dark theme support
+
+## Changelog
+
+v0.93版本：增加随机播放功能，在电台界面右上角增加随机播放按钮，会从本地数据库随机选取一个电台播放，增加发现电台渠道和趣味性；优化搜索界面和搜索功能实现，优化了现有的搜索算法，支持部分匹配和近似匹配，和标签组合搜索，以便更快找到电台；修改了部分界面遗留的硬编码问题，目前基本没有中英文混杂的界面显示问题了；添加了俄语支持；修正了暗色主题下某些界面和字体颜色错误的问题；修正了均衡器和统计页面的显示问题。
 
 v0.92版本：修改电台播放代码逻辑，优先使用本地电台地址，避免远程服务器依赖；降级了Kotlin版本，避免版本不兼容问题；更新一些过时的API，避免安卓版本升级后产生不兼容问题。
 
